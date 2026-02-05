@@ -1,0 +1,23 @@
+Framework Title,Framework Description,Framework Geography
+CCPA / CPRA,Law; Privacy Regulation; Owner: California; Version: 2018 / 2020,USA (California)
+CIS Controls v8,Framework; Security Framework; Owner: CIS; Version: v8,International
+COBIT 2019,Framework; Security Framework; Owner: ISACA; Version: 2019,International
+DORA,Regulation; Resilience Regulation; Owner: EU; Version: Reg (EU) 2022/2554,EU
+EU AI Act,Regulation; AI Governance; Owner: EU; Version: Reg (EU) 2024/1689,EU
+GDPR,Regulation; Privacy Regulation; Owner: EU; Version: Reg (EU) 2016/679,EU
+HIPAA,Law; Privacy Regulation; Owner: USA; Version: 1996,USA
+ISO 22301:2019,Standard; Resilience Standard; Owner: ISO; Version: 2019,International
+ISO/IEC 23894:2023,Standard; AI Governance; Owner: ISO/IEC; Version: 2023,International
+ISO/IEC 27001:2022,Standard; Security Standard; Owner: ISO/IEC; Version: 2022,International
+ISO/IEC 27002:2022,Standard; Security Standard; Owner: ISO/IEC; Version: 2022,International
+ISO/IEC 27701:2019,Standard; Privacy Standard; Owner: ISO/IEC; Version: 2019,International
+ISO/IEC 42001:2023,Standard; AI Governance; Owner: ISO/IEC; Version: 2023,International
+NIS2 Directive,Directive; Resilience Regulation; Owner: EU; Version: Dir (EU) 2022/2555,EU
+NIST AI RMF 1.0,Framework; AI Governance; Owner: NIST; Version: 1.0,USA
+NIST CSF 2.0,Framework; Security Framework; Owner: NIST; Version: 2.0,USA
+NIST SP 800-53r5,Standard; Security Framework; Owner: NIST; Version: Rev 5,USA
+NIST SP 800-66,Guide; Security/Privacy Guidance; Owner: NIST; Version: Rev 2,USA
+OECD AI Principles,Principles; Guideline/Principles; Owner: OECD; Version: 2024 Revision,International
+PCI DSS v4.0.1,Standard; Security Standard; Owner: PCI SSC; Version: 4.0.1,International
+SOC 2 (TSC),Framework; Security Framework; Owner: AICPA; Version: 2017,USA/International
+Sarbanes-Oxley (SOX),Law; Financial Regulation; Owner: USA; Version: 2002,USA

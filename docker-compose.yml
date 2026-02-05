@@ -1,0 +1,13 @@
+services:
+  cix-alerts-app:
+    build: .
+    container_name: cix-alerts-container
+    volumes:
+      - ./data:/app/data
+      # Map the input file so you can edit it locally and test immediately
+      - ./soc_alert_raw.json:/app/soc_alert_raw.json
+      - ./soc_alert_batch.json:/app/soc_alert_batch.json
+    env_file:
+      - .env
+    # Keep container running so you can log in and run tests manually
+    command: tail -f /dev/null

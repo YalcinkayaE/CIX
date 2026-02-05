@@ -1,0 +1,9 @@
+networkx
+pydantic
+boto3
+google-genai
+python-dotenv
+requests
+matplotlib
+scipy
+pyvis

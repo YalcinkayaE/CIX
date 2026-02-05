@@ -1,0 +1,74 @@
+flowchart LR
+
+%% Geography-based styling
+classDef us fill:#cfe8ff,stroke:#1b4f9c,stroke-width:1px;
+classDef ukeu fill:#d8f5d0,stroke:#1f7a1f,stroke-width:1px;
+classDef intl fill:#f2f2f2,stroke:#444,stroke-width:1px;
+
+  ISO_27001["ISO/IEC 27001:2022"]
+  ISO_27002["ISO/IEC 27002:2022"]
+  PCI_DSS["PCI DSS v4.0.1"]
+  NIST_CSF["NIST CSF 2.0"]
+  NIST_SP_800_53["NIST SP 800-53r5"]
+  CIS_Controls["CIS Controls v8"]
+  SOC_2["SOC 2 (TSC)"]
+  ISO_42001["ISO/IEC 42001:2023"]
+  ISO_23894["ISO/IEC 23894:2023"]
+  EU_AI_Act["EU AI Act"]
+  NIST_AI_RMF["NIST AI RMF 1.0"]
+  OECD_AI["OECD AI Principles"]
+  GDPR["GDPR"]
+  CCPA_CPRA["CCPA / CPRA"]
+  HIPAA["HIPAA"]
+  ISO_27701["ISO/IEC 27701:2019"]
+  NIS2["NIS2 Directive"]
+  DORA["DORA"]
+  ISO_22301["ISO 22301:2019"]
+  SOX["Sarbanes-Oxley (SOX)"]
+  COBIT["COBIT 2019"]
+  NIST_SP_800_66["NIST SP 800-66"]
+
+  ISO_42001 -->|aligned_with| ISO_27001
+  ISO_23894 -->|supports_compliance_with| ISO_42001
+  EU_AI_Act -->|can_be_supported_by| ISO_42001
+  EU_AI_Act -->|complements| GDPR
+  NIST_AI_RMF -->|aligned_with| NIST_CSF
+  NIST_AI_RMF -->|aligned_with| OECD_AI
+  ISO_27002 -->|supports_compliance_with| ISO_27001
+  ISO_27701 -->|extends| ISO_27001
+  NIST_CSF -->|mapped_to| ISO_27001
+  NIST_CSF -->|has_informative_references_to| NIST_SP_800_53
+  CIS_Controls -->|mapped_to| NIST_CSF
+  PCI_DSS -->|overlaps_with| ISO_27001
+  SOC_2 -->|aligned_with| COBIT
+  NIS2 -->|commonly_aligned_with| ISO_27001
+  DORA -->|lex_specialis_over| NIS2
+  ISO_22301 -->|aligned_with| ISO_27001
+  GDPR -->|can_be_supported_by| ISO_27701
+  GDPR -->|influences| CCPA_CPRA
+  SOX -->|often_implemented_using| COBIT
+  HIPAA -->|implementation_guidance| NIST_SP_800_66
+  HIPAA -->|crosswalk_available| NIST_CSF
+
+  class ISO_27001 intl;
+  class ISO_27002 intl;
+  class PCI_DSS intl;
+  class NIST_CSF us;
+  class NIST_SP_800_53 us;
+  class CIS_Controls intl;
+  class SOC_2 us;
+  class ISO_42001 intl;
+  class ISO_23894 intl;
+  class EU_AI_Act ukeu;
+  class NIST_AI_RMF us;
+  class OECD_AI intl;
+  class GDPR ukeu;
+  class CCPA_CPRA us;
+  class HIPAA us;
+  class ISO_27701 intl;
+  class NIS2 ukeu;
+  class DORA ukeu;
+  class ISO_22301 intl;
+  class SOX us;
+  class COBIT intl;
+  class NIST_SP_800_66 us;

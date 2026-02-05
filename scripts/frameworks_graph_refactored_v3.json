@@ -1,0 +1,497 @@
+{
+  "schema": {
+    "name": "frameworks_graph",
+    "version": "2.0"
+  },
+  "metadata": {
+    "title": "Global GRC Framework Interconnectivity Graph",
+    "version": "2.0",
+    "last_updated": "2026-01-31",
+    "generated_by": "CIX Alerts Logic",
+    "notes": [
+      "Normalized date fields into node.dates.*",
+      "Standardized edge fields: from/to/rel/rationale/confidence",
+      "Corrected CSF\u2194800-53 relationship to informative references mapping",
+      "Replaced HIPAA\u2192800-53 with HIPAA\u2192800-66 guidance and HIPAA\u2192CSF crosswalk",
+      "Expanded EU AI Act timeline fields (adoption/OJ/entry_into_force/applies_from)"
+    ]
+  },
+  "vocab": {
+    "edge_rel": [
+      "aligned_with",
+      "mapped_to",
+      "overlaps_with",
+      "built_on",
+      "extends",
+      "supports_compliance_with",
+      "crosswalk_available",
+      "implementation_guidance",
+      "has_informative_references_to",
+      "lex_specialis_over",
+      "applies_to"
+    ],
+    "confidence_levels": [
+      "High",
+      "Medium",
+      "Low"
+    ]
+  },
+  "nodes": {
+    "ISO_27001": {
+      "id": "ISO_27001",
+      "label": "ISO/IEC 27001:2022",
+      "kind": "Standard",
+      "type": "Security Standard",
+      "owner": "ISO/IEC",
+      "version": "2022",
+      "geography": "International",
+      "dates": {
+        "published": "2022-10"
+      }
+    },
+    "ISO_27002": {
+      "id": "ISO_27002",
+      "label": "ISO/IEC 27002:2022",
+      "kind": "Standard",
+      "type": "Security Standard",
+      "owner": "ISO/IEC",
+      "version": "2022",
+      "geography": "International",
+      "dates": {
+        "published": "2022-02"
+      }
+    },
+    "PCI_DSS": {
+      "id": "PCI_DSS",
+      "label": "PCI DSS v4.0.1",
+      "kind": "Standard",
+      "type": "Security Standard",
+      "owner": "PCI SSC",
+      "version": "4.0.1",
+      "geography": "International",
+      "dates": {
+        "published": "2024-06"
+      }
+    },
+    "NIST_CSF": {
+      "id": "NIST_CSF",
+      "label": "NIST CSF 2.0",
+      "kind": "Framework",
+      "type": "Security Framework",
+      "owner": "NIST",
+      "version": "2.0",
+      "geography": "USA",
+      "dates": {
+        "published": "2024-02-26"
+      }
+    },
+    "NIST_SP_800_53": {
+      "id": "NIST_SP_800_53",
+      "label": "NIST SP 800-53r5",
+      "kind": "Standard",
+      "type": "Security Framework",
+      "owner": "NIST",
+      "version": "Rev 5",
+      "geography": "USA",
+      "dates": {
+        "published": "2020-09"
+      }
+    },
+    "CIS_Controls": {
+      "id": "CIS_Controls",
+      "label": "CIS Controls v8",
+      "kind": "Framework",
+      "type": "Security Framework",
+      "owner": "CIS",
+      "version": "v8",
+      "geography": "International",
+      "dates": {
+        "published": "2021-05"
+      }
+    },
+    "SOC_2": {
+      "id": "SOC_2",
+      "label": "SOC 2 (TSC)",
+      "kind": "Framework",
+      "type": "Security Framework",
+      "owner": "AICPA",
+      "version": "2017",
+      "geography": "USA/International",
+      "dates": {
+        "published": "2017",
+        "last_revision": "2022"
+      }
+    },
+    "ISO_42001": {
+      "id": "ISO_42001",
+      "label": "ISO/IEC 42001:2023",
+      "kind": "Standard",
+      "type": "AI Governance",
+      "owner": "ISO/IEC",
+      "version": "2023",
+      "geography": "International",
+      "dates": {
+        "published": "2023-12"
+      }
+    },
+    "ISO_23894": {
+      "id": "ISO_23894",
+      "label": "ISO/IEC 23894:2023",
+      "kind": "Standard",
+      "type": "AI Governance",
+      "owner": "ISO/IEC",
+      "version": "2023",
+      "geography": "International",
+      "dates": {
+        "published": "2023-02"
+      }
+    },
+    "EU_AI_Act": {
+      "id": "EU_AI_Act",
+      "label": "EU AI Act",
+      "kind": "Regulation",
+      "type": "AI Governance",
+      "owner": "EU",
+      "version": "Reg (EU) 2024/1689",
+      "geography": "EU",
+      "dates": {
+        "applies_from": "2026-08-02",
+        "adopted": "2024-06-13",
+        "oj_published": "2024-07-12",
+        "entry_into_force": "2024-08-01",
+        "phased_application": [
+          {
+            "date": "2025-02-02",
+            "scope": "prohibited practices + AI literacy (selected provisions)"
+          },
+          {
+            "date": "2025-08-02",
+            "scope": "GPAI obligations (selected provisions)"
+          },
+          {
+            "date": "2027-08-02",
+            "scope": "high-risk obligations for certain systems (selected provisions)"
+          }
+        ]
+      }
+    },
+    "NIST_AI_RMF": {
+      "id": "NIST_AI_RMF",
+      "label": "NIST AI RMF 1.0",
+      "kind": "Framework",
+      "type": "AI Governance",
+      "owner": "NIST",
+      "version": "1.0",
+      "geography": "USA",
+      "dates": {
+        "published": "2023-01"
+      }
+    },
+    "OECD_AI": {
+      "id": "OECD_AI",
+      "label": "OECD AI Principles",
+      "kind": "Principles",
+      "type": "Guideline/Principles",
+      "owner": "OECD",
+      "version": "2024 Revision",
+      "geography": "International",
+      "dates": {
+        "published": "2024-05"
+      }
+    },
+    "GDPR": {
+      "id": "GDPR",
+      "label": "GDPR",
+      "kind": "Regulation",
+      "type": "Privacy Regulation",
+      "owner": "EU",
+      "version": "Reg (EU) 2016/679",
+      "geography": "EU",
+      "dates": {
+        "published": "2016-04-27",
+        "applies_from": "2018-05-25"
+      }
+    },
+    "CCPA_CPRA": {
+      "id": "CCPA_CPRA",
+      "label": "CCPA / CPRA",
+      "kind": "Law",
+      "type": "Privacy Regulation",
+      "owner": "California",
+      "version": "2018 / 2020",
+      "geography": "USA (California)",
+      "dates": {
+        "published": "2018-06"
+      }
+    },
+    "HIPAA": {
+      "id": "HIPAA",
+      "label": "HIPAA",
+      "kind": "Law",
+      "type": "Privacy Regulation",
+      "owner": "USA",
+      "version": "1996",
+      "geography": "USA",
+      "dates": {
+        "published": "1996"
+      }
+    },
+    "ISO_27701": {
+      "id": "ISO_27701",
+      "label": "ISO/IEC 27701:2019",
+      "kind": "Standard",
+      "type": "Privacy Standard",
+      "owner": "ISO/IEC",
+      "version": "2019",
+      "geography": "International",
+      "dates": {
+        "published": "2019-08"
+      }
+    },
+    "NIS2": {
+      "id": "NIS2",
+      "label": "NIS2 Directive",
+      "kind": "Directive",
+      "type": "Resilience Regulation",
+      "owner": "EU",
+      "version": "Dir (EU) 2022/2555",
+      "geography": "EU",
+      "dates": {
+        "published": "2022-12-14",
+        "transposition_deadline": "2024-10-17",
+        "repeals_previous_from": "2024-10-18"
+      }
+    },
+    "DORA": {
+      "id": "DORA",
+      "label": "DORA",
+      "kind": "Regulation",
+      "type": "Resilience Regulation",
+      "owner": "EU",
+      "version": "Reg (EU) 2022/2554",
+      "geography": "EU",
+      "dates": {
+        "published": "2022-12-14",
+        "applies_from": "2025-01-17"
+      }
+    },
+    "ISO_22301": {
+      "id": "ISO_22301",
+      "label": "ISO 22301:2019",
+      "kind": "Standard",
+      "type": "Resilience Standard",
+      "owner": "ISO",
+      "version": "2019",
+      "geography": "International",
+      "dates": {
+        "published": "2019-10"
+      }
+    },
+    "SOX": {
+      "id": "SOX",
+      "label": "Sarbanes-Oxley (SOX)",
+      "kind": "Law",
+      "type": "Financial Regulation",
+      "owner": "USA",
+      "version": "2002",
+      "geography": "USA",
+      "dates": {
+        "published": "2002-07"
+      }
+    },
+    "COBIT": {
+      "id": "COBIT",
+      "label": "COBIT 2019",
+      "kind": "Framework",
+      "type": "Security Framework",
+      "owner": "ISACA",
+      "version": "2019",
+      "geography": "International",
+      "dates": {
+        "published": "2018"
+      }
+    },
+    "NIST_SP_800_66": {
+      "id": "NIST_SP_800_66",
+      "label": "NIST SP 800-66",
+      "kind": "Guide",
+      "type": "Security/Privacy Guidance",
+      "owner": "NIST",
+      "version": "Rev 2",
+      "geography": "USA",
+      "dates": {
+        "published": "2024-02"
+      }
+    }
+  },
+  "edges": [
+    {
+      "from": "ISO_42001",
+      "to": "ISO_27001",
+      "rel": "aligned_with",
+      "rationale": "built on management system structure of",
+      "confidence": "High",
+      "id": "E001"
+    },
+    {
+      "from": "ISO_23894",
+      "to": "ISO_42001",
+      "rel": "supports_compliance_with",
+      "rationale": "provides risk management guidance for",
+      "confidence": "High",
+      "id": "E002"
+    },
+    {
+      "from": "EU_AI_Act",
+      "to": "ISO_42001",
+      "rel": "can_be_supported_by",
+      "rationale": "harmonized standards likely to leverage 42001",
+      "confidence": "Medium",
+      "id": "E003"
+    },
+    {
+      "from": "EU_AI_Act",
+      "to": "GDPR",
+      "rel": "complements",
+      "rationale": "interplays on data governance/privacy",
+      "confidence": "High",
+      "id": "E004"
+    },
+    {
+      "from": "NIST_AI_RMF",
+      "to": "NIST_CSF",
+      "rel": "aligned_with",
+      "rationale": "shares risk-based conceptual model",
+      "confidence": "High",
+      "id": "E005"
+    },
+    {
+      "from": "NIST_AI_RMF",
+      "to": "OECD_AI",
+      "rel": "aligned_with",
+      "rationale": "maps to OECD principles",
+      "confidence": "High",
+      "id": "E006"
+    },
+    {
+      "from": "ISO_27002",
+      "to": "ISO_27001",
+      "rel": "supports_compliance_with",
+      "rationale": "provides implementation guidance for Annex A",
+      "confidence": "High",
+      "id": "E007"
+    },
+    {
+      "from": "ISO_27701",
+      "to": "ISO_27001",
+      "rel": "extends",
+      "rationale": "adds PIMS requirements to ISMS",
+      "confidence": "High",
+      "id": "E008"
+    },
+    {
+      "from": "NIST_CSF",
+      "to": "ISO_27001",
+      "rel": "mapped_to",
+      "rationale": "extensive informative references",
+      "confidence": "High",
+      "id": "E009"
+    },
+    {
+      "from": "NIST_CSF",
+      "to": "NIST_SP_800_53",
+      "rel": "has_informative_references_to",
+      "rationale": "CSF outcomes can be mapped to SP 800-53 controls via informative references",
+      "confidence": "High",
+      "id": "E010"
+    },
+    {
+      "from": "CIS_Controls",
+      "to": "NIST_CSF",
+      "rel": "mapped_to",
+      "rationale": "CIS provides mappings to CSF categories",
+      "confidence": "High",
+      "id": "E011"
+    },
+    {
+      "from": "PCI_DSS",
+      "to": "ISO_27001",
+      "rel": "overlaps_with",
+      "rationale": "significant control overlap but distinct scopes",
+      "confidence": "Medium",
+      "id": "E012"
+    },
+    {
+      "from": "SOC_2",
+      "to": "COBIT",
+      "rel": "aligned_with",
+      "rationale": "TSC aligns with COBIT principles",
+      "confidence": "Medium",
+      "id": "E013"
+    },
+    {
+      "from": "NIS2",
+      "to": "ISO_27001",
+      "rel": "commonly_aligned_with",
+      "rationale": "ISO 27001 is the de facto standard for demonstrating conformity",
+      "confidence": "Medium",
+      "id": "E014"
+    },
+    {
+      "from": "DORA",
+      "to": "NIS2",
+      "rel": "lex_specialis_over",
+      "rationale": "prevails for financial entities",
+      "confidence": "High",
+      "id": "E015"
+    },
+    {
+      "from": "ISO_22301",
+      "to": "ISO_27001",
+      "rel": "aligned_with",
+      "rationale": "shared MSS structure, often integrated",
+      "confidence": "High",
+      "id": "E016"
+    },
+    {
+      "from": "GDPR",
+      "to": "ISO_27701",
+      "rel": "can_be_supported_by",
+      "rationale": "ISO 27701 designed to demonstrate GDPR accountability",
+      "confidence": "High",
+      "id": "E017"
+    },
+    {
+      "from": "GDPR",
+      "to": "CCPA_CPRA",
+      "rel": "influences",
+      "rationale": "GDPR concepts heavily influenced CCPA",
+      "confidence": "High",
+      "id": "E018"
+    },
+    {
+      "from": "SOX",
+      "to": "COBIT",
+      "rel": "often_implemented_using",
+      "rationale": "COBIT is standard framework for SOX ITGC",
+      "confidence": "High",
+      "id": "E019"
+    },
+    {
+      "from": "HIPAA",
+      "to": "NIST_SP_800_66",
+      "rel": "implementation_guidance",
+      "rationale": "NIST SP 800-66 provides implementation guidance for the HIPAA Security Rule",
+      "confidence": "High",
+      "id": "E020"
+    },
+    {
+      "from": "HIPAA",
+      "to": "NIST_CSF",
+      "rel": "crosswalk_available",
+      "rationale": "NIST provides a HIPAA Security Rule crosswalk to the NIST Cybersecurity Framework",
+      "confidence": "High",
+      "id": "E021"
+    }
+  ]
+}
