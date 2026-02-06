@@ -1,0 +1,166 @@
+{
+  "version": "0.2",
+  "profile": "axoden-soc-kernel",
+  "notes": [
+    "Updated to align Stage 3 -> FindingCandidates and Stage 4 -> CertifiedFindings.",
+    "Profile parameters (phi_limit, beta, tau, ingestion_thresholds) must be recorded per run."
+  ],
+  "vectors": [
+    {
+      "id": "tv01_stage1_vacuum_drop_418",
+      "description": "VACUUM must return HTTP 418 (DROP) and write ledger with required evidence pointers.",
+      "endpoint": "POST /api/v1/ingest/classify",
+      "input": {
+        "events": [
+          {
+            "source_id": "siem-A",
+            "event_id": "evt-0001",
+            "source_timestamp": "2026-02-06T10:00:00Z",
+            "raw_payload": { "message": "", "event": { "kind": "alert" }, "observables": [] }
+          }
+        ]
+      },
+      "expected": {
+        "per_event": [
+          {
+            "event_id": "evt-0001",
+            "status": "PROCESSED",
+            "band": "VACUUM",
+            "decision_code": "VACUUM_DROP",
+            "http_status": 418,
+            "required_evidence_pointers_present": true
+          }
+        ],
+        "batch": { "vacuum_count": 1, "drop_count": 1 },
+        "ledger": { "hash_chain_verifiable": true }
+      }
+    },
+    {
+      "id": "tv02_stage1_low_entropy_suppress_envelope",
+      "description": "LOW_ENTROPY must store deterministic envelope; must not enter Stage 2 CandidateSet.",
+      "endpoint": "POST /api/v1/ingest/classify",
+      "input": {
+        "events": [
+          {
+            "source_id": "siem-A",
+            "event_id": "evt-0002",
+            "source_timestamp": "2026-02-06T10:01:00Z",
+            "raw_payload": { "event": { "kind": "alert" }, "rule": { "name": "Known noisy rule" }, "severity": 1 }
+          }
+        ]
+      },
+      "expected": {
+        "per_event": [
+          {
+            "event_id": "evt-0002",
+            "status": "PROCESSED",
+            "band": "LOW_ENTROPY",
+            "decision_code": "LOW_ENTROPY_SUPPRESS",
+            "http_status": 200,
+            "envelope": {
+              "must_store_minimal_envelope": true,
+              "must_not_include_free_text_summary": true
+            }
+          }
+        ],
+        "batch": { "low_entropy_count": 1, "suppress_count": 1 }
+      }
+    },
+    {
+      "id": "tv03_idempotency_replay_no_redecision",
+      "description": "Duplicate idempotency_key must replay original decision and write IDEMPOTENT_REPLAY ledger entry.",
+      "endpoint": "POST /api/v1/ingest/classify",
+      "precondition": {
+        "already_ingested": {
+          "source_id": "siem-A",
+          "event_id": "evt-0100",
+          "raw_payload_hash": "sha256:PLACEHOLDER_HASH_0100"
+        }
+      },
+      "input": {
+        "events": [
+          {
+            "source_id": "siem-A",
+            "event_id": "evt-0100",
+            "source_timestamp": "2026-02-06T10:05:00Z",
+            "raw_payload_hash": "sha256:PLACEHOLDER_HASH_0100",
+            "raw_payload_ref": "objectstore://bucket/events/evt-0100.json"
+          }
+        ]
+      },
+      "expected": {
+        "per_event": [
+          {
+            "event_id": "evt-0100",
+            "status": "REPLAYED",
+            "ledger": { "replay_entry_decision_code": "IDEMPOTENT_REPLAY" }
+          }
+        ],
+        "batch": { "replayed_count": 1 }
+      }
+    },
+    {
+      "id": "tv04_event_id_hash_mismatch_conflict_409",
+      "description": "Same (source_id,event_id) but different raw_payload_hash must return HTTP 409 (FORK/CONFLICT).",
+      "endpoint": "POST /api/v1/ingest/classify",
+      "precondition": {
+        "already_ingested": { "source_id": "siem-A", "event_id": "evt-0200", "raw_payload_hash": "sha256:HASH_OLD" }
+      },
+      "input": {
+        "events": [
+          {
+            "source_id": "siem-A",
+            "event_id": "evt-0200",
+            "source_timestamp": "2026-02-06T10:06:00Z",
+            "raw_payload_hash": "sha256:HASH_NEW",
+            "raw_payload_ref": "objectstore://bucket/events/evt-0200-new.json"
+          }
+        ]
+      },
+      "expected": {
+        "per_event": [
+          {
+            "event_id": "evt-0200",
+            "status": "CONFLICT",
+            "http_status": 409,
+            "ledger": { "conflict_entry_decision_code": "EVENT_ID_CONFLICT" }
+          }
+        ],
+        "batch": { "conflict_count": 1 }
+      }
+    },
+    {
+      "id": "tv05_stage3_to_stage4_findings_candidates_then_certified",
+      "description": "Stage 3 outputs FindingCandidates; Stage 4 outputs CertifiedFindings only after resolvable evidence refs.",
+      "endpoint": "POST /assessments",
+      "input": {
+        "events": [
+          {
+            "source_id": "siem-A",
+            "event_id": "evt-1001",
+            "source_timestamp": "2026-02-06T10:10:00Z",
+            "raw_payload": {
+              "event": { "kind": "alert" },
+              "host": { "name": "host-9" },
+              "process": { "name": "powershell.exe", "command_line": "powershell -enc AAA=" },
+              "network": { "destination": { "ip": "203.0.113.10" } }
+            }
+          }
+        ],
+        "profile_parameters": {
+          "phi_limit": 1000,
+          "beta": 0.5,
+          "tau": 0.2,
+          "ingestion_thresholds": { "vacuum_entropy_max": 0.01, "low_entropy_max": 0.1, "mimic_scoped_min": 0.1 }
+        }
+      },
+      "expected": {
+        "assessment": {
+          "must_record_profile_parameters": true,
+          "finding_candidates_present_or_zero": true,
+          "certified_findings_only_if_evidence_resolvable": true
+        }
+      }
+    }
+  ]
+}

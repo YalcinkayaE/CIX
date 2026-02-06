@@ -1,0 +1,4 @@
+interface:
+  display_name: "API-Only Service Design"
+  short_description: "Deterministic API-only service spec"
+  default_prompt: "Use $api-only-service-design to design a deterministic API-only service for CIX Alerts."

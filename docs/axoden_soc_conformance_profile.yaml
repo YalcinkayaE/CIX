@@ -1,0 +1,115 @@
+# axoden_soc_conformance_profile.yaml
+profile:
+  name: "axoden-soc-kernel"
+  version: "0.2"
+  contract_doc: "axoden_soc_kernel_math_contract.md"
+
+pipeline:
+  stage3_output: "FindingCandidates"
+  stage4_output: "CertifiedFindings"
+  stage3_non_authoritative: true
+  stage4_is_only_certifier: true
+
+# Profile parameters must be recorded per run (ledger + response)
+parameters:
+  phi_limit: null
+  beta: null
+  tau: null
+  ingestion_thresholds:
+    vacuum_entropy_max: null
+    low_entropy_max: null
+    mimic_scoped_min: null
+  enrichment_limits:
+    max_sources_per_candidate: 5
+    max_requests_per_assessment: 200
+    timeout_seconds: 10
+
+hashing:
+  algorithm: "sha256"
+  canonical_json: "JCS"
+  ledger_hash_chain: true
+
+idempotency:
+  enabled: true
+  key_fields: ["source_id", "event_id", "raw_payload_hash"]
+  on_duplicate: "REPLAY"
+  on_event_id_hash_mismatch: "CONFLICT_409"
+
+batch_processing:
+  partial_success_allowed: true
+  fail_batch_if_ledger_unavailable: true
+  schema_validation_error_code: "INVALID_SCHEMA"
+  terminal_ledger_entries: ["BATCH_RECEIVED", "BATCH_COMPLETED"]
+
+retention:
+  raw_payload_retention: "REFERENCE_ONLY"
+  low_entropy_envelope_retention: true
+  low_entropy_store_raw_payload_ref: true
+
+stage1_admissibility:
+  bands: ["VACUUM", "LOW_ENTROPY", "MIMIC_SCOPED"]
+  http_mapping:
+    VACUUM: { status: 418, meaning: "HTTP 418 (DROP)", decision_code: "VACUUM_DROP" }
+    LOW_ENTROPY: { status: 200, meaning: "SUPPRESS/COMPRESS", decision_code: "LOW_ENTROPY_SUPPRESS" }
+    MIMIC_SCOPED: { status: 200, meaning: "PASS", decision_code: "MIMIC_SCOPED_PASS" }
+
+stage2_distillation:
+  enabled: true
+  candidate_set_target_max: 200
+  dedup:
+    time_bucket_seconds: null
+    collision_policy: "GROUP"
+    key_definition_ref: "CODE_DEFINED_PURE_FUNCTION"
+  entity_normalization:
+    enabled: true
+    ruleset_version: "v1"
+
+stage3_graph_adjudication:
+  enabled: true
+  module_name: "cix-alerts"
+  enrichment:
+    enabled: true
+    require_provenance: true
+  finding_candidates:
+    max_finding_candidates: 10
+    require_evidence_refs_per_claim: 1
+    claim_types: ["HYPOTHESIS", "OBSERVATION", "CONCLUSION"]
+
+stage4_certification:
+  enabled: true
+  require_resolvable_evidence_refs: true
+  require_min_evidence_per_claim: 1
+  outcomes: ["CERTIFIED", "REJECTED", "NEEDS_MORE_EVIDENCE", "FORK"]
+  http_mapping:
+    REJECTED: { status: 403, meaning: "HTTP 403 (REJECT)" }
+    FORK: { status: 409, meaning: "HTTP 409 (FORK/CONFLICT)" }
+
+telemetry:
+  enabled: true
+  required_counters:
+    - "vacuum_count"
+    - "low_entropy_count"
+    - "mimic_scoped_count"
+    - "drop_count"
+    - "suppress_count"
+    - "pass_count"
+    - "replayed_count"
+    - "conflict_count"
+    - "failed_count"
+    - "stage1_ms"
+    - "stage2_ms"
+    - "stage3_ms"
+    - "stage4_ms"
+    - "ingested"
+    - "admissible"
+    - "candidate_set_size"
+    - "finding_candidates"
+    - "certified_findings"
+  exposure_endpoints:
+    - "/axoden/telemetry"
+
+exports:
+  assessment_json_enabled: true
+  stix_enabled: false
+  csv_enabled: false
+  include_integrity_proof_ref: true
