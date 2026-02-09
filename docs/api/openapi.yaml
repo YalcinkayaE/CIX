@@ -1,0 +1,250 @@
+openapi: 3.0.3
+info:
+  title: CIX Alerts Consolidated API
+  version: "1.0.0"
+servers:
+  - url: http://localhost:8009
+
+paths:
+  /healthz:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthResponse"
+
+  /v1/ingest/events:
+    post:
+      summary: Ingest events with kernel gate + dedup
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/IngestBatchRequest"
+      responses:
+        "200":
+          description: Ingested
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IngestBatchResponse"
+        "409":
+          description: Idempotency conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /v1/runs/graph:
+    post:
+      summary: Start graph run from admitted evidence
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GraphRunRequest"
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GraphRunResponse"
+        "409":
+          description: Idempotency conflict
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "422":
+          description: Missing evidence
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /v1/runs/{run_id}:
+    get:
+      summary: Get run status
+      parameters:
+        - in: path
+          name: run_id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GraphRunStatus"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /v1/runs/{run_id}/artifacts:
+    get:
+      summary: Get run artifacts
+      parameters:
+        - in: path
+          name: run_id
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Artifacts
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArtifactList"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status: { type: string }
+
+    IngestEvent:
+      type: object
+      required: [source_id, event_id, source_timestamp]
+      properties:
+        source_id: { type: string }
+        event_id: { type: string }
+        source_timestamp: { type: string, format: date-time }
+        raw_payload: { type: object, additionalProperties: true }
+        raw_payload_ref: { type: string }
+        raw_payload_hash: { type: string }
+        raw_event: { type: string }
+        format: { type: string, enum: ["json", "cef", "leef", "syslog"] }
+      additionalProperties: true
+
+    IngestBatchRequest:
+      type: object
+      required: [events]
+      properties:
+        events:
+          type: array
+          items: { $ref: "#/components/schemas/IngestEvent" }
+        profile_id:
+          type: string
+          default: "profile.cix"
+        run_graph:
+          type: boolean
+          default: false
+
+    KernelDecision:
+      type: object
+      required: [action_id, reason_codes]
+      properties:
+        action_id: { type: string }
+        reason_codes:
+          type: array
+          items: { type: string }
+
+    IngestEventResult:
+      type: object
+      properties:
+        event_id: { type: string }
+        evidence_id: { type: string }
+        decision: { $ref: "#/components/schemas/KernelDecision" }
+        dedup_key: { type: string }
+        dropped_reason: { type: string }
+
+    IngestBatchResponse:
+      type: object
+      properties:
+        batch_id: { type: string }
+        admitted:
+          type: array
+          items: { $ref: "#/components/schemas/IngestEventResult" }
+        dropped:
+          type: array
+          items: { $ref: "#/components/schemas/IngestEventResult" }
+        dedup:
+          type: object
+          properties:
+            duplicates_removed: { type: integer }
+        run_id: { type: string }
+        registry_commit: { type: string }
+
+    GraphRunRequest:
+      type: object
+      required: [evidence_ids]
+      properties:
+        evidence_ids:
+          type: array
+          items: { type: string }
+        profile_id:
+          type: string
+          default: "profile.cix"
+
+    GraphRunResponse:
+      type: object
+      properties:
+        run_id: { type: string }
+        status: { type: string }
+
+    GraphRunStatus:
+      type: object
+      properties:
+        run_id: { type: string }
+        status: { type: string }
+        started_at: { type: string, format: date-time }
+        finished_at: { type: string, format: date-time }
+        metrics: { type: object, additionalProperties: true }
+
+    Artifact:
+      type: object
+      properties:
+        artifact_id: { type: string }
+        type: { type: string }
+        path: { type: string }
+
+    ArtifactList:
+      type: object
+      properties:
+        run_id: { type: string }
+        artifacts:
+          type: array
+          items: { $ref: "#/components/schemas/Artifact" }
+
+    ErrorResponse:
+      type: object
+      required: [code, message, trace_id]
+      properties:
+        code: { type: string }
+        message: { type: string }
+        details: { type: object, additionalProperties: true }
+        trace_id: { type: string }
