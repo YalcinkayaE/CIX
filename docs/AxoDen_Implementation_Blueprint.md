@@ -1,9 +1,11 @@
-# AxoDen Implementation Blueprint
+# AxoDen Implementation Blueprint (Deprecated)
 ## CIX Alerts "World Graph" Prototype (v3.0)
 
 **Date:** January 2026
 **Status:** Operational (Dockerized)
 **Safety Level:** AxoDen-Compliant (ARV/EFI/VSR Enforced)
+
+> **Deprecated:** This document is superseded by `docs/AxoDen_Canonical_Blueprint.md` and is retained for historical reference only.
 
 ---
 
