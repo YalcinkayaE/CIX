@@ -7,3 +7,7 @@ requests
 matplotlib
 scipy
 pyvis
+fastapi
+uvicorn
+
+pyyaml
