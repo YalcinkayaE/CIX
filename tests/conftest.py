@@ -9,9 +9,11 @@ from typing import Any, Dict
 
 import pytest
 
+
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+from src.kernel.ledger import Ledger
 
 DOCS_DIR = ROOT / "docs"
 VECTORS_PATH = DOCS_DIR / "test_vectors.json"
@@ -32,15 +34,9 @@ def get_vector(test_vectors):
     return _get
 
 
-@pytest.fixture(scope="session")
-def profile_thresholds():
-    return {
-        "ingestion_thresholds": {
-            "vacuum_entropy_max": 4.05,
-            "low_entropy_max": 4.3,
-            "mimic_scoped_min": 4.3,
-        }
-    }
+@pytest.fixture
+def temp_ledger(tmp_path):
+    return Ledger(str(tmp_path / "ledger.jsonl"))
 
 
 def load_stage1_module():
