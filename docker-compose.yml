@@ -2,6 +2,8 @@ services:
   cix-alerts-app:
     build: .
     container_name: cix-alerts-container
+    ports:
+      - "8009:8009"
     volumes:
       - ./data:/app/data
       # Map the input file so you can edit it locally and test immediately
@@ -9,5 +11,4 @@ services:
       - ./soc_alert_batch.json:/app/soc_alert_batch.json
     env_file:
       - .env
-    # Keep container running so you can log in and run tests manually
-    command: tail -f /dev/null
+    command: uvicorn src.api.app:app --host 0.0.0.0 --port 8009

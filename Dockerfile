@@ -25,5 +25,5 @@ COPY *.json .
 # Create data directory for volume mapping
 RUN mkdir data
 
-# Set default entrypoint
-CMD ["python", "-u", "main.py"]
+# Default entrypoint: API service
+CMD ["uvicorn", "src.api.app:app", "--host", "0.0.0.0", "--port", "8009"]
