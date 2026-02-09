@@ -11,10 +11,14 @@ from src.synthesis import GraphNarrator
 from src.audit import ForensicLedger
 from src.visualize import GraphVisualizer
 from src.canon_registry import arv_evaluate, arv_phi, ARV_PHI_LIMIT
+from src.kernel.kernel_gate import KernelGate
+from src.ingest.dedup import compute_event_hash
 
 def main():
     parser = argparse.ArgumentParser(description="CIX Alerts Graph-Lead Prototype")
     parser.add_argument("input_file", nargs="?", default="soc_alert_batch.json", help="Path to the input JSON file (default: soc_alert_batch.json)")
+    parser.add_argument("--skip-kernel", action="store_true", help="Skip kernel gating (legacy flow)")
+    parser.add_argument("--kernel-ledger", default="data/kernel_ledger.jsonl", help="Kernel ledger output path")
     args = parser.parse_args()
 
     print("--- CIX Alerts Graph-Lead Prototype (Phase 3: World Graph) Starting ---")
@@ -35,17 +39,54 @@ def main():
     # Using 'soc_alert_batch.json' to test the new batch capability
     raw_alerts = parser.parse_file(args.input_file)
     print(f"[1] Batch Ingestion: Loaded {len(raw_alerts)} alerts from {args.input_file}.")
-    
-    # 2. World Graph Construction
+
+    # 2. Kernel Gate + Dedup (before graph build)
+    admitted_alerts = raw_alerts
+    if not args.skip_kernel:
+        gate = KernelGate(ledger_path=args.kernel_ledger)
+        gated_results = []
+        halt_triggered = False
+        for raw_alert in raw_alerts:
+            result = gate.evaluate(raw_alert)
+            if result.action_id == "ARV.HALT":
+                gate.append_ledger(result)
+                print(f"  [Kernel] HALT: {result.reason_codes}")
+                halt_triggered = True
+                break
+            if result.action_id in {"ARV.ADMIT", "ARV.COMPRESS"}:
+                gated_results.append(result)
+            else:
+                # Non-admitted events are not sent to graph
+                gate.append_ledger(result)
+        if halt_triggered:
+            return
+        deduped_results = []
+        seen_hashes = set()
+        duplicates_removed = 0
+        for result in gated_results:
+            event_hash = compute_event_hash(result.graph_raw)
+            if event_hash in seen_hashes:
+                duplicates_removed += 1
+                continue
+            seen_hashes.add(event_hash)
+            deduped_results.append(result)
+        if duplicates_removed:
+            print(f"  [Kernel] Dedup removed {duplicates_removed} events before graph build.")
+        admitted_alerts = [r.graph_raw for r in deduped_results]
+        # Append ledger entries only for deduplicated, admitted events
+        for result in deduped_results:
+            gate.append_ledger(result)
+
+    # 3. World Graph Construction
     world_graph = nx.DiGraph()
     constructor = GraphConstructor()
     
-    for raw_alert in raw_alerts:
+    for raw_alert in admitted_alerts:
         alert_model = GraphReadyAlert.from_raw_data(raw_alert)
         constructor.add_to_graph(world_graph, alert_model)
         print(f"  [+] Merged Alert: {alert_model.event_id}")
         
-    print(f"[2] World Graph Built: {len(world_graph.nodes)} nodes, {len(world_graph.edges)} edges.")
+    print(f"[3] World Graph Built: {len(world_graph.nodes)} nodes, {len(world_graph.edges)} edges.")
 
     # [ARV] Gate 1: Post-Construction (Global Check)
     phi_curr = arv_phi(world_graph.nodes)
