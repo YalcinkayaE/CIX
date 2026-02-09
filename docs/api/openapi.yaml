@@ -122,6 +122,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ArtifactList"
+        "202":
+          description: Run still processing; artifacts not ready yet
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ArtifactList"
         "404":
           description: Not found
           content:

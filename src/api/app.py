@@ -8,8 +8,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-from fastapi import BackgroundTasks, FastAPI, Header, HTTPException, Query
-from pydantic import BaseModel, Field
+from fastapi import BackgroundTasks, FastAPI, Header, HTTPException, Query, Response
+from pydantic import BaseModel, ConfigDict, Field
 
 from src.kernel.ledger import Ledger
 from src.kernel.stage1 import classify_batch
@@ -37,8 +37,7 @@ class IngestEvent(BaseModel):
         None, description="Input format: json, cef, leef, syslog"
     )
 
-    class Config:
-        extra = "allow"
+    model_config = ConfigDict(extra="allow")
 
 
 class IngestBatch(BaseModel):
@@ -142,7 +141,7 @@ def create_app() -> FastAPI:
                     ledger_path_obj.unlink()
                 ledger = Ledger(str(ledger_path_obj))
 
-            events = [event.dict(exclude_none=True) for event in batch.events]
+            events = [event.model_dump(exclude_none=True) for event in batch.events]
             result = classify_batch(
                 events,
                 profile=batch.profile_parameters,
@@ -170,7 +169,7 @@ def create_app() -> FastAPI:
         background_tasks: BackgroundTasks,
         idempotency_key: str = Header(..., alias="Idempotency-Key"),
     ) -> IngestBatchResponse:
-        payload_dict = batch.dict()
+        payload_dict = batch.model_dump()
         payload_hash = _payload_hash(payload_dict)
         cached = idempotency_cache.get(idempotency_key)
         if cached:
@@ -187,7 +186,7 @@ def create_app() -> FastAPI:
         halt_triggered = False
 
         for raw_alert in batch.events:
-            result = gate.evaluate(raw_alert.dict(exclude_none=True))
+            result = gate.evaluate(raw_alert.model_dump(exclude_none=True))
             decision = KernelDecision(
                 action_id=result.action_id,
                 reason_codes=result.reason_codes,
@@ -319,7 +318,7 @@ def create_app() -> FastAPI:
         background_tasks: BackgroundTasks,
         idempotency_key: str = Header(..., alias="Idempotency-Key"),
     ) -> GraphRunResponse:
-        payload_dict = request.dict()
+        payload_dict = request.model_dump()
         payload_hash = _payload_hash(payload_dict)
         cached = idempotency_cache.get(idempotency_key)
         if cached:
@@ -372,10 +371,15 @@ def create_app() -> FastAPI:
         return GraphRunStatus(**run)
 
     @app.get("/v1/runs/{run_id}/artifacts", response_model=ArtifactList)
-    def get_run_artifacts(run_id: str) -> ArtifactList:
+    def get_run_artifacts(run_id: str, response: Response) -> ArtifactList:
+        run = run_store.get(run_id)
+        if not run:
+            _error("RUN_NOT_FOUND", "Run not found", 404)
         artifacts = artifact_store.get(run_id)
         if artifacts is None:
-            _error("RUN_NOT_FOUND", "Run not found", 404)
+            if run.get("status") in {"PENDING", "RUNNING"}:
+                response.status_code = 202
+            return ArtifactList(run_id=run_id, artifacts=[])
         return ArtifactList(run_id=run_id, artifacts=[Artifact(**a) for a in artifacts])
 
     return app
