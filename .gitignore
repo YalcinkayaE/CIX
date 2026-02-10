@@ -21,3 +21,15 @@ data/
 soc_alert_flat.json
 *.png
 *.zip
+*.jsonl
+*.html
+*.pdf
+soc_alert_raw.json
+soc_alert_batch.json
+soc_alert_batch.json.bak
+
+# Large/local sample artifacts (tracked examples remain until explicitly removed)
+samples/**/*.normalized.json
+samples/**/*updated*.json
+samples/**/*expected*.json
+samples/**/*batch.json
