@@ -1,0 +1,11 @@
+{
+  "events": [
+    {
+      "source_id": "siem-B",
+      "event_id": "evt-leef-1",
+      "source_timestamp": "2026-02-06T12:01:00Z",
+      "format": "leef",
+      "raw_event": "LEEF:2.0|Vendor|Product|1.0|EVT123|\tcat=malware\tsev=5"
+    }
+  ]
+}

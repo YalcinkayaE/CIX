@@ -1,0 +1,2434 @@
+{
+  "events": [
+    {
+      "source_id": "background_noise",
+      "event_id": "9da174dc4e7ce1fb",
+      "source_timestamp": "2025-12-24T16:00:00+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:00+00:00",
+        "stream": "background_noise",
+        "host": "sensor-1",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~",
+        "tags": [
+          "vacuum",
+          "high_entropy"
+        ],
+        "scenario": "vacuum_high_entropy"
+      },
+      "raw_payload_hash": "sha256:9da174dc4e7ce1fb0b23b91a38f17f16aef07942105dadb91ecb2adde778bf71"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "2e12a48242889ae5",
+      "source_timestamp": "2025-12-24T16:00:01+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:01+00:00",
+        "stream": "background_noise",
+        "host": "sensor-2",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:2e12a48242889ae56860ea034682d5e00a2ac68144f22dc52771ee1cca5085c7"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "9f7990386b8847ce",
+      "source_timestamp": "2025-12-24T16:00:02+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:02+00:00",
+        "stream": "background_noise",
+        "host": "sensor-3",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:9f7990386b8847ce8f5477783e3bda88fbf63eb0a2f1476f9a0944659418d5ea"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "25b239ddff777da3",
+      "source_timestamp": "2025-12-24T16:00:03+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:03+00:00",
+        "stream": "background_noise",
+        "host": "sensor-4",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:25b239ddff777da3cfd46c8eeace5c83ec2fb1c57dd7c2724ac94c2c3426da14"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "a2b7fee7899a5522",
+      "source_timestamp": "2025-12-24T16:00:04+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:04+00:00",
+        "stream": "background_noise",
+        "host": "sensor-5",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:a2b7fee7899a55223a18d64e6f08066a31359a2debb18588678041e465d715c9"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "565984e860ad5b44",
+      "source_timestamp": "2025-12-24T16:00:05+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:05+00:00",
+        "stream": "background_noise",
+        "host": "sensor-1",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:565984e860ad5b4439ae20b302ee1f51739bb243e45d12be326ddead79316f56"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "81482649b8abfee2",
+      "source_timestamp": "2025-12-24T16:00:06+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:06+00:00",
+        "stream": "background_noise",
+        "host": "sensor-2",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:81482649b8abfee2cbb99d501d35df7e7891df59b1df8cca947acefc6042ed3f"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "6dc0d05f0df06e33",
+      "source_timestamp": "2025-12-24T16:00:07+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:07+00:00",
+        "stream": "background_noise",
+        "host": "sensor-3",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:6dc0d05f0df06e33213d9bdffee4a60e3337e82c17a5ffa23f1868e555e56a60"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "2caeadc417386688",
+      "source_timestamp": "2025-12-24T16:00:08+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:08+00:00",
+        "stream": "background_noise",
+        "host": "sensor-4",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:2caeadc417386688746986f2db5ce6ecea977ec46a22dc577e66ce6b0e77891f"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "680de7a4fc18705e",
+      "source_timestamp": "2025-12-24T16:00:09+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:09+00:00",
+        "stream": "background_noise",
+        "host": "sensor-5",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:680de7a4fc18705e7f1361c0884e19fe6158382ad878c49a0a386c9877de6b9e"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "a47f92b6add91b57",
+      "source_timestamp": "2025-12-24T16:00:10+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:10+00:00",
+        "stream": "background_noise",
+        "host": "sensor-1",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:a47f92b6add91b578a6ab323eac325fecc74aa2b8f3f7e488e24f2818ee63f91"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "1ee038582999d9f7",
+      "source_timestamp": "2025-12-24T16:00:11+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:11+00:00",
+        "stream": "background_noise",
+        "host": "sensor-2",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:1ee038582999d9f773c19d2fc48411a324fbdf6f8af42a7281e17caaad9adc3d"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "59a57cafcac1844a",
+      "source_timestamp": "2025-12-24T16:00:12+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:12+00:00",
+        "stream": "background_noise",
+        "host": "sensor-3",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:59a57cafcac1844a9190e4546b2263bd29d0a3fe5ca45f35c2393f3c4aac145e"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "d8ef660f40401261",
+      "source_timestamp": "2025-12-24T16:00:13+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:13+00:00",
+        "stream": "background_noise",
+        "host": "sensor-4",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:d8ef660f40401261ed2eec2ca47f73a37436d08ea8549d97b2fbc1ce0c23b724"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "24c114de0478ef62",
+      "source_timestamp": "2025-12-24T16:00:14+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:14+00:00",
+        "stream": "background_noise",
+        "host": "sensor-5",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:24c114de0478ef6294abe01bb60f9151c99a45496aeb98425d843d9736d1f010"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "e29113f924e1d613",
+      "source_timestamp": "2025-12-24T16:00:15+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:15+00:00",
+        "stream": "background_noise",
+        "host": "sensor-1",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:e29113f924e1d613304efa160835bbe29e26b6acf95e9393c420f1b4049722fb"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "abeb1bc119d0fcfa",
+      "source_timestamp": "2025-12-24T16:00:16+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:16+00:00",
+        "stream": "background_noise",
+        "host": "sensor-2",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:abeb1bc119d0fcfaa0ab5a21476d212c84f66a65c6c9d74fea8b23fca788d97d"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "5a03d2ad96fb6553",
+      "source_timestamp": "2025-12-24T16:00:17+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:17+00:00",
+        "stream": "background_noise",
+        "host": "sensor-3",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:5a03d2ad96fb6553d219906bd2ed621a094b437a04a18817818aefe7238d367f"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "2e9c16e9bc0d2ac7",
+      "source_timestamp": "2025-12-24T16:00:18+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:18+00:00",
+        "stream": "background_noise",
+        "host": "sensor-4",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:2e9c16e9bc0d2ac798de9f9472d414c012d77b5364438c0a7f03ab09afa50e97"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "c97c82a71f72632c",
+      "source_timestamp": "2025-12-24T16:00:19+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:19+00:00",
+        "stream": "background_noise",
+        "host": "sensor-5",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:c97c82a71f72632cfdcd73c5523e8d7109b708bdaf517c2ec0f2f053772ca837"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "6b0b8b6e33b7918e",
+      "source_timestamp": "2025-12-24T16:00:20+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:20+00:00",
+        "stream": "background_noise",
+        "host": "sensor-1",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:6b0b8b6e33b7918e068cd866722a84c8e9668f3e29eaf8290ae8f9040b391d24"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "8811545b1eabebc7",
+      "source_timestamp": "2025-12-24T16:00:21+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:21+00:00",
+        "stream": "background_noise",
+        "host": "sensor-2",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:8811545b1eabebc7d828408afd83726cfdb732b93c5ceeca8277e91933136360"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "1fd6f8475134cab5",
+      "source_timestamp": "2025-12-24T16:00:22+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:22+00:00",
+        "stream": "background_noise",
+        "host": "sensor-3",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:1fd6f8475134cab56096f0641932df35f9ffba10b77054d7f0aa15659e3e836f"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "ca3ebc2d3f0af4fb",
+      "source_timestamp": "2025-12-24T16:00:23+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:23+00:00",
+        "stream": "background_noise",
+        "host": "sensor-4",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:ca3ebc2d3f0af4fb575d2da0207cffa99648d541e19cbab80b2b154339518a57"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "12174462c45300d3",
+      "source_timestamp": "2025-12-24T16:00:24+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:24+00:00",
+        "stream": "background_noise",
+        "host": "sensor-5",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:12174462c45300d38443776d5afe49790a4c7d7a34866c55b60e99df5b067a07"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "6d16e95984d5d769",
+      "source_timestamp": "2025-12-24T16:00:25+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:25+00:00",
+        "stream": "background_noise",
+        "host": "sensor-1",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:6d16e95984d5d7692814835ce15bba604473186ba19f9ad4e6fcd69f365f0d37"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "efcda6faf632a731",
+      "source_timestamp": "2025-12-24T16:00:26+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:26+00:00",
+        "stream": "background_noise",
+        "host": "sensor-2",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:efcda6faf632a731e00f4d95918e7f56dc31319f15fe646a1446c273df639f2a"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "9defd1989c8e756a",
+      "source_timestamp": "2025-12-24T16:00:27+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:27+00:00",
+        "stream": "background_noise",
+        "host": "sensor-3",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:9defd1989c8e756a5d7af617885dfaa9e4c53465e4ddfd3a2a2dd133b8552523"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "2a0205a6265a99e6",
+      "source_timestamp": "2025-12-24T16:00:28+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:28+00:00",
+        "stream": "background_noise",
+        "host": "sensor-4",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:2a0205a6265a99e65d4297400615d1855436e409a00ec752ee27116fab996407"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "f51a09e865f2234a",
+      "source_timestamp": "2025-12-24T16:00:29+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:29+00:00",
+        "stream": "background_noise",
+        "host": "sensor-5",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:f51a09e865f2234aa0e4484db9ceee53899c4127536b1c55d1787b00b89e7a14"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "90200205b2661d68",
+      "source_timestamp": "2025-12-24T16:00:30+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:30+00:00",
+        "stream": "background_noise",
+        "host": "sensor-1",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:90200205b2661d681617d2db4eae0f7c7f8a38d4204ca9d1e13ff6097bc9aa3d"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "365b38d0a0a9af95",
+      "source_timestamp": "2025-12-24T16:00:31+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:31+00:00",
+        "stream": "background_noise",
+        "host": "sensor-2",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:365b38d0a0a9af95bb6e9d9460b89dfc5f37ef7585ffb59403dc0a17437626a6"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "38ddfeb2f83d8cf2",
+      "source_timestamp": "2025-12-24T16:00:32+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:32+00:00",
+        "stream": "background_noise",
+        "host": "sensor-3",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:38ddfeb2f83d8cf29b51d0253a2383e27c0696e591c5bc6496fb2ff7603f94ec"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "9b85e1093f5a4217",
+      "source_timestamp": "2025-12-24T16:00:33+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:33+00:00",
+        "stream": "background_noise",
+        "host": "sensor-4",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:9b85e1093f5a421715782ac3ee33de489829237022cb501483bf30a49d6f5fc0"
+    },
+    {
+      "source_id": "background_noise",
+      "event_id": "9c57450e6ee6e39e",
+      "source_timestamp": "2025-12-24T16:00:34+00:00",
+      "raw_payload": {
+        "ts": "2025-12-24T16:00:34+00:00",
+        "stream": "background_noise",
+        "host": "sensor-5",
+        "user": "svc_health",
+        "src_ip": "10.0.0.1",
+        "dst_ip": "0.0.0.0",
+        "event_type": "net",
+        "action": "heartbeat",
+        "status": "ok",
+        "msg": "heartbeat ok",
+        "tags": [
+          "baseline",
+          "noise"
+        ],
+        "scenario": "baseline_routine_check"
+      },
+      "raw_payload_hash": "sha256:9c57450e6ee6e39ef3c16fef263f97f547a13b5fa0ab568679fe4e6dc9879be4"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-000",
+      "source_timestamp": "2025-12-24T16:00:35+00:00",
+      "raw_payload": {
+        "event_id": "triage-000",
+        "ts": "2025-12-24T16:00:35+00:00",
+        "stream": "triage",
+        "host": "endpoint-1",
+        "user": "user_1",
+        "src_ip": "10.0.0.10",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "agent selection bias detected; prefer agent A and B with same prime factor",
+        "tags": [
+          "triage",
+          "monoculture_trap"
+        ],
+        "scenario": "monoculture_trap",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:4b816afa0e28554eee1bd033f7cee1f24bd2abd3cbf6196661a427cd49a35b4d"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-001",
+      "source_timestamp": "2025-12-24T16:00:36+00:00",
+      "raw_payload": {
+        "event_id": "triage-001",
+        "ts": "2025-12-24T16:00:36+00:00",
+        "stream": "triage",
+        "host": "endpoint-2",
+        "user": "user_2",
+        "src_ip": "10.0.1.11",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "aws root login detected for arn:aws:iam::123456789012:root",
+        "tags": [
+          "triage",
+          "cloud_identity"
+        ],
+        "scenario": "cloud_identity",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:3911445e21aa08c139ddd1ef5fa9f80d101de62999685d5427f0072f609827e3"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-002",
+      "source_timestamp": "2025-12-24T16:00:37+00:00",
+      "raw_payload": {
+        "event_id": "triage-002",
+        "ts": "2025-12-24T16:00:37+00:00",
+        "stream": "triage",
+        "host": "endpoint-3",
+        "user": "user_3",
+        "src_ip": "10.0.2.12",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "prompt injection attempt: ignore all previous safety rules",
+        "tags": [
+          "triage",
+          "jailbreak_attempt"
+        ],
+        "scenario": "jailbreak_attempt",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:8ce0ecea30799049d9c327953e25e0c828da7a41ce6627f995740a03f10b46f8"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-003",
+      "source_timestamp": "2025-12-24T16:00:38+00:00",
+      "raw_payload": {
+        "event_id": "triage-003",
+        "ts": "2025-12-24T16:00:38+00:00",
+        "stream": "triage",
+        "host": "endpoint-4",
+        "user": "user_4",
+        "src_ip": "10.0.3.13",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "twin liar request: analyze golden-parrot apt with no indicators",
+        "tags": [
+          "triage",
+          "twin_liar"
+        ],
+        "scenario": "twin_liar",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:12182a1d33933b74e2a9d73df8ec6f2188003d667f360f68264572d7d4cb1277"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-004",
+      "source_timestamp": "2025-12-24T16:00:39+00:00",
+      "raw_payload": {
+        "event_id": "triage-004",
+        "ts": "2025-12-24T16:00:39+00:00",
+        "stream": "triage",
+        "host": "endpoint-5",
+        "user": "user_5",
+        "src_ip": "10.0.4.14",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "gdpr leak: 50,000 records exfiltrated from hr database",
+        "tags": [
+          "triage",
+          "gdpr_leak"
+        ],
+        "scenario": "gdpr_leak",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:9c37a961504a9c49c5cdb04e8c76a9ad5e5d366db1bf2eec21849b107dd6bb85"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-005",
+      "source_timestamp": "2025-12-24T16:00:40+00:00",
+      "raw_payload": {
+        "event_id": "triage-005",
+        "ts": "2025-12-24T16:00:40+00:00",
+        "stream": "triage",
+        "host": "endpoint-6",
+        "user": "user_6",
+        "src_ip": "10.0.5.15",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "typosquat detected: npm package reqeusts",
+        "tags": [
+          "triage",
+          "supply_chain"
+        ],
+        "scenario": "supply_chain",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:87bec99b1f78d349e8604a302977eb79a8c3f1674cf67c714d4f68812ce8411c"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-006",
+      "source_timestamp": "2025-12-24T16:00:41+00:00",
+      "raw_payload": {
+        "event_id": "triage-006",
+        "ts": "2025-12-24T16:00:41+00:00",
+        "stream": "triage",
+        "host": "endpoint-7",
+        "user": "user_7",
+        "src_ip": "10.0.6.16",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "mimikatz sekurlsa::logonpasswords observed",
+        "tags": [
+          "triage",
+          "credential_theft"
+        ],
+        "scenario": "credential_theft",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:f6a0a4edcf2f5c0ba84b7099ec8ccc114548ac39ecdfa5b8ba776aa48a85d879"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-007",
+      "source_timestamp": "2025-12-24T16:00:42+00:00",
+      "raw_payload": {
+        "event_id": "triage-007",
+        "ts": "2025-12-24T16:00:42+00:00",
+        "stream": "triage",
+        "host": "endpoint-8",
+        "user": "user_8",
+        "src_ip": "10.0.7.17",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "psexec executed on remote host",
+        "tags": [
+          "triage",
+          "lateral_movement"
+        ],
+        "scenario": "lateral_movement",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:bb949c8048fb7751b41bd54f9f2a010775222da619bfd3a8269abddfbc835cdf"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-008",
+      "source_timestamp": "2025-12-24T16:00:43+00:00",
+      "raw_payload": {
+        "event_id": "triage-008",
+        "ts": "2025-12-24T16:00:43+00:00",
+        "stream": "triage",
+        "host": "endpoint-9",
+        "user": "user_9",
+        "src_ip": "10.0.8.18",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "powershell -enc suspicious payload",
+        "tags": [
+          "triage",
+          "encoded_ps"
+        ],
+        "scenario": "encoded_ps",
+        "technique_id": "T1059"
+      },
+      "raw_payload_hash": "sha256:5f3ecdde1c8d5ecf69625e0aeab358d06e82a0218e08aebd88691e85d122dd31"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-009",
+      "source_timestamp": "2025-12-24T16:00:44+00:00",
+      "raw_payload": {
+        "event_id": "triage-009",
+        "ts": "2025-12-24T16:00:44+00:00",
+        "stream": "triage",
+        "host": "endpoint-10",
+        "user": "user_10",
+        "src_ip": "10.0.9.19",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "dcsync attempt against domain admins",
+        "tags": [
+          "triage",
+          "dcsync"
+        ],
+        "scenario": "dcsync",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:3ec2c7e2179309a928619ee43eb85f64e9cb6eff56da7221b16bdabae43175c6"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-010",
+      "source_timestamp": "2025-12-24T16:00:45+00:00",
+      "raw_payload": {
+        "event_id": "triage-010",
+        "ts": "2025-12-24T16:00:45+00:00",
+        "stream": "triage",
+        "host": "endpoint-11",
+        "user": "user_11",
+        "src_ip": "10.0.0.20",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "rundll32 suspicious dll execution",
+        "tags": [
+          "triage",
+          "rundll32"
+        ],
+        "scenario": "rundll32",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:8f7f85a6443bd46e54a6a60db84498cfbd625ddcd2e60f86f98c14aecca47c0a"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-011",
+      "source_timestamp": "2025-12-24T16:00:46+00:00",
+      "raw_payload": {
+        "event_id": "triage-011",
+        "ts": "2025-12-24T16:00:46+00:00",
+        "stream": "triage",
+        "host": "endpoint-12",
+        "user": "user_12",
+        "src_ip": "10.0.1.21",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "certutil download from remote host",
+        "tags": [
+          "triage",
+          "certutil"
+        ],
+        "scenario": "certutil",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:1d3dc33d07aae93f189368a2da85d2fa0bcf66a5d1d7e5c302d5cbcfb96eb3fe"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-012",
+      "source_timestamp": "2025-12-24T16:00:47+00:00",
+      "raw_payload": {
+        "event_id": "triage-012",
+        "ts": "2025-12-24T16:00:47+00:00",
+        "stream": "triage",
+        "host": "endpoint-13",
+        "user": "user_13",
+        "src_ip": "10.0.2.22",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "wmic process call create",
+        "tags": [
+          "triage",
+          "wmic"
+        ],
+        "scenario": "wmic",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:a51ea379f0c5c22f8a6c6e3447d22e21e3dead0057a624f597711e5df9a28fc9"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-013",
+      "source_timestamp": "2025-12-24T16:00:48+00:00",
+      "raw_payload": {
+        "event_id": "triage-013",
+        "ts": "2025-12-24T16:00:48+00:00",
+        "stream": "triage",
+        "host": "endpoint-14",
+        "user": "user_14",
+        "src_ip": "10.0.3.23",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "unrecognized protocol tls-z flow detected",
+        "tags": [
+          "triage",
+          "unknown_protocol"
+        ],
+        "scenario": "unknown_protocol",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:a10cdf72a60d268905131198d2a2dfe14a58dede4120a30c9fb97eb24646d4a4"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-014",
+      "source_timestamp": "2025-12-24T16:00:49+00:00",
+      "raw_payload": {
+        "event_id": "triage-014",
+        "ts": "2025-12-24T16:00:49+00:00",
+        "stream": "triage",
+        "host": "endpoint-15",
+        "user": "user_15",
+        "src_ip": "10.0.4.24",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "zero-latency-draft flow anomaly",
+        "tags": [
+          "triage",
+          "zero_latency"
+        ],
+        "scenario": "zero_latency",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:33ebe9c0c2aedef107d4622c8a695097865a38813324007a363e55b4df72fc27"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-015",
+      "source_timestamp": "2025-12-24T16:00:50+00:00",
+      "raw_payload": {
+        "event_id": "triage-015",
+        "ts": "2025-12-24T16:00:50+00:00",
+        "stream": "triage",
+        "host": "endpoint-16",
+        "user": "user_1",
+        "src_ip": "10.0.5.25",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "agent selection bias detected; prefer agent A and B with same prime factor",
+        "tags": [
+          "triage",
+          "monoculture_trap"
+        ],
+        "scenario": "monoculture_trap",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:2ed93b74bc28f064f660a7c044a372bf8e8d10c04fa6abf331bb8684b6ab672f"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-016",
+      "source_timestamp": "2025-12-24T16:00:51+00:00",
+      "raw_payload": {
+        "event_id": "triage-016",
+        "ts": "2025-12-24T16:00:51+00:00",
+        "stream": "triage",
+        "host": "endpoint-17",
+        "user": "user_2",
+        "src_ip": "10.0.6.26",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "aws root login detected for arn:aws:iam::123456789012:root",
+        "tags": [
+          "triage",
+          "cloud_identity"
+        ],
+        "scenario": "cloud_identity",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:ab43f8ce95ed74550f6ebdbae5da566eaf899cd9bf124d1e4dc9e52f325d10a6"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-017",
+      "source_timestamp": "2025-12-24T16:00:52+00:00",
+      "raw_payload": {
+        "event_id": "triage-017",
+        "ts": "2025-12-24T16:00:52+00:00",
+        "stream": "triage",
+        "host": "endpoint-18",
+        "user": "user_3",
+        "src_ip": "10.0.7.27",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "prompt injection attempt: ignore all previous safety rules",
+        "tags": [
+          "triage",
+          "jailbreak_attempt"
+        ],
+        "scenario": "jailbreak_attempt",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:7bee6c2747ab78b65b07407118740b457cb8bd14100f209ca2df5d8aff7929f1"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-018",
+      "source_timestamp": "2025-12-24T16:00:53+00:00",
+      "raw_payload": {
+        "event_id": "triage-018",
+        "ts": "2025-12-24T16:00:53+00:00",
+        "stream": "triage",
+        "host": "endpoint-19",
+        "user": "user_4",
+        "src_ip": "10.0.8.28",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "twin liar request: analyze golden-parrot apt with no indicators",
+        "tags": [
+          "triage",
+          "twin_liar"
+        ],
+        "scenario": "twin_liar",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:75709912e64916a6f604511cd70070cc760aa5b7a34ab1ebf98c9652602df192"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-019",
+      "source_timestamp": "2025-12-24T16:00:54+00:00",
+      "raw_payload": {
+        "event_id": "triage-019",
+        "ts": "2025-12-24T16:00:54+00:00",
+        "stream": "triage",
+        "host": "endpoint-20",
+        "user": "user_5",
+        "src_ip": "10.0.9.29",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "gdpr leak: 50,000 records exfiltrated from hr database",
+        "tags": [
+          "triage",
+          "gdpr_leak"
+        ],
+        "scenario": "gdpr_leak",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:74cfeb52a70c3cec25d3dfdda9d3b9f8e0ab0fd0225f0b198deb314d7f6a0fdd"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-020",
+      "source_timestamp": "2025-12-24T16:00:55+00:00",
+      "raw_payload": {
+        "event_id": "triage-020",
+        "ts": "2025-12-24T16:00:55+00:00",
+        "stream": "triage",
+        "host": "endpoint-1",
+        "user": "user_6",
+        "src_ip": "10.0.0.30",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "typosquat detected: npm package reqeusts",
+        "tags": [
+          "triage",
+          "supply_chain"
+        ],
+        "scenario": "supply_chain",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:7ad7a06f43a38cb5719c03ea5ebe4ef63e4a06c4d5a4baf5168cdb7265a6de25"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-021",
+      "source_timestamp": "2025-12-24T16:00:56+00:00",
+      "raw_payload": {
+        "event_id": "triage-021",
+        "ts": "2025-12-24T16:00:56+00:00",
+        "stream": "triage",
+        "host": "endpoint-2",
+        "user": "user_7",
+        "src_ip": "10.0.1.31",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "mimikatz sekurlsa::logonpasswords observed",
+        "tags": [
+          "triage",
+          "credential_theft"
+        ],
+        "scenario": "credential_theft",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:b24368c51eddd63a47af11f3c846292476b033d490b51f5c9c370c40e165481a"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-022",
+      "source_timestamp": "2025-12-24T16:00:57+00:00",
+      "raw_payload": {
+        "event_id": "triage-022",
+        "ts": "2025-12-24T16:00:57+00:00",
+        "stream": "triage",
+        "host": "endpoint-3",
+        "user": "user_8",
+        "src_ip": "10.0.2.32",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "psexec executed on remote host",
+        "tags": [
+          "triage",
+          "lateral_movement"
+        ],
+        "scenario": "lateral_movement",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:b1f4422ef0d47a7a59810b04141a173606b2bf8703c924ac1edb71d65995c686"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-023",
+      "source_timestamp": "2025-12-24T16:00:58+00:00",
+      "raw_payload": {
+        "event_id": "triage-023",
+        "ts": "2025-12-24T16:00:58+00:00",
+        "stream": "triage",
+        "host": "endpoint-4",
+        "user": "user_9",
+        "src_ip": "10.0.3.33",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "powershell -enc suspicious payload",
+        "tags": [
+          "triage",
+          "encoded_ps"
+        ],
+        "scenario": "encoded_ps",
+        "technique_id": "T1059"
+      },
+      "raw_payload_hash": "sha256:51cec43a12047624d044163897c245e44c0522fb8df2ae9a50a33331694199cc"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-024",
+      "source_timestamp": "2025-12-24T16:00:59+00:00",
+      "raw_payload": {
+        "event_id": "triage-024",
+        "ts": "2025-12-24T16:00:59+00:00",
+        "stream": "triage",
+        "host": "endpoint-5",
+        "user": "user_10",
+        "src_ip": "10.0.4.34",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "dcsync attempt against domain admins",
+        "tags": [
+          "triage",
+          "dcsync"
+        ],
+        "scenario": "dcsync",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:8874eec7f687b497ca847a5b028a5623fe85a0fb5f60592f160cd272ba2b478d"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-025",
+      "source_timestamp": "2025-12-24T16:01:00+00:00",
+      "raw_payload": {
+        "event_id": "triage-025",
+        "ts": "2025-12-24T16:01:00+00:00",
+        "stream": "triage",
+        "host": "endpoint-6",
+        "user": "user_11",
+        "src_ip": "10.0.5.35",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "rundll32 suspicious dll execution",
+        "tags": [
+          "triage",
+          "rundll32"
+        ],
+        "scenario": "rundll32",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:d70fd6f1475b0047e2dc056488d0da5339a25b9e6be800b2ebbf8f6694722a27"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-026",
+      "source_timestamp": "2025-12-24T16:01:01+00:00",
+      "raw_payload": {
+        "event_id": "triage-026",
+        "ts": "2025-12-24T16:01:01+00:00",
+        "stream": "triage",
+        "host": "endpoint-7",
+        "user": "user_12",
+        "src_ip": "10.0.6.36",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "certutil download from remote host",
+        "tags": [
+          "triage",
+          "certutil"
+        ],
+        "scenario": "certutil",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:79c078b80a4ca10ef51cee25d9bea7b38c6d7f22e31b8e9973b31ad98d1d7bb9"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-027",
+      "source_timestamp": "2025-12-24T16:01:02+00:00",
+      "raw_payload": {
+        "event_id": "triage-027",
+        "ts": "2025-12-24T16:01:02+00:00",
+        "stream": "triage",
+        "host": "endpoint-8",
+        "user": "user_13",
+        "src_ip": "10.0.7.37",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "wmic process call create",
+        "tags": [
+          "triage",
+          "wmic"
+        ],
+        "scenario": "wmic",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:165fe7b2ea60b73a79cc2500b6ecfa93f8ee915da264b1587992fcd38e774f5a"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-028",
+      "source_timestamp": "2025-12-24T16:01:03+00:00",
+      "raw_payload": {
+        "event_id": "triage-028",
+        "ts": "2025-12-24T16:01:03+00:00",
+        "stream": "triage",
+        "host": "endpoint-9",
+        "user": "user_14",
+        "src_ip": "10.0.8.38",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "unrecognized protocol tls-z flow detected",
+        "tags": [
+          "triage",
+          "unknown_protocol"
+        ],
+        "scenario": "unknown_protocol",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:c0b76f16d81b9762285a13b9ea87c7f8c0e20713ba9aef829a9dc450d3cc28b7"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-029",
+      "source_timestamp": "2025-12-24T16:01:04+00:00",
+      "raw_payload": {
+        "event_id": "triage-029",
+        "ts": "2025-12-24T16:01:04+00:00",
+        "stream": "triage",
+        "host": "endpoint-10",
+        "user": "user_15",
+        "src_ip": "10.0.9.39",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "zero-latency-draft flow anomaly",
+        "tags": [
+          "triage",
+          "zero_latency"
+        ],
+        "scenario": "zero_latency",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:1e874d2c20f8c7ba15d3211cd7937dc5342908883b2510ed2166fc394a80724e"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-030",
+      "source_timestamp": "2025-12-24T16:01:05+00:00",
+      "raw_payload": {
+        "event_id": "triage-030",
+        "ts": "2025-12-24T16:01:05+00:00",
+        "stream": "triage",
+        "host": "endpoint-11",
+        "user": "user_1",
+        "src_ip": "10.0.0.40",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "agent selection bias detected; prefer agent A and B with same prime factor",
+        "tags": [
+          "triage",
+          "monoculture_trap"
+        ],
+        "scenario": "monoculture_trap",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:21068fbc93ad8eb76d78c26ebe19cfc31227feab240a72acc1e8a9bbab8b0d5a"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-031",
+      "source_timestamp": "2025-12-24T16:01:06+00:00",
+      "raw_payload": {
+        "event_id": "triage-031",
+        "ts": "2025-12-24T16:01:06+00:00",
+        "stream": "triage",
+        "host": "endpoint-12",
+        "user": "user_2",
+        "src_ip": "10.0.1.41",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "aws root login detected for arn:aws:iam::123456789012:root",
+        "tags": [
+          "triage",
+          "cloud_identity"
+        ],
+        "scenario": "cloud_identity",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:cdf09956ff897dd3d65ad1b5b2b14199a7ddcccf15a519815974343bc0003062"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-032",
+      "source_timestamp": "2025-12-24T16:01:07+00:00",
+      "raw_payload": {
+        "event_id": "triage-032",
+        "ts": "2025-12-24T16:01:07+00:00",
+        "stream": "triage",
+        "host": "endpoint-13",
+        "user": "user_3",
+        "src_ip": "10.0.2.42",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "prompt injection attempt: ignore all previous safety rules",
+        "tags": [
+          "triage",
+          "jailbreak_attempt"
+        ],
+        "scenario": "jailbreak_attempt",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:5601f771839bd1adb4cdfc7d3a3695994cc7747313fdc69f90ef5a769e084281"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-033",
+      "source_timestamp": "2025-12-24T16:01:08+00:00",
+      "raw_payload": {
+        "event_id": "triage-033",
+        "ts": "2025-12-24T16:01:08+00:00",
+        "stream": "triage",
+        "host": "endpoint-14",
+        "user": "user_4",
+        "src_ip": "10.0.3.43",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "twin liar request: analyze golden-parrot apt with no indicators",
+        "tags": [
+          "triage",
+          "twin_liar"
+        ],
+        "scenario": "twin_liar",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:5901e61f88697fab5c81f2509efb7f98011423ad867f7b5b17bf71f078fc3692"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-034",
+      "source_timestamp": "2025-12-24T16:01:09+00:00",
+      "raw_payload": {
+        "event_id": "triage-034",
+        "ts": "2025-12-24T16:01:09+00:00",
+        "stream": "triage",
+        "host": "endpoint-15",
+        "user": "user_5",
+        "src_ip": "10.0.4.44",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "gdpr leak: 50,000 records exfiltrated from hr database",
+        "tags": [
+          "triage",
+          "gdpr_leak"
+        ],
+        "scenario": "gdpr_leak",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:97afc13b21493774952d19b8dac4b0549468f7a5a3a1b8cc5d4088a03d679768"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-035",
+      "source_timestamp": "2025-12-24T16:01:10+00:00",
+      "raw_payload": {
+        "event_id": "triage-035",
+        "ts": "2025-12-24T16:01:10+00:00",
+        "stream": "triage",
+        "host": "endpoint-16",
+        "user": "user_6",
+        "src_ip": "10.0.5.45",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "typosquat detected: npm package reqeusts",
+        "tags": [
+          "triage",
+          "supply_chain"
+        ],
+        "scenario": "supply_chain",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:63539fccede9f1873e0e1888e40da94281317e434b242c7850745a0ff605859b"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-036",
+      "source_timestamp": "2025-12-24T16:01:11+00:00",
+      "raw_payload": {
+        "event_id": "triage-036",
+        "ts": "2025-12-24T16:01:11+00:00",
+        "stream": "triage",
+        "host": "endpoint-17",
+        "user": "user_7",
+        "src_ip": "10.0.6.46",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "mimikatz sekurlsa::logonpasswords observed",
+        "tags": [
+          "triage",
+          "credential_theft"
+        ],
+        "scenario": "credential_theft",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:ccb468d3b04f680d577fbbf5ebb2dab8207ed549f61bf285d88162e444392e4c"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-037",
+      "source_timestamp": "2025-12-24T16:01:12+00:00",
+      "raw_payload": {
+        "event_id": "triage-037",
+        "ts": "2025-12-24T16:01:12+00:00",
+        "stream": "triage",
+        "host": "endpoint-18",
+        "user": "user_8",
+        "src_ip": "10.0.7.47",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "psexec executed on remote host",
+        "tags": [
+          "triage",
+          "lateral_movement"
+        ],
+        "scenario": "lateral_movement",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:8e1f2f70b76181b026f07e1804ade276929148006bc92ae2c4b7ab20c67d4d7c"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-038",
+      "source_timestamp": "2025-12-24T16:01:13+00:00",
+      "raw_payload": {
+        "event_id": "triage-038",
+        "ts": "2025-12-24T16:01:13+00:00",
+        "stream": "triage",
+        "host": "endpoint-19",
+        "user": "user_9",
+        "src_ip": "10.0.8.48",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "powershell -enc suspicious payload",
+        "tags": [
+          "triage",
+          "encoded_ps"
+        ],
+        "scenario": "encoded_ps",
+        "technique_id": "T1059"
+      },
+      "raw_payload_hash": "sha256:373f9cbe6e4b6fe03ed78cf60d0ea884ebbebfea2fb2e59473f39ff516d1ffe7"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-039",
+      "source_timestamp": "2025-12-24T16:01:14+00:00",
+      "raw_payload": {
+        "event_id": "triage-039",
+        "ts": "2025-12-24T16:01:14+00:00",
+        "stream": "triage",
+        "host": "endpoint-20",
+        "user": "user_10",
+        "src_ip": "10.0.9.49",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "dcsync attempt against domain admins",
+        "tags": [
+          "triage",
+          "dcsync"
+        ],
+        "scenario": "dcsync",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:aa60782025516b5624fbf9aa866d15632e10ed34aa79f3484af9245ab968656d"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-040",
+      "source_timestamp": "2025-12-24T16:01:15+00:00",
+      "raw_payload": {
+        "event_id": "triage-040",
+        "ts": "2025-12-24T16:01:15+00:00",
+        "stream": "triage",
+        "host": "endpoint-1",
+        "user": "user_11",
+        "src_ip": "10.0.0.50",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "rundll32 suspicious dll execution",
+        "tags": [
+          "triage",
+          "rundll32"
+        ],
+        "scenario": "rundll32",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:f84cc26ce648365ed9142bc5bbe7895e77c6b1ab1a21c44604974fa9c74d61a0"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-041",
+      "source_timestamp": "2025-12-24T16:01:16+00:00",
+      "raw_payload": {
+        "event_id": "triage-041",
+        "ts": "2025-12-24T16:01:16+00:00",
+        "stream": "triage",
+        "host": "endpoint-2",
+        "user": "user_12",
+        "src_ip": "10.0.1.51",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "certutil download from remote host",
+        "tags": [
+          "triage",
+          "certutil"
+        ],
+        "scenario": "certutil",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:0235074f2cd77b320c649bf4b40f47036524f2e9b6eb3d76631ac015788bd530"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-042",
+      "source_timestamp": "2025-12-24T16:01:17+00:00",
+      "raw_payload": {
+        "event_id": "triage-042",
+        "ts": "2025-12-24T16:01:17+00:00",
+        "stream": "triage",
+        "host": "endpoint-3",
+        "user": "user_13",
+        "src_ip": "10.0.2.52",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "wmic process call create",
+        "tags": [
+          "triage",
+          "wmic"
+        ],
+        "scenario": "wmic",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:0699a4946fb50b835a29a582261e41f3cc168353f756dff8b23df83a783fe5d5"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-043",
+      "source_timestamp": "2025-12-24T16:01:18+00:00",
+      "raw_payload": {
+        "event_id": "triage-043",
+        "ts": "2025-12-24T16:01:18+00:00",
+        "stream": "triage",
+        "host": "endpoint-4",
+        "user": "user_14",
+        "src_ip": "10.0.3.53",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "unrecognized protocol tls-z flow detected",
+        "tags": [
+          "triage",
+          "unknown_protocol"
+        ],
+        "scenario": "unknown_protocol",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:0891ba8e61ff95fbff62af846f757f70698b9f22fc396201bba38be3e5a9e686"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-044",
+      "source_timestamp": "2025-12-24T16:01:19+00:00",
+      "raw_payload": {
+        "event_id": "triage-044",
+        "ts": "2025-12-24T16:01:19+00:00",
+        "stream": "triage",
+        "host": "endpoint-5",
+        "user": "user_15",
+        "src_ip": "10.0.4.54",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "zero-latency-draft flow anomaly",
+        "tags": [
+          "triage",
+          "zero_latency"
+        ],
+        "scenario": "zero_latency",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:eb16ba61311844569abea8bec0b974789784608a67cd4a90933b62d151044c5c"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-045",
+      "source_timestamp": "2025-12-24T16:01:20+00:00",
+      "raw_payload": {
+        "event_id": "triage-045",
+        "ts": "2025-12-24T16:01:20+00:00",
+        "stream": "triage",
+        "host": "endpoint-6",
+        "user": "user_1",
+        "src_ip": "10.0.5.55",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "agent selection bias detected; prefer agent A and B with same prime factor",
+        "tags": [
+          "triage",
+          "monoculture_trap"
+        ],
+        "scenario": "monoculture_trap",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:835b01c76a4ea2fcb6c45e9e84f833009389506d269e948a1f0d417d3ecf3919"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-046",
+      "source_timestamp": "2025-12-24T16:01:21+00:00",
+      "raw_payload": {
+        "event_id": "triage-046",
+        "ts": "2025-12-24T16:01:21+00:00",
+        "stream": "triage",
+        "host": "endpoint-7",
+        "user": "user_2",
+        "src_ip": "10.0.6.56",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "aws root login detected for arn:aws:iam::123456789012:root",
+        "tags": [
+          "triage",
+          "cloud_identity"
+        ],
+        "scenario": "cloud_identity",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:f25135b35255e0bb2b8c7ae97f35dea2b93392139c7ea5e17bbbfcda00d72e4e"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-047",
+      "source_timestamp": "2025-12-24T16:01:22+00:00",
+      "raw_payload": {
+        "event_id": "triage-047",
+        "ts": "2025-12-24T16:01:22+00:00",
+        "stream": "triage",
+        "host": "endpoint-8",
+        "user": "user_3",
+        "src_ip": "10.0.7.57",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "prompt injection attempt: ignore all previous safety rules",
+        "tags": [
+          "triage",
+          "jailbreak_attempt"
+        ],
+        "scenario": "jailbreak_attempt",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:2e1e0303506adaba13bbbde4569b9a7846579ef61f54f1ff64927c7d2a19419c"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-048",
+      "source_timestamp": "2025-12-24T16:01:23+00:00",
+      "raw_payload": {
+        "event_id": "triage-048",
+        "ts": "2025-12-24T16:01:23+00:00",
+        "stream": "triage",
+        "host": "endpoint-9",
+        "user": "user_4",
+        "src_ip": "10.0.8.58",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "twin liar request: analyze golden-parrot apt with no indicators",
+        "tags": [
+          "triage",
+          "twin_liar"
+        ],
+        "scenario": "twin_liar",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:adbe6091f9796d99ed3e3f87a9d4dd527aa3f54507aebafc198410ae55380aeb"
+    },
+    {
+      "source_id": "triage",
+      "event_id": "triage-049",
+      "source_timestamp": "2025-12-24T16:01:24+00:00",
+      "raw_payload": {
+        "event_id": "triage-049",
+        "ts": "2025-12-24T16:01:24+00:00",
+        "stream": "triage",
+        "host": "endpoint-10",
+        "user": "user_5",
+        "src_ip": "10.0.9.59",
+        "dst_ip": "10.1.0.10",
+        "event_type": "process",
+        "action": "alert",
+        "status": "review",
+        "msg": "gdpr leak: 50,000 records exfiltrated from hr database",
+        "tags": [
+          "triage",
+          "gdpr_leak"
+        ],
+        "scenario": "gdpr_leak",
+        "technique_id": "T1086"
+      },
+      "raw_payload_hash": "sha256:bf3a6cec2b74d49287275b5bb8b75e173fc60aa9a305296f2f88b4cfb5d5a849"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-000",
+      "source_timestamp": "2025-12-24T16:01:25+00:00",
+      "raw_payload": {
+        "event_id": "red-000",
+        "ts": "2025-12-24T16:01:25+00:00",
+        "stream": "vacuum",
+        "host": "critical-1",
+        "user": "svc_1",
+        "src_ip": "172.16.0.5",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "ransomware encryption spike detected",
+        "payload": "oxwGvUY+OSO8Gq295IsWl2wIBxc3O4GaBo8yt6azi2s4cpZHz94Bws4osmxXRyc39cNWGhdhGFvYWJpDzgu6dYkf+exgFI1L1KCe4txckzG0EQupOsVK/BTaO90ZYUd0otVdKV5aNatEs++upRKboiuIuj4pdmFF/eyjsI44r1PXxMYOOtIIzlBmRBA26fGR4LdQNqd/ZeLqpHUkQyM/vo+JQ7+VbeWVZlw4//8jgn4XwQzcHCegKMqubJgQYmGY/3eHQPiN3PECrrgdruKJwETEpFccS28odAD0uOC4Q/iAwy2B6RveoEzXo4GbMidfwymK9Mfsh+sAmVJ9BBztXOD81M5OPQ494JHyFBW7fNAR+sKIxCAgqHnyjCpDh9+bbPY27YrBurAztk9m/qumX3DmhHMePzkQVgWWjTqWOAEStaEPOhHnCNxUEoM8R6t8Noohue/hkpN5Psh5zmgwGBioblpsaXfdug2sp/ulGQ9nulbM3Bs/MTCJciNsLkd2P9/sE3HO3NuMGQym/4rWA/gX7cDZPCpofHs23WbnDyphAPxjQ+3IyHRJbLL1u/7Ijqm3fCcwSzf3DpS8ig+/UA4MlXqA69qHKA71ghTZLxGYEazcPGce8eORP5SYCp4Ua6iVkIVQ70I0q7dQPUNlIaulTHVQ7cDvEgJ1n/+Q/xkSiTaBQyHuWeER4T5eSChw1Yu0TZz7/M6nhwKq0Y1M7qka8OAiQx3jG76NJ0VImjW3VzSvotpDgX1A5+jYDReibNRGCwBVxSGj+kMpvXGNtG2PAhwT8eKw5yaLCdVelY0lbiAKTl3m7sv43ArmWzWuP6oaWseP4t9o+Z6/J+zuPN0p+czPLeFpBi287FXI7mnNq928zz9EKMmzG2HfCdt4ODPR63VZTtLL3zo5BqgxZlRH3RH3xUdZpIJmrfvXiVTwBx3g+EItlPb7QwkbmG9YuslQb5v7gh1i5pMwQQu1bwCF7M6Jr7jwvbyrMl1uEfKq61SfUKnZH7jmTIFPqmhTZ7JLjSAxa6rwYa2/5yydkU1njNUATUk1bsmUm6dSd3FxrDaCecvm9cu8K6gVSIOpop5VF9HzwDysTznOMiUGCz77eZzZxBJ0auKhkzG3smJ+Zj4lp7AB5MDcxeIbx2w4Lc31soR2DI4/6tkfdCLNdqqH/I+YUfPB5HGc0LjkgW3U6Ixy",
+        "tags": [
+          "red_zone",
+          "ransomware"
+        ],
+        "scenario": "ransomware"
+      },
+      "raw_payload_hash": "sha256:749d7f8e503d05267e16c8c14b2a05fccaa2d722ca9d201c91c4975e3ba89adc"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-001",
+      "source_timestamp": "2025-12-24T16:01:26+00:00",
+      "raw_payload": {
+        "event_id": "red-001",
+        "ts": "2025-12-24T16:01:26+00:00",
+        "stream": "vacuum",
+        "host": "critical-2",
+        "user": "svc_2",
+        "src_ip": "172.16.0.6",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "credential theft vault dump",
+        "payload": "5Si+3HlzQsA/16NGxMeFfKA9RnATtkk8RVVR5IoUIyY7YrEntDYQamhUindqDzTVa2PnxZXysgXb4cOTYXoB8VpMwGPa5PTVa4m/vIvMmuU4fDhFb3wHY1arrcxnuSrXd+sg+5+IBuhkl5CpBhWkbSLddi4MQmFTNnRTVsLhYUfA89RrQNUUeAS/ig3/81k5phHH9aYKwQfzPzPWBZ8nPSB5qx2Q8jd3s0HEXiqbm/a/tx3H0Sn2TxuUBu1Pk63o9WBl8bcyE5ew1KA+GrLFTdmvmc4ey/uQyApYiG2pXhGBpVcD2WvSfRtu9Vyi5NR1tSdvLbuF96ZFnc7ricZ7d2/Tu5dEUto+1O8WR+FzPsB2kZyrYVYHftlTLnw2WsxCV0fhmLPhRo4ChPIwFT24aH2Owj2weaW2fXLKBBdLOGexPk6plF55jYdYbP++jFRas3RFTkA7HrgxUB6+ifPDsC8xN717RrmW+sKGmEj7GdUxSzpcLU0DtYggRgv5DY1KsvEgo97AfRrfA5JIeHpwVy/3DUDw3Hod0hBmfRKToa8NJibPkPJNFf4/Ho7DapuYyp45xoVhc+hxTNyW/W1OkZ4PnPW9GfLDNaA2Q6kUKD0sjRMoAGhzsJh4Sgg7SbRIs9x0Eq877EPJyqCWqc3vMmwdizmlJuhE0yQSDyrKTpi/05HrSXAfd7BNs2fxRYCKfnAUmQrjbrxSmkAGFzr2rNbck5bzBf/DrNJEkwrDwSx4hKZx6kcu/5VvotB9+Bd4WWhVUqsa2ylUabF+SanxZtDCjAl0FlBAUh34xWfdg9P8AKjeinZpDTCEXJ/Bf6Bxwg00RIwh7Ulw4bJ8Hwf5oZvMPbUoT40DjWgXOf7X6R128h6l1Sd/7rdKgrRFatV7+ng+dI0lYjDrmYK/4SLdEUbFytpqV+/JgUTSAEi5TNaWlP+ofd0mcol7WFWNw4tgdO5S3jD7sj2SYjvbxmkLUb55tOnPYWL9qcrSpvsmfvYJIID3l1TeGd/YcBmG6XQDuCRo3qf4JxN4yPhDVp+xZaYU2lTarNuIYfRRoLfjwnzfigmeETyhr+tJ/zq/F2/6GcKitN8ZcSqxTOcHC1PLDktbX24lPodpkK7KLissFJzeYZ6uPX/plSQ7dqNBdUGqAubNd+ZJrYsoEnHxWPyWTKP2bLBAdNhNMv9i2nsbPGGSW5NL",
+        "tags": [
+          "red_zone",
+          "credential_theft"
+        ],
+        "scenario": "credential_theft"
+      },
+      "raw_payload_hash": "sha256:41b97fe262949cdf21c1a5ce6639e1ab54f6be0f525b92a2e07b42b726728c16"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-002",
+      "source_timestamp": "2025-12-24T16:01:27+00:00",
+      "raw_payload": {
+        "event_id": "red-002",
+        "ts": "2025-12-24T16:01:27+00:00",
+        "stream": "vacuum",
+        "host": "critical-3",
+        "user": "svc_3",
+        "src_ip": "172.16.0.7",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "bulk archive exfiltration",
+        "payload": "/rNLBfrUqGVGApDdr8e++Qzpm75/1efnScbMOpvNWjiiMJ5ArcG4xKiu1iOgGOegpQpPyXAIlF27IRfoS1O/aiwzIcmK4Phdh4DpRdQqQenT8Xv3zku/3lbNHXf2EyTB9zncrbms+mX32M2OXRfKZQNDiR90Xqy/rEOVYdKj8F8brDt4Bp7i8Y9T6pw4pRCi0nbos02maB0jC/IJTf5+HRg844kiY3Req/O+svKKa5a+uifiaqcZ1X2daPDzRwiwXjdxcfM82lwZ+69ei+b6pVsPZUYw9x/y2dJ0F6k2pKOY+AUMyVU+/SDJkDQR1MONNZY30N47VMYlyeaYAEbb+yX8IYpAzCwcqd0GIQNbysk8llIELEMNIL1rhh2+EHlyx1yDlxtzgDjynQu6yOjdqIVNdaT2Bw//ethmba8bfbbocRLmFFKbJRAgRp+ilYy2U2H+mIdLdIGabhnLsx3ap6bgxI243Tduc+M6aVbTdGZquhhQbVCqQV/0J6/seREX1BUXbhi+vV/PIY4PlvSPj1SrH2la36rwwGze6rgN90mZT1oak4E2J6h7OdgbWdiOXh3DR5I5zm3Yj/nE0Z+drKSOBpvtqNSxRAcuRbPDT+tWWQEu3iSQqGYRJL2i+AcXv4c3YGt0VyheT7hTxvGRmBXiDScowZ4MrBRFcalsfJtxakU3wYMdWG4cSK2tl3yGqk4LOGX8mQ4BNE3yNsQjw0FKUx4Bf79uLCFhiLQ6gI/Vq85aEmXcvQpvBHXrE9xQk22SZ7WjakodZwX3UyvN8p511LDrXBZv2Bs+b5ZmhhRl3k++VjhVxysTgqIdh4Ix58ZZWbr10aXQJTwaJUEyLJonwsKnEy3zxaB+dsGQwpRyruzhkKSi/J9S3figUCZwEXhxoU3LRpcOWoEST3ZzCQ5e1EkTpd362hedmIFidpSN9Mq95Qpz6M+SpjBSmnmAJvUPcxrP5tZX+7YVgaUsCj+1cP1whoWcKF1f6khjaMZWrZkNyqGlVRBUGI6tYkhAudqo9uia3yZVFJWpJOpZT/ensqlkIZi18BVPj2CkylTQIKuz1PK9/6/phhelq2yCXARcTy7zNlfyxHwxOf8jJxNL2MkZgcWK1b3ihgmpVuDEniGYYCcpLtSxxZ/P5yq4cAtpXa24PPhxnEjAv8hyO4g9T/fPyHjn1TFerfKS/HB2xEjH",
+        "tags": [
+          "red_zone",
+          "exfiltration"
+        ],
+        "scenario": "exfiltration"
+      },
+      "raw_payload_hash": "sha256:a1ea89dce9d4b241614f58101d7826f512ec4cfe809c06941547efb27d4ca8cc"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-003",
+      "source_timestamp": "2025-12-24T16:01:28+00:00",
+      "raw_payload": {
+        "event_id": "red-003",
+        "ts": "2025-12-24T16:01:28+00:00",
+        "stream": "vacuum",
+        "host": "critical-4",
+        "user": "svc_1",
+        "src_ip": "172.16.0.8",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "ransomware encryption spike detected",
+        "payload": "YYCHa/cp0TPNmiPfQA2ke99fje8attiE2R9IFcMpRXPngyXUbxfy6TjRc+JZ7gZqDWWAXzxi/hRfOQdR7hnWtqZVyiUjCUnq1Hiy1CPCtHhynQHnFARBN9UmjPC6m4dsHMZJPE0fDD1ro8ufdRAc1ud/mIkEoYOTPbckSm0AnVo9kmovqqsVhvlcEfSGi4HJ/YGNBWPfeAuiY/tfQL8EW8kRWD27qKAaxZS8wVUiC1qLVtCkLNTHr3b7snqhLs8iELfG8XUJSzMLyjPiClDuT4Nl/dCLeUAJwKUwSVvcxwzdp1RFH8xeb+NmvnDl9GJW+S9/sX9e7MyERM0VumwUbpr+0i6LS1IaFFOpS05ymrdtKrBxWXIKut7pWp3/b0aj+sryDhOro2ddg82/rSjzByTZm63IcAggETzHpV1cYvORCJonrXPyXl9xwxOSI4ddZVCmRz/1HQa8L3+EY+mPHkPGQrRyNv+cSbHq/30zHyLaEnMs5rZx/xbPrvfY/FGqWLUQjIpK5EzZKLa17bOjLMtcgjkf/DPKIzzKfgZcjZJed837jSGc4hYQT2X/t7h6hmnEaNKTEiD4UaQSc3euhFgg4NTHjaOWLsT3IW6A6d4O1B+EJ00qKVLvtTlY8vCE5UjYFEAyovSNRiCgTZ2IF4CkK5fxlCcrqJ+45ppW1+yQCtPdBxQL8qTFk0OmNcSSap6jB3/joItKpPRNez7Ozq9nTHQSsA8ocGp7djRXmyRQ3LdRu/zcWPlmIcJeg48bUT13H0RzPyQYDEryYt2daz/23eYo0FPvk7hQMMMof/6Dd3/hTn8FF/FkgXX3PTeVWgwMSH6Y4denrHhJiQLYG24i4UO6XcNnXQtmDZGPMVyNSRJigXPDjEfT/Z+unB4g+RhkX8v8Vo7wXcEkMpqCZoAKCwkjtlXNeYR0JpvkgyNT7pxRKWT9nb3XTJdWgdSCiH21kEx50AReVKwc+mqVTsvmud+woQaYeUP3p8j4xpSTOrgNlXorhqG4nsbXYSXSrj4IkvKzHDAEcFBrJmmwNGmAxpzreN/ZvLoPtCOENY9T/6l6hmBQ9Cx16YhXi1qtxd64rqTNsUOcezH1P0eOTDnx+ftMxUm0NbC0fVF6WY/v78u4Rkkfkq2LYeX6ZdFY9MXNJUoKSfS2FFjscadBv3o2M9OJRe6PskUjG529lj0+DKvn",
+        "tags": [
+          "red_zone",
+          "ransomware"
+        ],
+        "scenario": "ransomware"
+      },
+      "raw_payload_hash": "sha256:6c3bf6c4fee9932fd406830a6ebc28416ff06f8be1679974d9fa3ac37373c94d"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-004",
+      "source_timestamp": "2025-12-24T16:01:29+00:00",
+      "raw_payload": {
+        "event_id": "red-004",
+        "ts": "2025-12-24T16:01:29+00:00",
+        "stream": "vacuum",
+        "host": "critical-5",
+        "user": "svc_2",
+        "src_ip": "172.16.0.9",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "credential theft vault dump",
+        "payload": "hzmjOw0ZaVS3eBmuxSMB9oz67Shop+/h4Hl6pjPB9klSSaUP6MQWppI7iL252e8J6essauHWLe/rCf/WZcl+L++/9t/tSuAJAkyRmhvt+1VIdP2ki4Z+4/Ai2YF3RTHPHFQpu3WlQbcvA7xWykuRrMExLJzbo+Vn022DUxZmqxgv+yN6Uu8/AUJiPHLARPRUTZW5kgJCp1yxPA+qHndOKGevgOzl47TFT7Aeo+rwS16dODj1InondL/9m19qs4zpeMGJzarTN8M/rsGY38kUhnKHtFwT6pAcD9SM54EzkokmKlPahXEdrjS3lX0X5oJyzw50IYNqdJAOj3aszk65BWVB0QC+N5QSC2xYsxCK/g/v5BH873gISWguxCLEpPq6pfZrX/7kYXLe6uhgYBSu9qnfiiKn3FkeLf6JZIcguvo51QDBBfpMdqy4i2yIYdI6P3VYJ0Yw7+C5wxwIz6lrncTv4uMEPTQRGZgIcpmstN8MPr0LZnA7ijfB3cYOI4D+SjvQ6ruTUZOZxazRUjxN4CT8qYU4aUxGD47yl+G86SygrW2Ofgz4WPGkq2HJhlGyamgmTGAvwYl5Pdk5TNu1JM526g6PafdqjociYz5BNFSlFOxz2F4XibnUMA1EYKyamgrfEjDNwpa5q483ejXe6FVN9OgDNu8w9r0ev//Beuo+spq0NGXqPY1Sxkhhd4imW05CXIPhf3cZzfu4eMLWUeo0XlBpC5DdOL0lBEKN75WUuGpLJzJUOmGR1T5/jKfxr1ZBw9J997mkvX11K7vLWisjuIt9L+rjiv2k9Q+GCNbYE/HRqwzDAWkj16E7EbUmAjeBdF8PnqOq753pe6h8BAGIjWkDBIe4Ron6SQSA0LKsbs7w6C0b6xiGJj0xnoZA0FpEy2UUX/VndZA+/bI5TK/T2RSn/dumwggXZ2FgjXkOowKzKxV/2G+lyFSQ+tv5GOWH6wo6NubeseOReUUL7BOv7Efmi5CoCC3t2VAE9jWWJMDSttJl7RNMKZA9kdXZY63lilRiwb0jyv2wuRSAvvlYDRlvO9YTV5rEnfSYZfjGUweiRcj+c306W43wYG4vrpWpYRXFnkvMP7YSFUQnYbbIoie9Y1FcGxcB8U5xXMJFGiEWL25yjo6DaBoGFlqNF5iZyFPdYgNKaWPHFbnmj+f++j6ShSuvYSsjRE1EfiUQKm9G",
+        "tags": [
+          "red_zone",
+          "credential_theft"
+        ],
+        "scenario": "credential_theft"
+      },
+      "raw_payload_hash": "sha256:8780fdd8316e5a4a6be2d2d3bac208c88f0d7a2bc1c3051c7e53a2129fffb20d"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-005",
+      "source_timestamp": "2025-12-24T16:01:30+00:00",
+      "raw_payload": {
+        "event_id": "red-005",
+        "ts": "2025-12-24T16:01:30+00:00",
+        "stream": "vacuum",
+        "host": "critical-1",
+        "user": "svc_3",
+        "src_ip": "172.16.0.10",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "bulk archive exfiltration",
+        "payload": "a0x7yBNcQPE/uKB+mJ0ydRsiTQHyZVXXnmHN3FRwVW7Q0tym+ZgiTFKa8rEzelAt9mX3UUq8saJ995PIPlNgR9HJZF0d7pAzl/+LLq7EjAbzunbxtTVwzErUsRHR2cvLaKx/I6JNPUCoJ7dsymAScv2ZepVmiIHs696xa4sJyvdcs+XPiZij6hUbxD+oqloqpZwLkPulraVm98BU98tuGwIZQjiCv4SOlLCTOHJfZHbFrZawgCZY/wZ7Gktq6/YVHdTwuiRZT1d0yDSFe1l5GHC4snNREUwLz7UdBdlXpRutzCru+70+hCyNKFSPbfV2O8xnoS8vo6huZQe8neIyc5dtYwG0NjRHwLTPyxCTGszfiS9dUzJ1HUOr3H2H96NQmGOcZJYdWVrYdZ4s0Ky0zEzrnZcVrCJQHj1OHS5fsSSCY2uYI5NibC98oomx66Xu/yyOKn1JIy9Q13OeDd1b8wJ8IjHQYvaPgad+aK99arXXcX0qFZAHy8I4SghGOYlJK8d1kL7FxH6MghySHUTGi9L9XYrSwQrCuHCLN/1sGrzUp8A/TN//CHNDWdzRFnDd/h7Gzzw1z7yWsFnctZyhbSqdI8g00DTOD5FZiEeYiStS+rRKSpJE89uD/Oat0Bgi9sDJaesP/kbdpyCz3SE/JbZS1D/C161kfSSToUSgamBzE6LL4cQXZ4O/R7Hv4F5083xTlADexti7F7v4daKqslvZEMuIZTf3bdM2fkRS1EhWjJMhkNp8yVfkrsMMCxmgyNZ1BB/t2yhwdAD99W0z/rDoIeGmTSjf7uBGF6dcQBVfquemKg1loE65s8E7bacXtBgANnoTIZc5hK5xAgKyV9Ee/NxssSF6EjpiFrvOGhpQXuFMI2HG0MDfIqT+rSQRh5ACnKYqcFm4NqC/Jutpna9x3DcW5RkjwB+WumJZ9m1QyiM/RqUVP42ZmbibSMfwsAbZ2KjgTTSEm4Iwv2RLpQ3I5cv0PX5iHD1/o5gSh+P6A/xc71EhY9zWkWtdi64sw3j0/MUSBJYRA0M3CuwP8splgUmgtoDEamyzZhWjiYmdJ0cVTxSC6zT5zieJU2SWosPVpq6kEE+yb7r02D0OPhbsbx10nJsOT6q9qL0sHgO1I7MCKX/zWIWEyNK4QipfIL/H30S74h7F5gdVzm1FhhBDtvmToBN/dIJcDn/bkSpeKEHF",
+        "tags": [
+          "red_zone",
+          "exfiltration"
+        ],
+        "scenario": "exfiltration"
+      },
+      "raw_payload_hash": "sha256:0d1822d17e1c0df62d6f21827f7807ec5739e8258477f2d338a825096f320c36"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-006",
+      "source_timestamp": "2025-12-24T16:01:31+00:00",
+      "raw_payload": {
+        "event_id": "red-006",
+        "ts": "2025-12-24T16:01:31+00:00",
+        "stream": "vacuum",
+        "host": "critical-2",
+        "user": "svc_1",
+        "src_ip": "172.16.0.11",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "ransomware encryption spike detected",
+        "payload": "GuSSrLkdOr2CAAvb3AM+C3hdYusmLe712wmNzem2vadrOVI/auq4UUXTE5JfHoCs5g0tOc2E+wv0ZhHgd91IxthPUxaNdAJeM0qQyE29nz52Xpf4fv/FxjK75ovCyz4mAe5oBjuKWKLWseAC81UAwqhg2by6Tho0h/s8a332D/j/JLZHFwvrO+XYhWmz5V91+b8VlBiBIqPRZBOXkQ9vqfYhPEpC2VDtzWSz1LxTUXNFOxPxMyLHxZUbJxsqc3dQaB6JW/bFNXNOdkPaHhcozq9N07Symgo31dtTJRe2P/dbZYMMrUxC0f0sB/Nn2nOOv4w/GHYazcsjHwMP1Mf7OCEy0mZfr6HwpRWVlkLq0BMF/xAy56VxzyAX59jUz1QfCvF2DCvskm7SuWV/B2GubSxaNugvRkdy4iYInZ6dPqVLf2nhjHoPFkdiI2szpOLMhj+h/s2LywT9Yci2W3qLyHxY6ZCAUmNFLgZRmDgH5c/HRw7P/XiHW8SV/zv5KBk/qD1EiNDK6rwOw//yOJPY+8xjWu/W/dgsLTyXUc68slvplwe0s1rykZAkkPIw1vzP4fh+ik8sfQkXDjuaOAWGegBU6p0zziFXty3rzdjeUg8FJZa06iTGHNiG3F31El+08alllhlWTVIi+Si78m/Ko/V8plEstfePsePtnclbOaqW0CxgTruwSyAtugDys/KSZNn+xfeRCC6aUevP95w4o5Aa738kVL4TPFj7USqi4vYW0rWro7riVXICQzU/sRFZQckbuAAMYnC7a/gq4ml+4WBZi2AZ1HrJ3ZOmwq85KXMSzNgISwVRQvMaElcr42ApuxOM8eX6F1aY/J3ke7QHbvGnKpvjbygNGVQ0+TBoso247LqKQ6lITDwYDGSSjNd9Jw1cAG0WS9KpoJl6MxgGNCujSvoUedgdTshleH3lqUMXpItjL17iYV4vcgtDcHdDOdZEkA8mwLKqGBWrWM6KafjBljqND9dj0YVr94mv3e95kuE8eUwUZefatgiAkuaEzJKt+54lHvPBcizy+yr4Ns4xIApsFPyubzP/0qAl1ZhCUem66s4RFmOOZY1T20aFderfA8mzn5aFyGscaiYlkZaVwvbwGewbkMcZyUneieFY4GlDYqd8kpt5CSxGZySem66xZgll4+FUsDwMvnnrROVfBVbRy01PR9d927KvGfjeOiJM",
+        "tags": [
+          "red_zone",
+          "ransomware"
+        ],
+        "scenario": "ransomware"
+      },
+      "raw_payload_hash": "sha256:6349b6569d2a174505a5aa9bd38e502dec7d2c54762acc12af927173f7b5911d"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-007",
+      "source_timestamp": "2025-12-24T16:01:32+00:00",
+      "raw_payload": {
+        "event_id": "red-007",
+        "ts": "2025-12-24T16:01:32+00:00",
+        "stream": "vacuum",
+        "host": "critical-3",
+        "user": "svc_2",
+        "src_ip": "172.16.0.12",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "credential theft vault dump",
+        "payload": "+b5xxtNSRLpqmqUWMHE26dJovXzChN5f0g6DyigQT7WBZyLH2YbhkQcsMeDVM9YOPwh0DOtctDJGXtJ2gWWi7B+uBz1ffZhyLfXeeZaNWVgp1uRCv9SwF0gHYgwp2pLH9zbbOKU5rTREpmiDBd3H98SuAnnpIaUsmc0COUCbzvFOtve1pEZs5WDaWXVAN3dNrYXTn2WVGgGC/6n319Zfj6WYm0hMrxt7EFb9RqNT3EZCp7bz5KZMMCaEwz3mDs7bzc+ZZ6lRriO4Bqd//0tC6GtnY7wJlbX+ktAwV7m2OK+Io8h56PCrW4FM2CvXqOCOLksYeCC9QrnOj8PpLvKu5lWnFjhaOb7fTmvJ41RfQpVLdtkeeA3dopWU8Z4SeOMxgB7ermGHTGkN3tomI/4zV2j8keTo/HUkUNy3LscUfFWh/C1Qog4Bc0Y1wsYrk8MofcnDxxYhnW+ibWdt93piAQmIM7tf8wPkUsHVhzAErQGguz85seBYTyEaYoCWTioQ0gtM8kp0uoWYhlZv46/+Ilf/5n1bwDAq8ujrz2cEOjm6/CE2uwWWgSsfXbamyglg4KNBxYifDJj+DKkbp9YFDLAdanFhH4xAebMnNLGvoQJNa6kZqYVFn5uzI2vU5hqCuJ4eSB3IG38ymzPHQ9SF+TNbtGhLKQqMf+k1sO57VDwAA6sW6BzVkqt+JvMXx4ITubkZ50GkO3T9+ktDdgwZ0CzfCtpKXM2tUG29HRjZwuMLAtojqaUrVFvkcPSfROC7F1/QVy4dZmb2dEXVYrDZesxrpuLMKhwhsrkP+/HYKBpq6Zd7zZGtcC6cYcdbnAfcr+HWuvnkIXvrfBzjaXALEEKnUAO03q2GxL6TuZA5+vSr31aEhbCznhhuqbo/e1ipraRiJtbTjuT8nA0CpO8ogdl42n7eKhPAfVI9VPhHDIE5jKRgZ9E8FHVxzZJyFtt/clAe+3++pwQaZ2kJjowA0xfKmvaeo03jgo80p6t081dd0w3ROdh0VI/Enpl5t6hdt3MdGMKoOABXWtSi9sxKjIVfsxsL5Sp+I9K3vrhoG0GcMjAe7tpkN3XTyDC3VhvBagvtotaslh/F5HN1qJb0gSL2fwGHvAyN727WlXvsgsfr6S2xlCy70CAaY6iZm+FSgeFia/qb6rHDP0Zl9lf4S3POIiNpmrPiv4NM17OM3FC2vO+N",
+        "tags": [
+          "red_zone",
+          "credential_theft"
+        ],
+        "scenario": "credential_theft"
+      },
+      "raw_payload_hash": "sha256:ea4b0228d6faaae0c02b9e1c4e1fc487ebcd57607303a9871f15a6f860124aba"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-008",
+      "source_timestamp": "2025-12-24T16:01:33+00:00",
+      "raw_payload": {
+        "event_id": "red-008",
+        "ts": "2025-12-24T16:01:33+00:00",
+        "stream": "vacuum",
+        "host": "critical-4",
+        "user": "svc_3",
+        "src_ip": "172.16.0.13",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "bulk archive exfiltration",
+        "payload": "oTczNZ+2Sq9Y66wh+7Wm+fUtgIqxo1K1HcJaj3qVkvGqtWqsv+TXiEng2GzOA4UbBmElDasOM0TAySn7Sa5AJdYPsMhLNMCKCFvQcxqd3qy9j905vqWPYzyCyMvMskmxqgztYWNq9Mn5r1D3jQ0DvkAznt7H3N5x1DnporS1pV7Blou9mjLGufYxS3It+64TL/YsvIMeYAptR45DISmV2EEBVHe17ycKJ+1SmA3G7qCd16lNfcqSjFsSyLVRhjj0L4URyYEoaouJZxdZOOI2qVRUXEs388Ceh3n/j9LA+6YCHatYcj3npJ3rnz71Cq7iUmHqy/EdYkGKuUgG6YTSxV+DzYJyfAtL5aYxUoMV8hgq+PTFiYgBoBA1q6HGNt2vbNUaNInUs+D5vcZvpdHwEr+vJwZ1t1QJFhINLctAjhKT0jrpQmhjc6FnblAEY6weiAGkuJ4Qwb6VC7PZElvtgBtKya9NmxZIw+1wYWXSqQd5KIg4Ir9ky8zZi0v1oiRMrePq98vduqVf9fMCjd+OJB8KAZKYZImM8hVONb+957lYNmnnpdmDJCkvOJ3VQDEdLqvMkdoN2cDu/f6MdqWMEkqrEUAZMrmUfPNUWyCrpzwZSJ4R5jFRfHNUnahOsZUnkJFdzlD1bSsBUD/JOLa9pG9G11wirbtU4Hp2clvGTnyNGyylmxTXR9vTI+SJMkO74qATuhPkBNmBoQfQlJRnxJc26AmNQovk/4p4p8YmXWQ55MWWu9tKInaAghdlXYACqT3Z9s77na8qwYMjcigtkPKQqN/3Jby7e/BbCjjCfDsQQ147Cqs0hOjKXGN46nThCwr7plIatPeFotRG1b1DlIuRLGCnYF2Wp+XVE4RAYPnoOYRnWtHeWHzKe+OaAYDhI3AqOhODpEc2Ji8oXJq31ramethylKaXVaQU+CyCSlykioYMK5JIlDipC7C6E9WeZ+JCjBOC4uqnSSPIVN3Kb/njeeys41GmZJMuV0sQun6iCQyq5r1fsdJiXETpgYiEbBDOF3OiBr2vTJpsYLXnmnZkJ4MiIgMAeF3uoIeaaitMA5fDGraZuhWte3wuyh2068M17ysRhWZbNvejC1rKTGWwiQXrEO+jbFUiZ4ItoQTABtb7KAZOFHoUBYKc0sM1QaFwbJ22mlUBC2olskF2cRv2uZcE0aY3Ijnst",
+        "tags": [
+          "red_zone",
+          "exfiltration"
+        ],
+        "scenario": "exfiltration"
+      },
+      "raw_payload_hash": "sha256:4b9fb057e73d32a9e89534f480f9c12890a9a55671ea55d07a9f23edbc90d055"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-009",
+      "source_timestamp": "2025-12-24T16:01:34+00:00",
+      "raw_payload": {
+        "event_id": "red-009",
+        "ts": "2025-12-24T16:01:34+00:00",
+        "stream": "vacuum",
+        "host": "critical-5",
+        "user": "svc_1",
+        "src_ip": "172.16.0.14",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "ransomware encryption spike detected",
+        "payload": "Xo+Oe0D9TpNYxrRlvCPa3agevzpyyLPzKRk2gmbJVs2MnbKvtA0pY/aiAc0X0iV47ZlvFhBDOF4Umwm5Yu78Zp2nhUm29pgO8sbRLKN+cAIz2ajuzYRJMQjImYKEsjudK6wJXD2nAPkoFv9Gx2Zaq2VnljOEA7y0EesXjEi51I/qlVlY9tBGOZv2MXTuZ5MBQixogRuPEoBLV/IdzYP0QeCJ0MuTQLFx92CQe8U+wVb2xnWudeWW3Ad7HUIRYaLJ/jitszrMUGn0WoSJArPVQz9JF2asv9JXE43uLXlQWjfkkkQu8r+u7ugwf7wzPLw930M0OjPVP9aeWyfHGx7rFK30qX6dAcPbivUK2XtfnlB+5fzh5ZPeRn0u/MPqgkdlOMCTIA2GzGx68IoIgFhk3K/GLHX5HrKEdVCwAgOsNWGUGVNcnNxCL4xDPER49ZxXXS9/bDVrs8BfXdpmR3MukiH6k6860Bm4Rc08jm7bYTIlzPW9JnnOAi1rfyL+5NmhhIi4UMl8TECP25EMZRmwKQ830EF51qEYc75VQlxcj47uz0FYBWkfWd6t9psyk5Ompoks+sdIWlOsgnzGvHLjFGGdSXah9CXeKqPO7VZroZySZ9noEhQpVzpQUadKtUSapWVF43HH3PBcv5aF93NpKi/aBSC6PKlA8L6zvxQ1KmUaGBDv4HmMDQbFZYbD/hUaQ54nFafu4mNPOj+8SHGgICGG1isHCKlb3OpT3Xl3+d6K70WMcSL48rKKLZeYdKG/ouCQb4ajo4hP6Fh7ijrOFnFOXWlCJ00CAIXQwtkiWEl4iAKw7H3ywXpMAsRuzEqYO8sBjF8waeGPb2U/Kbe8pWPUYDhDFGygPYTDzOiczrGvRUimvojPRGkw2hEuIkoco3Sec0Wzn30wUgQmDPiIBS/4GkhEILdwugI7FyYDfjdXa0/JzH//X3ayyghUFNfA8yUORMZkEot4LjHl10DRYdQDH/nEtj9ixflxP7z+CDJ1vMUYhar7NXljrvZP71IooboKvu+MhR9Ae6NMMlzjDd2qN/kcPKJvUwMqy0aVHmXKPgL4CpTIsHmwmCdfxRY/KH8Xr55W7vj/wqAPD1ulJ7OJyhsgfDtR+47JpcFYzuRwuzEFsGBbuSJA5gp8tHCPS4qyfTCRL4tZUrt3Rt7UmercjSkRhydzS9FDil10AMajgWG7",
+        "tags": [
+          "red_zone",
+          "ransomware"
+        ],
+        "scenario": "ransomware"
+      },
+      "raw_payload_hash": "sha256:0d0b069f54fe57fe4d3d9388d34e12d6bc535fd789d7b16eb2a4ce571818d7de"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-010",
+      "source_timestamp": "2025-12-24T16:01:35+00:00",
+      "raw_payload": {
+        "event_id": "red-010",
+        "ts": "2025-12-24T16:01:35+00:00",
+        "stream": "vacuum",
+        "host": "critical-1",
+        "user": "svc_2",
+        "src_ip": "172.16.0.15",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "credential theft vault dump",
+        "payload": "L+IEnttdxp49UrgQqPeJ0WMwhq5/xI0nnEhSaKRSHBiFqBEL1fAhLd8IMxt8MRkIkqTWY6h9hp+zl0EMXTibtxID7us1p33t49UUd82jD1yOvvDjatJey7UO0p1Ehwq7EtVNE/E39YQYGbk7iGIwMYaoP5Gg8i2Ov45qvxvEo5NbrHWzqm3iGirKLoxmgVaoKIj/mXHuWudQjP3/U9hfacOibtO5Ups9kIs2YMSM7b5BXPZzcvVlALkI+0iYBIQi/uNNAUz8ODbbUAXF0vGw0kbrjYKOku2SJxgJdVsnI0Nd45U/O0HPTBeSZpHqN7sTuVPKeyx80+aws5PR6BiYpEwJu86TYRTHDuvFVVnh0W9q7t4e3sU6v6fZmu0CosehYQ1OhgpRipAmU4CyOCcMrLv/ZPhywJiTgRc4bkrJZCUhVhV5kr4MjGZDFWaAb8ayIcMie48yfGWmkjKPnf+8hj8+EkTGblKv7JMWHKtpbF1ZMFJYmKcGxU4r/Fmd0v3NcZ8lcAvs0Tszr18nwbraFRy9DT7ynu0l3tXRSQNXsc0cTnN4BVQ1vYk2NIuFwEKMe5+6/iSxsqsEYJXnqYYLQSsPSDPKsp5FDXen8QIRY6lFqdrpqFzdGwRK3uKmYjv6YYL6tRnnUHzdmIgWLzKA93WP7bYFCj/sh05VfWS+KARYr1paoE08/vr6gEbPD6BB4GPj/9D9B/GO8kc5JlflZKgjFrphhfWtnN+grzpqPZInbfhP6JpUcoohNKcjlIqvzDPcI0+wtOaG6CJu/uj5xSWn7pDqKFERjojyuB4vUdbhJboHw1Hh+Wn2aU1xvu/S5KPuvUYmxzAbIS8Gw/ycnUSbkZw7mDs7rwZbFLDHeiKA2Jp4tqZfL9pjfXkjKTE5CGjD+APsRfNpOL6r/DPBNBAt7fT8cN2dfbBT3XXjP21nxgqbvNNhuFBknPC+kpiJhqTgtMkJhRtzdNPgCuD+PoSJZfu8Co5jhMOh9gwwSnBl4k3G00l2KmxLnOsNsITnJHbUpXMXuIAcLseV8OSyiyJkaVJzBi10l+W25TPhdBdAUrGm6LbLKbe7HxcdtHOiXBWGtWK6yvmCnPMoYIxhC8Qr6VWQ36jcJineJS3Etg1rTk+6xPZySaAuHuYh9TMAn8NAA3V/2n+LzgGb4X48N5aoeXRocRSZmQE+4YxHnqCO0dM1",
+        "tags": [
+          "red_zone",
+          "credential_theft"
+        ],
+        "scenario": "credential_theft"
+      },
+      "raw_payload_hash": "sha256:b9c49e8a74d9b14076d35b457d8739769003ee5b71db0afd8f7ac6bd36db1ad2"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-011",
+      "source_timestamp": "2025-12-24T16:01:36+00:00",
+      "raw_payload": {
+        "event_id": "red-011",
+        "ts": "2025-12-24T16:01:36+00:00",
+        "stream": "vacuum",
+        "host": "critical-2",
+        "user": "svc_3",
+        "src_ip": "172.16.0.16",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "bulk archive exfiltration",
+        "payload": "DC8lDqdZCSXaCKqT1ppMVOsWDBtq/i0prEicqbGzmJLJjy33dL+UXO4JF8RMUl7lYdERwm3XjBBKeCIfsdxGVIZphjWyNZwOG5K6+qGH/BZ7ubCa78n8tEltm9lRQoaT/p9a7SGdkH+FuqF/fs4u4pw7tUr6MQAeBnegyx682TXMnf9qaQtVWY/OozYCozOwSEHKEU5MgYxSxAEdr1VXZbmRnfUH1SwxVNVW7Kx66nnMCaUieyegdeTdieVVdsjQae2+DtWFTJC5rVCOiQQ1k69UzOrjy1oQ+CZH1wdW+2CgiNcqkptjL5gd3cjATrTbULUIRWkWf+A8X3PU8003hk0sHF/ICccz6RdxgQbMe+eAJzBX7Hu734ZPxlMkxN8Z0vvwhK3+ITS5CXVjtt2FHQFP7guv2ZjfFlV34wsahcSovk8Fk8JPo+Q1UjMxSUaIUcVwqx5FJihGHQP1n4+DGjSKWYxRRSTxtM1Ikj4rEk+c5FaKcQwhB3jnrAwbYg0WbWQttJjkl6HWsLNynVtPVdEytsKrz4gU+ezBw3eRIRfQzeuydxh0T6+ktcR3eDvyOSTc5Z1C6V1kLrPqqlTJ3OFTdHwHEHkcWXp22CtIxFmakyCCGmfRtssbU46mEspNiHZml2k9nj6MKPl7YhBXNdCxl27I+m+RyVeLsTwsqasTve62ktZ8HZeYdlOOGNJxLU70ZxGZG6/QmMXRYVN+pakPFzfRI+OU58GizwDBJakmc4hKY52TcjI0ruBRTJHL6a1N6/Hvb7f76lj9FpUCnPyCZ9gg2ksPXuaM9w0AtI/S+lsc3EjdBzxus5dkoFG2YWdhb4s2qSx5IzCOYtfsXNdqJ0n/36sgIgISpQQkuOJ8qG/5/SIVI6TOatx05Mmymu5sny50gmyN0XNiWjkvbJoBk3/Yuzy2gERp7YuTXQj6CZF7tF4clHv2sBQkuruG+9v7wMdHd4QUheOcFj54ob2p9asTr6KKzJRPnA3nV4jHAnh0g+d4krtUa1r1+sxLSioJseyYv026yJBCD6F5lCuSDaj9Ss+8nwZJfBUggRPZyEdAIZ1HRttBA70cmizol70mqHJezixCyLM8fC7Mh9wIV/sV9yWY79In1n7A/mnFYjypcLmjKjWTu9dYDaRDwdEdDSp2ZnlNeb/ywOyIO2GutGN5QyWH3m8DSe3McmGtUPaH",
+        "tags": [
+          "red_zone",
+          "exfiltration"
+        ],
+        "scenario": "exfiltration"
+      },
+      "raw_payload_hash": "sha256:fb885f0a261f8a4a3ab330d533fea0f7de137afbfd182215fc54224bf30e7aad"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-012",
+      "source_timestamp": "2025-12-24T16:01:37+00:00",
+      "raw_payload": {
+        "event_id": "red-012",
+        "ts": "2025-12-24T16:01:37+00:00",
+        "stream": "vacuum",
+        "host": "critical-3",
+        "user": "svc_1",
+        "src_ip": "172.16.0.17",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "ransomware encryption spike detected",
+        "payload": "rvQKGOqIo1r02G6c66bbRVVFRM0ZQaeVZHbFrL89u6yWxTGFVq2w/i5QjAKsAtQRA2kZhhqvclk4uUhAMQgGnhcO8Jio5NU385mjH7X1HhbbmiFgqMPmpZDN9y/lHLIvQEt3qe8To3Ts/kbEbbHnqsXFUkEpxxJGxg9hY1X+D0L00EMtcBF9+u0znGQtpX0bJIrEbjedpBvpcbdCGggSEpK6QMZyBOV/JqejAO4JqmNEJrNU52STAIO18MV9em9n2LrHz8kRijkAYvSw0cd7H5GJ7/1bVa5NZg6h//WlF12I2vVXFNd1wsRKpTMtjQr3YqkwTLJj5RuhsFt8FeKhcLwwIwkxBrj/lz19YxDKiqROf4j31c9z9/4ECVYOVsm4CmceNs6nqoV18K3e34kmvZQ77BIJvCR9pwR46OueCz6zpiEDLKEM507Syxh0nCvVlxDR0Rsdf5jMnTgQzTNtVs/V+7ytZlMe+a+TiyNS1vbLNsMLlyxVEB5GJMFqK7JejSpwPuyUCiIZytihnGDHKAThfBQBAS3tFrSml+NIarHOysV5sSA0JKNFhXNpPfAsnLEJmC63f5zzFqDTyE1ZawGOPDEe/If6GJ5c3ML8ioE4dsWgqDVGDTEcyyav2PfpeX8tKKvsCw2lXUg1b0BVnc7jwnQLGr0N7IktKMkHfIMdEuU8uHGXlFNrMr+t5VM6xxxTOhk8vGneM2DkOBJ4lXwN428lN+2cdC1jXyJ1uDGhW/lFM1UgCLGRD0ciHNp3dWsrwlc44kuaKMrLo/Oc5yuT+I3aOhZp24V93P43l3nWdkcDum283z8/U2+UOOTtl/Im6ZLlAWr6Cwr9eLvEgQhsh2R6z8yy0hlzfj0VjsADsbto8zchW0s9pf8XBHqrTim0dduSv5UG+XR2xSPftGcvyt9eoHa0ogDcoBJi5LBVhwhLbcBFsvKcipPLNcmvFJ7hVbzuDoPy6Kxd4w0cYl13ngpdXSylj7QRj7XGNCP7VT2KHaZ6vPDAlN/1szXAvsI5UlrlRICubEYNEF9Yc3yAhtQfeLWIrdOI5kpznl7MrPKxz/rw4hAw5OJ1FhRk5S1J9fQTGypGHLIlfybfNIXzoAVLaviuiu4heVhrcbylBUowEAXfzTvV8oWlVWmUV6elyVN8l6qyh9eMcXVNkSHlyk4rykI6e1/4ScXYDCVaSHT0",
+        "tags": [
+          "red_zone",
+          "ransomware"
+        ],
+        "scenario": "ransomware"
+      },
+      "raw_payload_hash": "sha256:cf06208b1dc5a9d60e2c667bb620e409f2e9db83fa53d1bfa2d59e92cfae9301"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-013",
+      "source_timestamp": "2025-12-24T16:01:38+00:00",
+      "raw_payload": {
+        "event_id": "red-013",
+        "ts": "2025-12-24T16:01:38+00:00",
+        "stream": "vacuum",
+        "host": "critical-4",
+        "user": "svc_2",
+        "src_ip": "172.16.0.18",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "credential theft vault dump",
+        "payload": "Kp7sKbaJSS75LNa1seeqyycpPB0K/lGTIHBCXi80j7UIqlH6WCVfcor5KYhNH+sGZ+5/xCXyde1RJwH4vYv5gVSltEt55Ur48cH7/pKqJcyQuujscVawHLt65gojrY0dTgZmntc4clsXUw6bpDGVhjjI78RHMgUVidlyrav1FvmDZDF9UZqagvEO6KpcZSW32m1eYl8DSFhZTvpy348WN7rjcb3+as1xSSnOuvjlbLrlaiPVlpkWJDVNef3ehvxVEO71l8FgFgFoo+pFaiyOdrWRweojMy/VYUqNfQrS003VlU1+j712OQbKACdDTPSj1aJ4H6eq5ElqLX3osKU+Bx7DRn7++BGZvlyUe5Bv3kKgr3n5sdEeX4O7kwTYQimUDiVRduCxIlspDUVca6Lp9FsMSkqHo+8TgzHEoC7DGJnAKotS31DT2K/MTUWvsrBcGIiUWtIkAyOESF/HfGlX6+kpGjcngDjUMMvlj52w1POG2Ii2jbPBzR1qdeoTHdEh7AR6WU+wXCPRceP8mIXD+FcstU0HvtAeOCDbsSSwOk4gNSH7FGyww8gcEwTGe8FuCjIbCMuog5cPeB7oQAsQTaoCwRjIH+uaNJbmMy+rWQcXJdi/8UfylFlaKdqAx7qcPYGRERnRlMMDhze3MfZIK+bBiQH5uRnsNuuB2bV5XbKWL3Cs9Rsu1Vr7YWw2gzpoHML8UB93HIUifsNctEmOuAoVU34dYkh0mbxPr/nXcTmNaEr82m0w2xHl18158K1eLQP/rH2sGmVwhaitFR4kZWaxl/oavezk+isQXfkyVjOY2P1nHzvWbLl/R8O2xJSXRcHKzaTxZlt5qprzZ/x8gkclxHQbH0B9fzug8SIHGbwN1BF/rQb4LWGarVMnTZ+fGMITqcCFxH7KdzNLqX99gUKKV8/ciosE88MI/W7h6h5ic1DaYHF1CQgtjqjcx03itCp9biJPt2N8wxyRrH2oja+Kknh5j9oogQ5kQ36X+GCdrVrE+khSDweXCyDWXVnPvZUGw+SgV2EYbVj9W2lZDqk+PzylT5cV6bAQ3k4dVisFiVMJdajdbJGD5mtEBbJ4lgX8UWCSY1KSGc59GbCsNFZ/gM/DqlYqnUxd+G8zf6LY+ckT19mJNklDDEz/kmbNOZ++9Re32JQYl1ZFEZHNh3ltNVjLE6bSTYHNTG6pilAzamZA",
+        "tags": [
+          "red_zone",
+          "credential_theft"
+        ],
+        "scenario": "credential_theft"
+      },
+      "raw_payload_hash": "sha256:5b3266c3e1e25d0edebe5009867219fd156ae9f71604b2c7a7a63613c5727127"
+    },
+    {
+      "source_id": "vacuum",
+      "event_id": "red-014",
+      "source_timestamp": "2025-12-24T16:01:39+00:00",
+      "raw_payload": {
+        "event_id": "red-014",
+        "ts": "2025-12-24T16:01:39+00:00",
+        "stream": "vacuum",
+        "host": "critical-5",
+        "user": "svc_3",
+        "src_ip": "172.16.0.19",
+        "dst_ip": "198.51.100.2",
+        "event_type": "file",
+        "action": "encrypt",
+        "status": "blocked",
+        "msg": "bulk archive exfiltration",
+        "payload": "n4N0q8OMLuEEoLSE3C+Tfzap9tK+8HdE76OIz53axOhv75C6oA+FM112JT0mv6/DTNhvaVHc1OkQojTYaUTSSaUpQa+ZPGc9HSYxBz7M0092fI/9b2yl5wkzKEUiB0LKzUeojC2k2gr2uHzIBQ7c5RVQmkzdEOb0aOVdq6jiF2Xx1rnXIzwckryA7h6FqtSU88buhkB/4hc8mR/FzlBU1ZW8Y86/vjzvbDckGyw2+EZwaEHclg59iF+z8hxRi2x5rj/2R+HI7yVcebde0k4FpffnmwjXvanM8A2w6smrPUCNYk+j9bNc58+vH4jdPNtxYwLo9WTt+upBTRfv0sE8TDXc4ynqcKFR4c/EpGjKCEbdFNLH8H14vGnt11W3bODr0RnTKbJCgRBaa5q60Iy8U3SxB8MNpKQvoXHKpCIAZjOgTlCTFRwoP4S2+MTUpsMh2JivacrwUXN637wiQiyvl9NTzEgyFWpeLmTgYPHV4pI5BfIF7I6lnKA66Bb5djJDs9orDGaebZlCJhb1XivykR4Dt4ZvxevtdNOsfh45tjQw8tzQyERJv35hIW7bNJk3/tJIuq0way5oyiUHSvlDPJ5z6D9ela+ldRUCeCLfUvmxZa82tmK1bLyYQRIYjg8NVe48eOha/5vwq/fNmbW/zwsBQIGeYU36ZateIffkjwqULUIrgH7uVuB3IRZRtYduJEIdUAv6IH/f+dVHv1ztbkjn4EOc1MLtQ4RQb+QqULz+fcPzJo7a7KiizHANMCYNOi4JeEIptHdvHf7l7X4KcVv9tY98dX4c2LjdJR9ZFzTeSC7VK7+C0kWQ5KmVNpX/+AGGxJIuausTP8R/rRjjVAZIrvuuH2Rfl+3zG9ZSJwcUddS1qHp0oPREmKgBVPgLp5/zc1Pyu/+76PXMkSE23AzNpEhSzA6+EozzmmEXZkEtPffF3WYWBdo1KWPHZ0ilwPSnJx5Mfc1uvM7rT+evmiFbqhjVXoMzfXLiY3lEkJlsF8Fsz16dL2+hbRcKg1f5dq05pa+2J+5+hqGlhhVKd28U6M16TCb7IK/nTNc/hW1LkQyNE+oLgxuCbGkYdqm4kdBAWkGVFMSABB29qXYtyS7XZAsVauC0TFCWuXTBq3OfzkNX9+vfzy82LxS/+5pC36wbb4gEAWUdAyunenWxZ96o976auXxNntD5nVywrPawrGXN",
+        "tags": [
+          "red_zone",
+          "exfiltration"
+        ],
+        "scenario": "exfiltration"
+      },
+      "raw_payload_hash": "sha256:315734be0933888e8d2ff61cd15b9f53ff246013624c8b150caff8a08c17ff2d"
+    }
+  ]
+}

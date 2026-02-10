@@ -116,6 +116,11 @@ IngestEvent(s) with:
 - raw_payload or raw_payload_ref
 - raw_payload_hash (or computable)
 
+### Entropy computation (normative)
+- Raw entropy uses Miller–Madow over UTF-8 bytes of the extracted payload text.
+- Projected surprisal uses Π(event) with p = max(1/n, count(Π(event))/n) and -log2(p).
+- Default thresholds: entropy_ceiling = 5.2831, entropy_floor = 2.0.
+
 ### Computation (normative outcomes)
 - VACUUM → **HTTP 418 (DROP)** decision_code = VACUUM_DROP
 - LOW_ENTROPY → SUPPRESS decision_code = LOW_ENTROPY_SUPPRESS (envelope stored)

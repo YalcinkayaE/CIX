@@ -1,0 +1,15 @@
+{
+  "events": [
+    {
+      "source_id": "siem-D",
+      "event_id": "evt-json-1",
+      "source_timestamp": "2026-02-06T12:03:00Z",
+      "raw_payload": {
+        "event": { "kind": "alert" },
+        "message": "Powershell suspicious command",
+        "src_ip": "10.1.2.3",
+        "dst_ip": "10.2.3.4"
+      }
+    }
+  ]
+}

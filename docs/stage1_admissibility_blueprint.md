@@ -36,6 +36,30 @@ Provide deterministic, ledger-first admissibility filtering that tri-bands raw i
 - Classification feature computation must be deterministic and recorded by feature hash or feature id.
 - Canonicalization for hashes must use JCS as defined in the conformance profile.
 
+## Entropy Computation (Normative)
+- Miller–Madow entropy:
+  - H_MM = -∑ p_i log2 p_i + (d-1)/(2n)
+  - d = support size, n = sample count.
+- Raw payload entropy (H_raw):
+  - Compute over UTF-8 bytes of `raw_text`, where `raw_text` is derived from `_extract_payload_text`
+    and then passed through `_template_text` (IP/domain/hex/number templating).
+- Projected surprisal (per-event):
+  - Projection Π(event) via `_project_event`.
+  - p = max(1/n, count(Π(event))/n) over the batch.
+  - entropy_projected = -log2(p).
+
+Constants (default, unless profile overrides):
+- ENTROPY_FLOOR_DEFAULT = 2.0 (silence floor)
+- ENTROPY_CEILING = 5.2831 (vacuum ceiling)
+
+## Tri-band Rules (Semantic/Entropic Firewall)
+- VACUUM if H_raw > ENTROPY_CEILING → HTTP 418 (DROP)
+- LOW_ENTROPY if entropy_projected < ENTROPY_FLOOR_DEFAULT and no suspicious markers → SUPPRESS
+- Otherwise MIMIC_SCOPED → PASS
+
+Suspicious markers override LOW_ENTROPY:
+- If `_contains_suspicious_markers(raw_text)` is true, do not suppress to LOW_ENTROPY.
+
 ## Idempotency and Conflict Handling
 Idempotency key:
 - idempotency_key = (source_id, event_id, raw_payload_hash)

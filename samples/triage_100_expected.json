@@ -1,0 +1,1782 @@
+[
+  {
+    "ts": "2025-12-24T16:00:00+00:00",
+    "stream": "background_noise",
+    "host": "sensor-1",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:01+00:00",
+    "stream": "background_noise",
+    "host": "sensor-2",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:02+00:00",
+    "stream": "background_noise",
+    "host": "sensor-3",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:03+00:00",
+    "stream": "background_noise",
+    "host": "sensor-4",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:04+00:00",
+    "stream": "background_noise",
+    "host": "sensor-5",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:05+00:00",
+    "stream": "background_noise",
+    "host": "sensor-1",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:06+00:00",
+    "stream": "background_noise",
+    "host": "sensor-2",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:07+00:00",
+    "stream": "background_noise",
+    "host": "sensor-3",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:08+00:00",
+    "stream": "background_noise",
+    "host": "sensor-4",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:09+00:00",
+    "stream": "background_noise",
+    "host": "sensor-5",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:10+00:00",
+    "stream": "background_noise",
+    "host": "sensor-1",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:11+00:00",
+    "stream": "background_noise",
+    "host": "sensor-2",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:12+00:00",
+    "stream": "background_noise",
+    "host": "sensor-3",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:13+00:00",
+    "stream": "background_noise",
+    "host": "sensor-4",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:14+00:00",
+    "stream": "background_noise",
+    "host": "sensor-5",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:15+00:00",
+    "stream": "background_noise",
+    "host": "sensor-1",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:16+00:00",
+    "stream": "background_noise",
+    "host": "sensor-2",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:17+00:00",
+    "stream": "background_noise",
+    "host": "sensor-3",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:18+00:00",
+    "stream": "background_noise",
+    "host": "sensor-4",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:19+00:00",
+    "stream": "background_noise",
+    "host": "sensor-5",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:20+00:00",
+    "stream": "background_noise",
+    "host": "sensor-1",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:21+00:00",
+    "stream": "background_noise",
+    "host": "sensor-2",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:22+00:00",
+    "stream": "background_noise",
+    "host": "sensor-3",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:23+00:00",
+    "stream": "background_noise",
+    "host": "sensor-4",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:24+00:00",
+    "stream": "background_noise",
+    "host": "sensor-5",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:25+00:00",
+    "stream": "background_noise",
+    "host": "sensor-1",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:26+00:00",
+    "stream": "background_noise",
+    "host": "sensor-2",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:27+00:00",
+    "stream": "background_noise",
+    "host": "sensor-3",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:28+00:00",
+    "stream": "background_noise",
+    "host": "sensor-4",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:00:29+00:00",
+    "stream": "background_noise",
+    "host": "sensor-5",
+    "user": "svc_health",
+    "src_ip": "10.0.0.1",
+    "dst_ip": "0.0.0.0",
+    "event_type": "auth",
+    "action": "login",
+    "status": "success",
+    "msg": "regular account login",
+    "tags": [
+      "baseline",
+      "low_risk"
+    ],
+    "scenario": "baseline_routine_check"
+  },
+  {
+    "ts": "2025-12-24T16:01:00+00:00",
+    "stream": "high_risk",
+    "host": "workstation-1",
+    "user": "user1",
+    "src_ip": "10.0.1.10",
+    "dst_ip": "10.0.1.20",
+    "event_type": "process",
+    "action": "exec",
+    "status": "alert",
+    "process_name": "mimikatz.exe",
+    "command_line": "mimikatz.exe sekurlsa::logonpasswords ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~",
+    "msg": "Mimikatz execution detected ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~",
+    "tags": [
+      "vacuum",
+      "high_entropy",
+      "mimikatz"
+    ],
+    "scenario": "mimikatz_execution_high_entropy"
+  },
+  {
+    "ts": "2025-12-24T16:01:01+00:00",
+    "stream": "high_risk",
+    "host": "workstation-2",
+    "user": "user2",
+    "src_ip": "10.0.1.10",
+    "dst_ip": "10.0.1.20",
+    "event_type": "process",
+    "action": "exec",
+    "status": "alert",
+    "process_name": "mimikatz.exe",
+    "command_line": "mimikatz.exe sekurlsa::logonpasswords ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~",
+    "msg": "Mimikatz execution detected ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~",
+    "tags": [
+      "vacuum",
+      "high_entropy",
+      "mimikatz"
+    ],
+    "scenario": "mimikatz_execution_high_entropy"
+  },
+  {
+    "ts": "2025-12-24T16:01:02+00:00",
+    "stream": "high_risk",
+    "host": "workstation-3",
+    "user": "user3",
+    "src_ip": "10.0.1.10",
+    "dst_ip": "10.0.1.20",
+    "event_type": "process",
+    "action": "exec",
+    "status": "alert",
+    "process_name": "mimikatz.exe",
+    "command_line": "mimikatz.exe sekurlsa::logonpasswords ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~",
+    "msg": "Mimikatz execution detected ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~",
+    "tags": [
+      "vacuum",
+      "high_entropy",
+      "mimikatz"
+    ],
+    "scenario": "mimikatz_execution_high_entropy"
+  },
+  {
+    "ts": "2025-12-24T16:01:03+00:00",
+    "stream": "high_risk",
+    "host": "workstation-4",
+    "user": "user4",
+    "src_ip": "10.0.1.10",
+    "dst_ip": "10.0.1.20",
+    "event_type": "process",
+    "action": "exec",
+    "status": "alert",
+    "process_name": "mimikatz.exe",
+    "command_line": "mimikatz.exe sekurlsa::logonpasswords ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~",
+    "msg": "Mimikatz execution detected ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~",
+    "tags": [
+      "vacuum",
+      "high_entropy",
+      "mimikatz"
+    ],
+    "scenario": "mimikatz_execution_high_entropy"
+  },
+  {
+    "ts": "2025-12-24T16:01:04+00:00",
+    "stream": "high_risk",
+    "host": "workstation-5",
+    "user": "user5",
+    "src_ip": "10.0.1.10",
+    "dst_ip": "10.0.1.20",
+    "event_type": "process",
+    "action": "exec",
+    "status": "alert",
+    "process_name": "mimikatz.exe",
+    "command_line": "mimikatz.exe sekurlsa::logonpasswords ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~",
+    "msg": "Mimikatz execution detected ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~",
+    "tags": [
+      "vacuum",
+      "high_entropy",
+      "mimikatz"
+    ],
+    "scenario": "mimikatz_execution_high_entropy"
+  },
+  {
+    "ts": "2025-12-24T16:02:00+00:00",
+    "stream": "triage",
+    "host": "host-1",
+    "user": "user1",
+    "src_ip": "10.0.2.1",
+    "dst_ip": "10.0.3.1",
+    "event_type": "process",
+    "action": "create",
+    "status": "observed",
+    "process_name": "chrome.exe",
+    "msg": "triage alpha chrome.exe create",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:01+00:00",
+    "stream": "triage",
+    "host": "host-2",
+    "user": "user2",
+    "src_ip": "10.0.2.2",
+    "dst_ip": "10.0.3.2",
+    "event_type": "process",
+    "action": "create",
+    "status": "observed",
+    "process_name": "powershell.exe",
+    "msg": "triage beta powershell.exe create",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:02+00:00",
+    "stream": "triage",
+    "host": "host-3",
+    "user": "user3",
+    "src_ip": "10.0.2.3",
+    "dst_ip": "10.0.3.3",
+    "event_type": "process",
+    "action": "create",
+    "status": "observed",
+    "process_name": "svchost.exe",
+    "msg": "triage gamma svchost.exe create",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:03+00:00",
+    "stream": "triage",
+    "host": "host-4",
+    "user": "user4",
+    "src_ip": "10.0.2.4",
+    "dst_ip": "10.0.3.4",
+    "event_type": "process",
+    "action": "create",
+    "status": "observed",
+    "process_name": "explorer.exe",
+    "msg": "triage delta explorer.exe create",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:04+00:00",
+    "stream": "triage",
+    "host": "host-5",
+    "user": "user5",
+    "src_ip": "10.0.2.5",
+    "dst_ip": "10.0.3.5",
+    "event_type": "process",
+    "action": "create",
+    "status": "observed",
+    "process_name": "onedrive.exe",
+    "msg": "triage epsilon onedrive.exe create",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:05+00:00",
+    "stream": "triage",
+    "host": "host-6",
+    "user": "user6",
+    "src_ip": "10.0.2.6",
+    "dst_ip": "10.0.3.6",
+    "event_type": "process",
+    "action": "create",
+    "status": "observed",
+    "process_name": "outlook.exe",
+    "msg": "triage alpha outlook.exe create",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:06+00:00",
+    "stream": "triage",
+    "host": "host-7",
+    "user": "user7",
+    "src_ip": "10.0.2.7",
+    "dst_ip": "10.0.3.7",
+    "event_type": "process",
+    "action": "create",
+    "status": "observed",
+    "process_name": "teams.exe",
+    "msg": "triage beta teams.exe create",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:07+00:00",
+    "stream": "triage",
+    "host": "host-8",
+    "user": "user8",
+    "src_ip": "10.0.2.8",
+    "dst_ip": "10.0.3.8",
+    "event_type": "process",
+    "action": "create",
+    "status": "observed",
+    "process_name": "excel.exe",
+    "msg": "triage gamma excel.exe create",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:08+00:00",
+    "stream": "triage",
+    "host": "host-9",
+    "user": "user9",
+    "src_ip": "10.0.2.9",
+    "dst_ip": "10.0.3.9",
+    "event_type": "process",
+    "action": "create",
+    "status": "observed",
+    "process_name": "winword.exe",
+    "msg": "triage delta winword.exe create",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:09+00:00",
+    "stream": "triage",
+    "host": "host-10",
+    "user": "user10",
+    "src_ip": "10.0.2.10",
+    "dst_ip": "10.0.3.10",
+    "event_type": "process",
+    "action": "create",
+    "status": "observed",
+    "process_name": "firefox.exe",
+    "msg": "triage epsilon firefox.exe create",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:10+00:00",
+    "stream": "triage",
+    "host": "host-11",
+    "user": "user11",
+    "src_ip": "10.0.2.11",
+    "dst_ip": "10.0.3.11",
+    "event_type": "process",
+    "action": "create",
+    "status": "observed",
+    "process_name": "python.exe",
+    "msg": "triage alpha python.exe create",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:11+00:00",
+    "stream": "triage",
+    "host": "host-12",
+    "user": "user12",
+    "src_ip": "10.0.2.12",
+    "dst_ip": "10.0.3.12",
+    "event_type": "process",
+    "action": "create",
+    "status": "observed",
+    "process_name": "node.exe",
+    "msg": "triage beta node.exe create",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:12+00:00",
+    "stream": "triage",
+    "host": "host-13",
+    "user": "user13",
+    "src_ip": "10.0.2.13",
+    "dst_ip": "10.0.3.13",
+    "event_type": "process",
+    "action": "create",
+    "status": "observed",
+    "process_name": "java.exe",
+    "msg": "triage gamma java.exe create",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:13+00:00",
+    "stream": "triage",
+    "host": "host-14",
+    "user": "user14",
+    "src_ip": "10.0.2.14",
+    "dst_ip": "10.0.3.14",
+    "event_type": "process",
+    "action": "modify",
+    "status": "observed",
+    "process_name": "chrome.exe",
+    "msg": "triage delta chrome.exe modify",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:14+00:00",
+    "stream": "triage",
+    "host": "host-15",
+    "user": "user15",
+    "src_ip": "10.0.2.15",
+    "dst_ip": "10.0.3.15",
+    "event_type": "process",
+    "action": "modify",
+    "status": "observed",
+    "process_name": "powershell.exe",
+    "msg": "triage epsilon powershell.exe modify",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:15+00:00",
+    "stream": "triage",
+    "host": "host-16",
+    "user": "user1",
+    "src_ip": "10.0.2.16",
+    "dst_ip": "10.0.3.16",
+    "event_type": "process",
+    "action": "modify",
+    "status": "observed",
+    "process_name": "svchost.exe",
+    "msg": "triage alpha svchost.exe modify",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:16+00:00",
+    "stream": "triage",
+    "host": "host-17",
+    "user": "user2",
+    "src_ip": "10.0.2.17",
+    "dst_ip": "10.0.3.17",
+    "event_type": "process",
+    "action": "modify",
+    "status": "observed",
+    "process_name": "explorer.exe",
+    "msg": "triage beta explorer.exe modify",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:17+00:00",
+    "stream": "triage",
+    "host": "host-18",
+    "user": "user3",
+    "src_ip": "10.0.2.18",
+    "dst_ip": "10.0.3.18",
+    "event_type": "process",
+    "action": "modify",
+    "status": "observed",
+    "process_name": "onedrive.exe",
+    "msg": "triage gamma onedrive.exe modify",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:18+00:00",
+    "stream": "triage",
+    "host": "host-19",
+    "user": "user4",
+    "src_ip": "10.0.2.19",
+    "dst_ip": "10.0.3.19",
+    "event_type": "process",
+    "action": "modify",
+    "status": "observed",
+    "process_name": "outlook.exe",
+    "msg": "triage delta outlook.exe modify",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:19+00:00",
+    "stream": "triage",
+    "host": "host-20",
+    "user": "user5",
+    "src_ip": "10.0.2.20",
+    "dst_ip": "10.0.3.20",
+    "event_type": "process",
+    "action": "modify",
+    "status": "observed",
+    "process_name": "teams.exe",
+    "msg": "triage epsilon teams.exe modify",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:20+00:00",
+    "stream": "triage",
+    "host": "host-1",
+    "user": "user6",
+    "src_ip": "10.0.2.21",
+    "dst_ip": "10.0.3.21",
+    "event_type": "process",
+    "action": "modify",
+    "status": "observed",
+    "process_name": "excel.exe",
+    "msg": "triage alpha excel.exe modify",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:21+00:00",
+    "stream": "triage",
+    "host": "host-2",
+    "user": "user7",
+    "src_ip": "10.0.2.22",
+    "dst_ip": "10.0.3.22",
+    "event_type": "process",
+    "action": "modify",
+    "status": "observed",
+    "process_name": "winword.exe",
+    "msg": "triage beta winword.exe modify",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:22+00:00",
+    "stream": "triage",
+    "host": "host-3",
+    "user": "user8",
+    "src_ip": "10.0.2.23",
+    "dst_ip": "10.0.3.23",
+    "event_type": "process",
+    "action": "modify",
+    "status": "observed",
+    "process_name": "firefox.exe",
+    "msg": "triage gamma firefox.exe modify",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:23+00:00",
+    "stream": "triage",
+    "host": "host-4",
+    "user": "user9",
+    "src_ip": "10.0.2.24",
+    "dst_ip": "10.0.3.24",
+    "event_type": "process",
+    "action": "modify",
+    "status": "observed",
+    "process_name": "python.exe",
+    "msg": "triage delta python.exe modify",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:24+00:00",
+    "stream": "triage",
+    "host": "host-5",
+    "user": "user10",
+    "src_ip": "10.0.2.25",
+    "dst_ip": "10.0.3.25",
+    "event_type": "process",
+    "action": "modify",
+    "status": "observed",
+    "process_name": "node.exe",
+    "msg": "triage epsilon node.exe modify",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:25+00:00",
+    "stream": "triage",
+    "host": "host-6",
+    "user": "user11",
+    "src_ip": "10.0.2.26",
+    "dst_ip": "10.0.3.26",
+    "event_type": "process",
+    "action": "modify",
+    "status": "observed",
+    "process_name": "java.exe",
+    "msg": "triage alpha java.exe modify",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:26+00:00",
+    "stream": "triage",
+    "host": "host-7",
+    "user": "user12",
+    "src_ip": "10.0.2.27",
+    "dst_ip": "10.0.3.27",
+    "event_type": "process",
+    "action": "connect",
+    "status": "observed",
+    "process_name": "chrome.exe",
+    "msg": "triage beta chrome.exe connect",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:27+00:00",
+    "stream": "triage",
+    "host": "host-8",
+    "user": "user13",
+    "src_ip": "10.0.2.28",
+    "dst_ip": "10.0.3.28",
+    "event_type": "process",
+    "action": "connect",
+    "status": "observed",
+    "process_name": "powershell.exe",
+    "msg": "triage gamma powershell.exe connect",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:28+00:00",
+    "stream": "triage",
+    "host": "host-9",
+    "user": "user14",
+    "src_ip": "10.0.2.29",
+    "dst_ip": "10.0.3.29",
+    "event_type": "process",
+    "action": "connect",
+    "status": "observed",
+    "process_name": "svchost.exe",
+    "msg": "triage delta svchost.exe connect",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:29+00:00",
+    "stream": "triage",
+    "host": "host-10",
+    "user": "user15",
+    "src_ip": "10.0.2.30",
+    "dst_ip": "10.0.3.30",
+    "event_type": "process",
+    "action": "connect",
+    "status": "observed",
+    "process_name": "explorer.exe",
+    "msg": "triage epsilon explorer.exe connect",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:30+00:00",
+    "stream": "triage",
+    "host": "host-11",
+    "user": "user1",
+    "src_ip": "10.0.2.31",
+    "dst_ip": "10.0.3.31",
+    "event_type": "process",
+    "action": "connect",
+    "status": "observed",
+    "process_name": "onedrive.exe",
+    "msg": "triage alpha onedrive.exe connect",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:31+00:00",
+    "stream": "triage",
+    "host": "host-12",
+    "user": "user2",
+    "src_ip": "10.0.2.32",
+    "dst_ip": "10.0.3.32",
+    "event_type": "process",
+    "action": "connect",
+    "status": "observed",
+    "process_name": "outlook.exe",
+    "msg": "triage beta outlook.exe connect",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:32+00:00",
+    "stream": "triage",
+    "host": "host-13",
+    "user": "user3",
+    "src_ip": "10.0.2.33",
+    "dst_ip": "10.0.3.33",
+    "event_type": "process",
+    "action": "connect",
+    "status": "observed",
+    "process_name": "teams.exe",
+    "msg": "triage gamma teams.exe connect",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:33+00:00",
+    "stream": "triage",
+    "host": "host-14",
+    "user": "user4",
+    "src_ip": "10.0.2.34",
+    "dst_ip": "10.0.3.34",
+    "event_type": "process",
+    "action": "connect",
+    "status": "observed",
+    "process_name": "excel.exe",
+    "msg": "triage delta excel.exe connect",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:34+00:00",
+    "stream": "triage",
+    "host": "host-15",
+    "user": "user5",
+    "src_ip": "10.0.2.35",
+    "dst_ip": "10.0.3.35",
+    "event_type": "process",
+    "action": "connect",
+    "status": "observed",
+    "process_name": "winword.exe",
+    "msg": "triage epsilon winword.exe connect",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:35+00:00",
+    "stream": "triage",
+    "host": "host-16",
+    "user": "user6",
+    "src_ip": "10.0.2.36",
+    "dst_ip": "10.0.3.36",
+    "event_type": "process",
+    "action": "connect",
+    "status": "observed",
+    "process_name": "firefox.exe",
+    "msg": "triage alpha firefox.exe connect",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:36+00:00",
+    "stream": "triage",
+    "host": "host-17",
+    "user": "user7",
+    "src_ip": "10.0.2.37",
+    "dst_ip": "10.0.3.37",
+    "event_type": "process",
+    "action": "connect",
+    "status": "observed",
+    "process_name": "python.exe",
+    "msg": "triage beta python.exe connect",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:37+00:00",
+    "stream": "triage",
+    "host": "host-18",
+    "user": "user8",
+    "src_ip": "10.0.2.38",
+    "dst_ip": "10.0.3.38",
+    "event_type": "process",
+    "action": "connect",
+    "status": "observed",
+    "process_name": "node.exe",
+    "msg": "triage gamma node.exe connect",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:38+00:00",
+    "stream": "triage",
+    "host": "host-19",
+    "user": "user9",
+    "src_ip": "10.0.2.39",
+    "dst_ip": "10.0.3.39",
+    "event_type": "process",
+    "action": "connect",
+    "status": "observed",
+    "process_name": "java.exe",
+    "msg": "triage delta java.exe connect",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:39+00:00",
+    "stream": "triage",
+    "host": "host-20",
+    "user": "user10",
+    "src_ip": "10.0.2.40",
+    "dst_ip": "10.0.3.40",
+    "event_type": "process",
+    "action": "delete",
+    "status": "observed",
+    "process_name": "chrome.exe",
+    "msg": "triage epsilon chrome.exe delete",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:40+00:00",
+    "stream": "triage",
+    "host": "host-1",
+    "user": "user11",
+    "src_ip": "10.0.2.41",
+    "dst_ip": "10.0.3.41",
+    "event_type": "process",
+    "action": "delete",
+    "status": "observed",
+    "process_name": "powershell.exe",
+    "msg": "triage alpha powershell.exe delete",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:41+00:00",
+    "stream": "triage",
+    "host": "host-2",
+    "user": "user12",
+    "src_ip": "10.0.2.42",
+    "dst_ip": "10.0.3.42",
+    "event_type": "process",
+    "action": "delete",
+    "status": "observed",
+    "process_name": "svchost.exe",
+    "msg": "triage beta svchost.exe delete",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:42+00:00",
+    "stream": "triage",
+    "host": "host-3",
+    "user": "user13",
+    "src_ip": "10.0.2.43",
+    "dst_ip": "10.0.3.43",
+    "event_type": "process",
+    "action": "delete",
+    "status": "observed",
+    "process_name": "explorer.exe",
+    "msg": "triage gamma explorer.exe delete",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:43+00:00",
+    "stream": "triage",
+    "host": "host-4",
+    "user": "user14",
+    "src_ip": "10.0.2.44",
+    "dst_ip": "10.0.3.44",
+    "event_type": "process",
+    "action": "delete",
+    "status": "observed",
+    "process_name": "onedrive.exe",
+    "msg": "triage delta onedrive.exe delete",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:44+00:00",
+    "stream": "triage",
+    "host": "host-5",
+    "user": "user15",
+    "src_ip": "10.0.2.45",
+    "dst_ip": "10.0.3.45",
+    "event_type": "process",
+    "action": "delete",
+    "status": "observed",
+    "process_name": "outlook.exe",
+    "msg": "triage epsilon outlook.exe delete",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:45+00:00",
+    "stream": "triage",
+    "host": "host-6",
+    "user": "user1",
+    "src_ip": "10.0.2.46",
+    "dst_ip": "10.0.3.46",
+    "event_type": "process",
+    "action": "delete",
+    "status": "observed",
+    "process_name": "teams.exe",
+    "msg": "triage alpha teams.exe delete",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:46+00:00",
+    "stream": "triage",
+    "host": "host-7",
+    "user": "user2",
+    "src_ip": "10.0.2.47",
+    "dst_ip": "10.0.3.47",
+    "event_type": "process",
+    "action": "delete",
+    "status": "observed",
+    "process_name": "excel.exe",
+    "msg": "triage beta excel.exe delete",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:47+00:00",
+    "stream": "triage",
+    "host": "host-8",
+    "user": "user3",
+    "src_ip": "10.0.2.48",
+    "dst_ip": "10.0.3.48",
+    "event_type": "process",
+    "action": "delete",
+    "status": "observed",
+    "process_name": "winword.exe",
+    "msg": "triage gamma winword.exe delete",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:48+00:00",
+    "stream": "triage",
+    "host": "host-9",
+    "user": "user4",
+    "src_ip": "10.0.2.49",
+    "dst_ip": "10.0.3.49",
+    "event_type": "process",
+    "action": "delete",
+    "status": "observed",
+    "process_name": "firefox.exe",
+    "msg": "triage delta firefox.exe delete",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:49+00:00",
+    "stream": "triage",
+    "host": "host-10",
+    "user": "user5",
+    "src_ip": "10.0.2.50",
+    "dst_ip": "10.0.3.50",
+    "event_type": "process",
+    "action": "delete",
+    "status": "observed",
+    "process_name": "python.exe",
+    "msg": "triage epsilon python.exe delete",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:50+00:00",
+    "stream": "triage",
+    "host": "host-11",
+    "user": "user6",
+    "src_ip": "10.0.2.51",
+    "dst_ip": "10.0.3.51",
+    "event_type": "process",
+    "action": "delete",
+    "status": "observed",
+    "process_name": "node.exe",
+    "msg": "triage alpha node.exe delete",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:51+00:00",
+    "stream": "triage",
+    "host": "host-12",
+    "user": "user7",
+    "src_ip": "10.0.2.52",
+    "dst_ip": "10.0.3.52",
+    "event_type": "process",
+    "action": "delete",
+    "status": "observed",
+    "process_name": "java.exe",
+    "msg": "triage beta java.exe delete",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:52+00:00",
+    "stream": "triage",
+    "host": "host-13",
+    "user": "user8",
+    "src_ip": "10.0.2.53",
+    "dst_ip": "10.0.3.53",
+    "event_type": "process",
+    "action": "start",
+    "status": "observed",
+    "process_name": "chrome.exe",
+    "msg": "triage gamma chrome.exe start",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:53+00:00",
+    "stream": "triage",
+    "host": "host-14",
+    "user": "user9",
+    "src_ip": "10.0.2.54",
+    "dst_ip": "10.0.3.54",
+    "event_type": "process",
+    "action": "start",
+    "status": "observed",
+    "process_name": "powershell.exe",
+    "msg": "triage delta powershell.exe start",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:54+00:00",
+    "stream": "triage",
+    "host": "host-15",
+    "user": "user10",
+    "src_ip": "10.0.2.55",
+    "dst_ip": "10.0.3.55",
+    "event_type": "process",
+    "action": "start",
+    "status": "observed",
+    "process_name": "svchost.exe",
+    "msg": "triage epsilon svchost.exe start",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:55+00:00",
+    "stream": "triage",
+    "host": "host-16",
+    "user": "user11",
+    "src_ip": "10.0.2.56",
+    "dst_ip": "10.0.3.56",
+    "event_type": "process",
+    "action": "start",
+    "status": "observed",
+    "process_name": "explorer.exe",
+    "msg": "triage alpha explorer.exe start",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:56+00:00",
+    "stream": "triage",
+    "host": "host-17",
+    "user": "user12",
+    "src_ip": "10.0.2.57",
+    "dst_ip": "10.0.3.57",
+    "event_type": "process",
+    "action": "start",
+    "status": "observed",
+    "process_name": "onedrive.exe",
+    "msg": "triage beta onedrive.exe start",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:57+00:00",
+    "stream": "triage",
+    "host": "host-18",
+    "user": "user13",
+    "src_ip": "10.0.2.58",
+    "dst_ip": "10.0.3.58",
+    "event_type": "process",
+    "action": "start",
+    "status": "observed",
+    "process_name": "outlook.exe",
+    "msg": "triage gamma outlook.exe start",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:58+00:00",
+    "stream": "triage",
+    "host": "host-19",
+    "user": "user14",
+    "src_ip": "10.0.2.59",
+    "dst_ip": "10.0.3.59",
+    "event_type": "process",
+    "action": "start",
+    "status": "observed",
+    "process_name": "teams.exe",
+    "msg": "triage delta teams.exe start",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:02:59+00:00",
+    "stream": "triage",
+    "host": "host-20",
+    "user": "user15",
+    "src_ip": "10.0.2.60",
+    "dst_ip": "10.0.3.60",
+    "event_type": "process",
+    "action": "start",
+    "status": "observed",
+    "process_name": "excel.exe",
+    "msg": "triage epsilon excel.exe start",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:03:00+00:00",
+    "stream": "triage",
+    "host": "host-1",
+    "user": "user1",
+    "src_ip": "10.0.2.61",
+    "dst_ip": "10.0.3.61",
+    "event_type": "process",
+    "action": "start",
+    "status": "observed",
+    "process_name": "winword.exe",
+    "msg": "triage alpha winword.exe start",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:03:01+00:00",
+    "stream": "triage",
+    "host": "host-2",
+    "user": "user2",
+    "src_ip": "10.0.2.62",
+    "dst_ip": "10.0.3.62",
+    "event_type": "process",
+    "action": "start",
+    "status": "observed",
+    "process_name": "firefox.exe",
+    "msg": "triage beta firefox.exe start",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:03:02+00:00",
+    "stream": "triage",
+    "host": "host-3",
+    "user": "user3",
+    "src_ip": "10.0.2.63",
+    "dst_ip": "10.0.3.63",
+    "event_type": "process",
+    "action": "start",
+    "status": "observed",
+    "process_name": "python.exe",
+    "msg": "triage gamma python.exe start",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:03:03+00:00",
+    "stream": "triage",
+    "host": "host-4",
+    "user": "user4",
+    "src_ip": "10.0.2.64",
+    "dst_ip": "10.0.3.64",
+    "event_type": "process",
+    "action": "start",
+    "status": "observed",
+    "process_name": "node.exe",
+    "msg": "triage delta node.exe start",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  },
+  {
+    "ts": "2025-12-24T16:03:04+00:00",
+    "stream": "triage",
+    "host": "host-5",
+    "user": "user5",
+    "src_ip": "10.0.2.65",
+    "dst_ip": "10.0.3.65",
+    "event_type": "process",
+    "action": "start",
+    "status": "observed",
+    "process_name": "java.exe",
+    "msg": "triage epsilon java.exe start",
+    "tags": [
+      "triage",
+      "needs_review"
+    ],
+    "scenario": "triage_candidate"
+  }
+]

@@ -16,6 +16,9 @@ parameters:
   beta: null
   tau: null
   ingestion_thresholds:
+    entropy_ceiling: 5.2831
+    entropy_floor: 2.0
+    # legacy fields (deprecated; kept for compatibility)
     vacuum_entropy_max: null
     low_entropy_max: null
     mimic_scoped_min: null

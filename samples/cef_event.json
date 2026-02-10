@@ -1,0 +1,11 @@
+{
+  "events": [
+    {
+      "source_id": "siem-A",
+      "event_id": "evt-cef-1",
+      "source_timestamp": "2026-02-06T12:00:00Z",
+      "format": "cef",
+      "raw_event": "CEF:0|Acme|ThreatX|1.0|100|Test Event|5|src=10.0.0.1 dst=10.0.0.2 msg=hello"
+    }
+  ]
+}

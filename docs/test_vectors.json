@@ -16,7 +16,13 @@
             "source_id": "siem-A",
             "event_id": "evt-0001",
             "source_timestamp": "2026-02-06T10:00:00Z",
-            "raw_payload": { "message": "", "event": { "kind": "alert" }, "observables": [] }
+            "raw_payload": {
+              "message": "ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~ghijklmnopqrstuvwxyz!@#$%^&*()-_=+[]{}|;:'<>/?~",
+              "event": {
+                "kind": "alert"
+              },
+              "observables": []
+            }
           }
         ]
       },
@@ -31,8 +37,13 @@
             "required_evidence_pointers_present": true
           }
         ],
-        "batch": { "vacuum_count": 1, "drop_count": 1 },
-        "ledger": { "hash_chain_verifiable": true }
+        "batch": {
+          "vacuum_count": 1,
+          "drop_count": 1
+        },
+        "ledger": {
+          "hash_chain_verifiable": true
+        }
       }
     },
     {
@@ -45,7 +56,15 @@
             "source_id": "siem-A",
             "event_id": "evt-0002",
             "source_timestamp": "2026-02-06T10:01:00Z",
-            "raw_payload": { "event": { "kind": "alert" }, "rule": { "name": "Known noisy rule" }, "severity": 1 }
+            "raw_payload": {
+              "event": {
+                "kind": "alert"
+              },
+              "rule": {
+                "name": "Known noisy rule"
+              },
+              "severity": 1
+            }
           }
         ]
       },
@@ -63,7 +82,10 @@
             }
           }
         ],
-        "batch": { "low_entropy_count": 1, "suppress_count": 1 }
+        "batch": {
+          "low_entropy_count": 1,
+          "suppress_count": 1
+        }
       }
     },
     {
@@ -93,10 +115,14 @@
           {
             "event_id": "evt-0100",
             "status": "REPLAYED",
-            "ledger": { "replay_entry_decision_code": "IDEMPOTENT_REPLAY" }
+            "ledger": {
+              "replay_entry_decision_code": "IDEMPOTENT_REPLAY"
+            }
           }
         ],
-        "batch": { "replayed_count": 1 }
+        "batch": {
+          "replayed_count": 1
+        }
       }
     },
     {
@@ -104,7 +130,11 @@
       "description": "Same (source_id,event_id) but different raw_payload_hash must return HTTP 409 (FORK/CONFLICT).",
       "endpoint": "POST /api/v1/ingest/classify",
       "precondition": {
-        "already_ingested": { "source_id": "siem-A", "event_id": "evt-0200", "raw_payload_hash": "sha256:HASH_OLD" }
+        "already_ingested": {
+          "source_id": "siem-A",
+          "event_id": "evt-0200",
+          "raw_payload_hash": "sha256:HASH_OLD"
+        }
       },
       "input": {
         "events": [
@@ -123,10 +153,14 @@
             "event_id": "evt-0200",
             "status": "CONFLICT",
             "http_status": 409,
-            "ledger": { "conflict_entry_decision_code": "EVENT_ID_CONFLICT" }
+            "ledger": {
+              "conflict_entry_decision_code": "EVENT_ID_CONFLICT"
+            }
           }
         ],
-        "batch": { "conflict_count": 1 }
+        "batch": {
+          "conflict_count": 1
+        }
       }
     },
     {
@@ -140,10 +174,21 @@
             "event_id": "evt-1001",
             "source_timestamp": "2026-02-06T10:10:00Z",
             "raw_payload": {
-              "event": { "kind": "alert" },
-              "host": { "name": "host-9" },
-              "process": { "name": "powershell.exe", "command_line": "powershell -enc AAA=" },
-              "network": { "destination": { "ip": "203.0.113.10" } }
+              "event": {
+                "kind": "alert"
+              },
+              "host": {
+                "name": "host-9"
+              },
+              "process": {
+                "name": "powershell.exe",
+                "command_line": "powershell -enc AAA="
+              },
+              "network": {
+                "destination": {
+                  "ip": "203.0.113.10"
+                }
+              }
             }
           }
         ],
@@ -151,7 +196,11 @@
           "phi_limit": 1000,
           "beta": 0.5,
           "tau": 0.2,
-          "ingestion_thresholds": { "vacuum_entropy_max": 0.01, "low_entropy_max": 0.1, "mimic_scoped_min": 0.1 }
+          "ingestion_thresholds": {
+            "vacuum_entropy_max": 0.01,
+            "low_entropy_max": 0.1,
+            "mimic_scoped_min": 0.1
+          }
         }
       },
       "expected": {

@@ -23,7 +23,7 @@ RFC3164_RE = re.compile(
     r"^<(?P<pri>\d+)>"
     r"(?P<timestamp>[A-Z][a-z]{2}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2})\s+"
     r"(?P<hostname>\S+)\s+"
-    r"(?P<tag>[^\s:]+)(?:\[(?P<pid>\d+)\])?:\s*"
+    r"(?P<tag>[^\s:\[]+)(?:\[(?P<pid>\d+)\])?:\s*"
     r"(?P<msg>.*)$"
 )
 

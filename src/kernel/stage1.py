@@ -1,14 +1,19 @@
 from __future__ import annotations
 
+import math
+import re
 import time
 import uuid
 from collections import Counter
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 from .hashing import canonical_json, hash_payload, sha256_hex
 from .ledger import Ledger
 from ..ingest.siem_formats import parse_cef, parse_leef, parse_syslog
+
+ENTROPY_FLOOR_DEFAULT = 2.0
+ENTROPY_CEILING = 5.2831
 
 BAND_VACUUM = "VACUUM"
 BAND_LOW = "LOW_ENTROPY"
@@ -28,23 +33,193 @@ HTTP_OK = 200
 HTTP_CONFLICT = 409
 HTTP_BAD_REQUEST = 400
 
+_IP_RE = re.compile(
+    r"\\b(?:(?:25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|1?\\d?\\d)\\b"
+)
+_DOMAIN_RE = re.compile(r"\\b(?:[a-zA-Z0-9-]{1,63}\\.)+(?:[a-zA-Z]{2,63})\\b")
+_HEX_RE = re.compile(r"\\b[a-fA-F0-9]{16,}\\b")
+_NUM_RE = re.compile(r"\\b\\d+\\b")
+
 
 def _utc_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def _shannon_entropy(text: str) -> float:
-    if not text:
-        return 0.0
-    counts = Counter(text)
-    total = len(text)
-    import math
+def _template_text(s: str) -> str:
+    s = (s or "").lower()
+    s = _IP_RE.sub("<ip>", s)
+    s = _DOMAIN_RE.sub("<domain>", s)
+    s = _HEX_RE.sub("<hex>", s)
+    s = _NUM_RE.sub("<num>", s)
+    return s
 
-    entropy = 0.0
-    for count in counts.values():
-        p = count / total
-        entropy -= p * math.log2(p)
-    return entropy
+
+def _bucket_port(port: object) -> str:
+    try:
+        p = int(str(port))
+    except Exception:
+        return "port:unknown"
+    common = {53, 80, 88, 135, 389, 443, 445, 636, 3389}
+    return f"port:{p}" if p in common else "port:other"
+
+
+def _extract_payload_text(event: Dict[str, Any]) -> str:
+    if not isinstance(event, dict):
+        return str(event)
+
+    lower_map = {str(k).lower(): v for k, v in event.items()}
+
+    def pick(*keys: str) -> str:
+        for key in keys:
+            v = lower_map.get(key.lower())
+            if v is None:
+                continue
+            s = str(v).strip()
+            if s:
+                return s
+        return ""
+
+    parts: list[str] = []
+    for text_field in (
+        pick("command_line", "commandline"),
+        pick("image", "process_name", "process"),
+        pick("message", "msg"),
+        pick("scriptblocktext", "powershell_script", "payload"),
+        pick("url", "uri", "request"),
+    ):
+        if text_field:
+            parts.append(text_field)
+
+    return " | ".join(parts) if parts else canonical_json(event)
+
+
+def _project_event(obj: object) -> str:
+    if not isinstance(obj, dict):
+        return _template_text(str(obj))
+
+    obj_lc = {str(k).lower(): v for k, v in obj.items()}
+
+    keep_keys = [
+        "event_id",
+        "eventid",
+        "eventcode",
+        "provider",
+        "source",
+        "stream",
+        "event_type",
+        "action",
+        "status",
+        "outcome",
+        "severity",
+        "technique",
+        "technique_id",
+        "rule_id",
+        "process",
+        "process_name",
+        "image",
+        "command_line",
+        "commandline",
+        "msg",
+        "message",
+        "user",
+        "account",
+        "accountname",
+        "group",
+        "src_ip",
+        "dst_ip",
+        "ip",
+        "client_ip",
+        "remote_ip",
+        "sourceip",
+        "destinationip",
+        "sourceaddress",
+        "destaddress",
+        "src_port",
+        "dst_port",
+        "port",
+        "sourceport",
+        "destport",
+    ]
+
+    parts: list[str] = []
+    for k in keep_keys:
+        if k not in obj_lc:
+            continue
+        v = obj_lc.get(k)
+        if v is None:
+            continue
+        if k in {"msg", "message"}:
+            head = str(v).splitlines()[0] if str(v) else ""
+            if head:
+                parts.append(f"{k}={_template_text(head[:200])}")
+            continue
+        if k in {
+            "src_ip",
+            "dst_ip",
+            "ip",
+            "client_ip",
+            "remote_ip",
+            "sourceip",
+            "destinationip",
+            "sourceaddress",
+            "destaddress",
+        }:
+            parts.append(f"{k}=<ip>")
+            continue
+        if k in {"src_port", "dst_port", "port", "sourceport", "destport"}:
+            parts.append(_bucket_port(v))
+            continue
+        parts.append(f"{k}={_template_text(str(v))}")
+    return "|".join(parts) if parts else _template_text(canonical_json(obj))
+
+
+def _contains_suspicious_markers(text: str) -> bool:
+    s = (text or "").lower()
+    needles = (
+        "mimikatz",
+        "lsass",
+        "dcsync",
+        "domain admins",
+        "krbtgt",
+        "psexec",
+        "wmic",
+        "regsvr32",
+        "rundll32",
+        "certutil",
+        "t1003",
+        "t1059",
+        "t1053",
+        "4662",
+        "4698",
+        "4104",
+        "ransom",
+        "encrypt",
+        "mass rename",
+        "prompt injection",
+        "ignore all previous",
+        "twin-liar",
+        "twin liar",
+        "flow_anomaly",
+        "process_event",
+        "unrecognized protocol",
+        "tls-z",
+        "zero-latency-draft",
+    )
+    return any(n in s for n in needles)
+
+
+def _miller_madow_entropy_bytes(data: bytes) -> float:
+    if not data:
+        return 0.0
+    counts = Counter(data)
+    n = sum(counts.values())
+    if n <= 0:
+        return 0.0
+    d = len(counts)
+    probs = [c / n for c in counts.values()]
+    h_raw = -sum(p * math.log2(p) for p in probs)
+    correction = (d - 1) / (2 * n) if n > 0 else 0.0
+    return float(h_raw + correction)
 
 
 def _resolve_thresholds(profile: Optional[Dict[str, Any]]) -> Dict[str, float]:
@@ -54,15 +229,17 @@ def _resolve_thresholds(profile: Optional[Dict[str, Any]]) -> Dict[str, float]:
         or profile.get("parameters", {}).get("ingestion_thresholds")
         or {}
     )
-    vacuum_max = thresholds.get("vacuum_entropy_max")
-    low_max = thresholds.get("low_entropy_max")
-    mimic_min = thresholds.get("mimic_scoped_min")
-    if vacuum_max is None or low_max is None or mimic_min is None:
-        raise ValueError("Missing ingestion thresholds: vacuum_entropy_max, low_entropy_max, mimic_scoped_min")
     return {
-        "vacuum_entropy_max": float(vacuum_max),
-        "low_entropy_max": float(low_max),
-        "mimic_scoped_min": float(mimic_min),
+        "entropy_ceiling": float(
+            thresholds.get("entropy_ceiling")
+            or thresholds.get("vacuum_entropy_max")
+            or ENTROPY_CEILING
+        ),
+        "entropy_floor": float(
+            thresholds.get("entropy_floor")
+            or thresholds.get("low_entropy_max")
+            or ENTROPY_FLOOR_DEFAULT
+        ),
     }
 
 
@@ -72,12 +249,13 @@ def _parse_if_needed(event: Dict[str, Any]) -> Dict[str, Any]:
     raw_event = event.get("raw_event")
     if isinstance(raw_payload, str) and fmt in {"cef", "leef", "syslog"}:
         parsed = _parse_by_format(fmt, raw_payload)
-        event["raw_payload"] = {"format": fmt, "raw": raw_payload, "parsed": parsed}
+        event["parsed_payload"] = parsed
         if not event.get("source_timestamp") and parsed.get("timestamp"):
             event["source_timestamp"] = parsed.get("timestamp")
     elif isinstance(raw_event, str) and fmt in {"cef", "leef", "syslog"}:
         parsed = _parse_by_format(fmt, raw_event)
-        event["raw_payload"] = {"format": fmt, "raw": raw_event, "parsed": parsed}
+        event["raw_payload"] = raw_event
+        event["parsed_payload"] = parsed
         if not event.get("source_timestamp") and parsed.get("timestamp"):
             event["source_timestamp"] = parsed.get("timestamp")
     return event
@@ -95,25 +273,6 @@ def _parse_by_format(fmt: str, raw: str) -> Dict[str, Any]:
     raise ValueError(f"Unsupported format: {fmt}")
 
 
-def _compute_features(raw_payload: Any) -> Dict[str, Any]:
-    payload_text = canonical_json(raw_payload)
-    entropy = _shannon_entropy(payload_text)
-    return {
-        "payload_length": len(payload_text),
-        "entropy": entropy,
-    }
-
-
-def _classify_band(entropy: float, thresholds: Dict[str, float]) -> Tuple[str, str, int]:
-    if entropy <= thresholds["vacuum_entropy_max"]:
-        return BAND_VACUUM, DECISION_VACUUM, HTTP_DROP
-    if entropy <= thresholds["low_entropy_max"]:
-        return BAND_LOW, DECISION_LOW, HTTP_OK
-    if entropy >= thresholds["mimic_scoped_min"]:
-        return BAND_MIMIC, DECISION_MIMIC, HTTP_OK
-    return BAND_LOW, DECISION_LOW, HTTP_OK
-
-
 def classify_batch(
     events: List[Dict[str, Any]],
     profile: Optional[Dict[str, Any]] = None,
@@ -125,6 +284,15 @@ def classify_batch(
         ledger.seed_idempotency(precondition.get("already_ingested"))
 
     thresholds = _resolve_thresholds(profile)
+    effective_profile = dict(profile or {})
+    ingest_params = dict(
+        (profile or {}).get("ingestion_thresholds")
+        or (profile or {}).get("parameters", {}).get("ingestion_thresholds")
+        or {}
+    )
+    ingest_params["entropy_ceiling"] = thresholds["entropy_ceiling"]
+    ingest_params["entropy_floor"] = thresholds["entropy_floor"]
+    effective_profile["ingestion_thresholds"] = ingest_params
 
     batch_id = str(uuid.uuid4())
     start_time = time.time()
@@ -148,12 +316,22 @@ def classify_batch(
         {
             "batch_id": batch_id,
             "received_count": len(events),
-            "profile_parameters": profile or {},
+            "profile_parameters": effective_profile,
         },
     )
 
-    for event in events:
-        event = _parse_if_needed(dict(event))
+    prepared_events: List[Dict[str, Any]] = [_parse_if_needed(dict(e)) for e in events]
+    n = max(1, len(prepared_events))
+    projections: List[str] = []
+    for evt in prepared_events:
+        payload_for_projection = evt.get("parsed_payload") or evt.get("raw_payload")
+        projection_obj: Dict[str, Any] = {}
+        if isinstance(payload_for_projection, dict):
+            projection_obj.update(payload_for_projection)
+        projections.append(_project_event(projection_obj if projection_obj else payload_for_projection))
+    freq = Counter(projections)
+
+    for event, proj in zip(prepared_events, projections):
         source_id = event.get("source_id")
         event_id = event.get("event_id")
         source_timestamp = event.get("source_timestamp")
@@ -228,9 +406,48 @@ def classify_batch(
             )
             continue
 
-        features = _compute_features(raw_payload if raw_payload is not None else raw_payload_ref)
+        payload_for_analysis = event.get("parsed_payload") or raw_payload
+
+        if payload_for_analysis is None:
+            payload_for_analysis = raw_payload_ref
+
+        p = max(1.0 / n, float(freq.get(proj, 1)) / float(n))
+        entropy_projected = -math.log2(p)
+
+        payload_text = _extract_payload_text(
+            payload_for_analysis if isinstance(payload_for_analysis, dict) else {"payload": payload_for_analysis}
+        )
+        raw_text = _template_text(payload_text)
+        raw_bytes = raw_text.encode("utf-8", errors="ignore")
+        entropy_raw = _miller_madow_entropy_bytes(raw_bytes)
+
+        suspicious = _contains_suspicious_markers(payload_text)
+
+        band = BAND_MIMIC
+        decision_code = DECISION_MIMIC
+        http_status = HTTP_OK
+        reason = "Mimic Pattern: Requires triage"
+        if entropy_raw > thresholds["entropy_ceiling"]:
+            band = BAND_VACUUM
+            decision_code = DECISION_VACUUM
+            http_status = HTTP_DROP
+            reason = "Thermodynamic Limit Exceeded (High Randomness)"
+        elif entropy_projected < thresholds["entropy_floor"] and not suspicious:
+            band = BAND_LOW
+            decision_code = DECISION_LOW
+            http_status = HTTP_OK
+            reason = "Deterministic Pattern / Background noise"
+
+        features = {
+            "entropy_raw": round(float(entropy_raw), 4),
+            "entropy_projected": round(float(entropy_projected), 4),
+            "entropy_ceiling": thresholds["entropy_ceiling"],
+            "entropy_floor": thresholds["entropy_floor"],
+            "projection": proj,
+            "projection_count": int(freq.get(proj, 1)),
+            "reason": reason,
+        }
         feature_hash = sha256_hex(canonical_json(features))
-        band, decision_code, http_status = _classify_band(features["entropy"], thresholds)
 
         if band == BAND_VACUUM:
             counters["vacuum_count"] += 1
@@ -251,6 +468,13 @@ def classify_batch(
             "decision_code": decision_code,
             "http_status": http_status,
             "classification_features_id": feature_hash,
+            "entropy_raw": features["entropy_raw"],
+            "entropy_projected": features["entropy_projected"],
+            "entropy_ceiling": features["entropy_ceiling"],
+            "entropy_floor": features["entropy_floor"],
+            "projection": features["projection"],
+            "projection_count": features["projection_count"],
+            "reason": features["reason"],
         }
 
         decision_entry = ledger.append("BAND_DECISION", decision_payload)
@@ -274,6 +498,13 @@ def classify_batch(
             "decision_code": decision_code,
             "http_status": http_status,
             "evidence_pointers": evidence_pointers,
+            "entropy_raw": features["entropy_raw"],
+            "entropy_projected": features["entropy_projected"],
+            "entropy_ceiling": features["entropy_ceiling"],
+            "entropy_floor": features["entropy_floor"],
+            "projection": features["projection"],
+            "projection_count": features["projection_count"],
+            "reason": features["reason"],
         }
 
         if band == BAND_LOW:
@@ -318,5 +549,5 @@ def classify_batch(
         "failed_count": failed_count,
         "per_event": per_event,
         "batch": counters,
-        "profile_parameters": profile or {},
+        "profile_parameters": effective_profile,
     }

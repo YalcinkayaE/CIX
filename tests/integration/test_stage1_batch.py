@@ -11,7 +11,7 @@ from tests.conftest import (
 )
 
 
-def test_batch_partial_success_invalid_schema(profile_thresholds):
+def test_batch_partial_success_invalid_schema(temp_ledger):
     stage1 = load_stage1_module()
     fn = get_classify_batch_fn(stage1)
 
@@ -29,7 +29,7 @@ def test_batch_partial_success_invalid_schema(profile_thresholds):
         },
     ]
 
-    result = call_classify_batch(fn, events, profile=profile_thresholds)
+    result = call_classify_batch(fn, events, ledger=temp_ledger)
     per_event = normalize_per_event(result)
     batch = normalize_batch(result)
 
@@ -42,7 +42,7 @@ def test_batch_partial_success_invalid_schema(profile_thresholds):
     assert "processed_count" in batch
 
 
-def test_batch_counters_include_stage1_ms(profile_thresholds):
+def test_batch_counters_include_stage1_ms(temp_ledger):
     stage1 = load_stage1_module()
     fn = get_classify_batch_fn(stage1)
 
@@ -55,7 +55,7 @@ def test_batch_counters_include_stage1_ms(profile_thresholds):
         }
     ]
 
-    result = call_classify_batch(fn, events, profile=profile_thresholds)
+    result = call_classify_batch(fn, events, ledger=temp_ledger)
     batch = normalize_batch(result)
 
     assert "stage1_ms" in batch

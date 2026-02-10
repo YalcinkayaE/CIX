@@ -13,7 +13,7 @@ from tests.conftest import (
 )
 
 
-def test_tv01_vacuum_drop(get_vector, profile_thresholds):
+def test_tv01_vacuum_drop(get_vector, temp_ledger):
     vector = get_vector("tv01_stage1_vacuum_drop_418")
     stage1 = load_stage1_module()
     fn = get_classify_batch_fn(stage1)
@@ -21,7 +21,7 @@ def test_tv01_vacuum_drop(get_vector, profile_thresholds):
     result = call_classify_batch(
         fn,
         vector["input"]["events"],
-        profile=profile_thresholds,
+        ledger=temp_ledger,
         precondition=vector.get("precondition"),
     )
     per_event = normalize_per_event(result)
@@ -40,7 +40,7 @@ def test_tv01_vacuum_drop(get_vector, profile_thresholds):
     assert batch.get("drop_count") == vector["expected"]["batch"]["drop_count"]
 
 
-def test_tv02_low_entropy_envelope(get_vector, profile_thresholds):
+def test_tv02_low_entropy_envelope(get_vector, temp_ledger):
     vector = get_vector("tv02_stage1_low_entropy_suppress_envelope")
     stage1 = load_stage1_module()
     fn = get_classify_batch_fn(stage1)
@@ -48,7 +48,7 @@ def test_tv02_low_entropy_envelope(get_vector, profile_thresholds):
     result = call_classify_batch(
         fn,
         vector["input"]["events"],
-        profile=profile_thresholds,
+        ledger=temp_ledger,
         precondition=vector.get("precondition"),
     )
     per_event = normalize_per_event(result)
@@ -71,7 +71,7 @@ def test_tv02_low_entropy_envelope(get_vector, profile_thresholds):
     assert batch.get("suppress_count") == vector["expected"]["batch"]["suppress_count"]
 
 
-def test_tv03_idempotent_replay(get_vector, profile_thresholds):
+def test_tv03_idempotent_replay(get_vector, temp_ledger):
     vector = get_vector("tv03_idempotency_replay_no_redecision")
     stage1 = load_stage1_module()
     fn = get_classify_batch_fn(stage1)
@@ -79,7 +79,7 @@ def test_tv03_idempotent_replay(get_vector, profile_thresholds):
     result = call_classify_batch(
         fn,
         vector["input"]["events"],
-        profile=profile_thresholds,
+        ledger=temp_ledger,
         precondition=vector.get("precondition"),
     )
     per_event = normalize_per_event(result)
@@ -95,7 +95,7 @@ def test_tv03_idempotent_replay(get_vector, profile_thresholds):
     assert batch.get("replayed_count") == vector["expected"]["batch"]["replayed_count"]
 
 
-def test_tv04_event_id_conflict(get_vector, profile_thresholds):
+def test_tv04_event_id_conflict(get_vector, temp_ledger):
     vector = get_vector("tv04_event_id_hash_mismatch_conflict_409")
     stage1 = load_stage1_module()
     fn = get_classify_batch_fn(stage1)
@@ -103,7 +103,7 @@ def test_tv04_event_id_conflict(get_vector, profile_thresholds):
     result = call_classify_batch(
         fn,
         vector["input"]["events"],
-        profile=profile_thresholds,
+        ledger=temp_ledger,
         precondition=vector.get("precondition"),
     )
     per_event = normalize_per_event(result)
