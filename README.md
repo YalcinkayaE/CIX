@@ -20,8 +20,10 @@ python3 -u main.py
 - `--skip-enrichment` skip EFI enrichment (faster)
 - `--arv-beta N` set entropy expansion budget (ARV)
 - `--phi-limit-arv1 N` set Gate 1 phi limit (triage admission)
-- `--phi-limit-arv2 N` set Gate 2/3 phi limit (post-enrichment)
+- `--phi-limit-arv2 N` set Gate 2 phi limit (post-enrichment)
+- `--phi-limit-arv3 N` set Gate 3 phi limit (reporting)
 - `--verbose` print ARV gate decisions
+- `--profile-id` override AxoDen profile_id
 
 ## Docker
 

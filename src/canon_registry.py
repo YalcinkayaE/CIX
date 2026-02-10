@@ -9,11 +9,18 @@ Strictly adheres to 'Canonical_AxoDen_Engine_Room.md'.
 Version: 1.0.0
 """
 
-import math
 import hashlib
 import json
+import math
+import os
 import struct
-from typing import List, Dict, Any, Union, Optional, Tuple
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple, Union
+
+try:
+    import yaml
+except Exception:  # pragma: no cover - optional for profile overrides
+    yaml = None
 
 # --- Constants & Thresholds (Conformance Parameters) ---
 
@@ -21,6 +28,119 @@ from typing import List, Dict, Any, Union, Optional, Tuple
 ARV_BETA = 2.0          # Verification expansion budget (ln scale)
 ARV_TAU = 0.1           # Correlation risk threshold (2-adic distance)
 ARV_PHI_LIMIT = 100     # Max verifiable evidence nodes within SLA
+
+DEFAULT_PROFILE_ID = "axoden-cix-1-v0.2.0"
+DEFAULT_SCHEMA_VERSION = "0.2.0"
+
+_PROFILE_CACHE: Dict[str, Dict[str, Any]] = {}
+_REGISTRY_COMMIT_CACHE: Dict[str, str] = {}
+
+
+def _kernel_root() -> Optional[Path]:
+    env_path = os.getenv("AXODEN_KERNEL_PATH")
+    if env_path:
+        return Path(env_path).expanduser().resolve()
+    # Best-effort fallback: sibling axoden-kernel directory
+    try:
+        project_root = Path(__file__).resolve().parents[2]
+    except Exception:
+        return None
+    candidate = (project_root.parent / "axoden-kernel").resolve()
+    if candidate.exists():
+        return candidate
+    return None
+
+
+def _registry_root() -> Optional[Path]:
+    kernel_root = _kernel_root()
+    if not kernel_root:
+        return None
+    registry_root = kernel_root / "registry"
+    return registry_root if registry_root.exists() else None
+
+
+def _load_yaml(path: Path) -> Optional[Dict[str, Any]]:
+    if not yaml or not path.exists():
+        return None
+    with path.open("r", encoding="utf-8") as handle:
+        data = yaml.safe_load(handle)
+    return data if isinstance(data, dict) else None
+
+
+def _find_profile(profile_id: str) -> Optional[Dict[str, Any]]:
+    cached = _PROFILE_CACHE.get(profile_id)
+    if cached is not None:
+        return cached
+
+    explicit_path = os.getenv("AXODEN_PROFILE_PATH")
+    if explicit_path:
+        data = _load_yaml(Path(explicit_path))
+        if data:
+            _PROFILE_CACHE[profile_id] = data
+            return data
+
+    registry_root = _registry_root()
+    if registry_root:
+        profiles_dir = registry_root / "profiles"
+        if profiles_dir.exists():
+            for profile_file in sorted(profiles_dir.glob("*.yaml")):
+                data = _load_yaml(profile_file)
+                if not data:
+                    continue
+                if data.get("profile_id") == profile_id:
+                    _PROFILE_CACHE[profile_id] = data
+                    return data
+
+    _PROFILE_CACHE[profile_id] = {}
+    return {}
+
+
+def _registry_commit() -> Optional[str]:
+    registry_root = _registry_root()
+    if not registry_root:
+        return None
+    cache_key = str(registry_root)
+    cached = _REGISTRY_COMMIT_CACHE.get(cache_key)
+    if cached:
+        return cached
+    files = [
+        registry_root / "parameters.yaml",
+        registry_root / "metrics.yaml",
+        registry_root / "actions.yaml",
+        registry_root / "reasons.yaml",
+        registry_root / "states.yaml",
+    ]
+    profiles_dir = registry_root / "profiles"
+    if profiles_dir.exists():
+        files.extend(sorted(profiles_dir.glob("*.yaml")))
+    hasher = hashlib.sha256()
+    for path in files:
+        if not path.exists():
+            continue
+        hasher.update(path.relative_to(registry_root).as_posix().encode("utf-8"))
+        hasher.update(b"\n")
+        hasher.update(path.read_bytes())
+        hasher.update(b"\n")
+    digest = hasher.hexdigest()
+    _REGISTRY_COMMIT_CACHE[cache_key] = digest
+    return digest
+
+
+def profile_settings(profile_id: Optional[str] = None) -> Dict[str, Any]:
+    profile_id = profile_id or os.getenv("AXODEN_PROFILE_ID") or DEFAULT_PROFILE_ID
+    profile = _find_profile(profile_id)
+    arv = profile.get("arv", {}) if profile else {}
+    phi_limits = arv.get("phi_limit_stages", {}) if arv else {}
+    return {
+        "profile_id": profile.get("profile_id") if profile else profile_id,
+        "schema_version": profile.get("schema_version") if profile else DEFAULT_SCHEMA_VERSION,
+        "registry_commit": _registry_commit() or ("0" * 64),
+        "arv_beta": float(arv.get("beta_arv", ARV_BETA)),
+        "arv_tau": float(arv.get("tau_arv", ARV_TAU)),
+        "phi_limit_admission": int(phi_limits.get("admission", ARV_PHI_LIMIT)),
+        "phi_limit_enrichment": int(phi_limits.get("enrichment", ARV_PHI_LIMIT)),
+        "phi_limit_reporting": int(phi_limits.get("reporting", ARV_PHI_LIMIT)),
+    }
 
 # MQ Defaults (ER-mq)
 MQ_TAU_1 = 0.6          # Evidence alignment (general)

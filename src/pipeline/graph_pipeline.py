@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import hashlib
 import json
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, List
+from typing import Any, Dict, List
 
 import networkx as nx
 
@@ -14,7 +16,7 @@ from src.models import GraphReadyAlert
 from src.refiner import IntelligenceRefiner
 from src.synthesis import GraphNarrator
 from src.visualize import GraphVisualizer
-from src.canon_registry import ARV_BETA, ARV_PHI_LIMIT, ARV_TAU, arv_evaluate, arv_phi
+from src.canon_registry import ARV_BETA, ARV_PHI_LIMIT, ARV_TAU, arv_evaluate, arv_phi, profile_settings
 from src.ingest.dedup import compute_event_hash
 from src.kernel.kernel_gate import KernelGate
 from src.kernel.stage1 import BAND_LOW, BAND_MIMIC, BAND_VACUUM, classify_batch
@@ -22,6 +24,30 @@ from src.kernel.stage1 import BAND_LOW, BAND_MIMIC, BAND_VACUUM, classify_batch
 
 def _ensure_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
+
+
+def _utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _canonical_json(data: Dict) -> str:
+    return json.dumps(data, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
+
+def _hash_evidence(evidence: Dict) -> str:
+    payload = dict(evidence)
+    payload["evidence_id"] = ""
+    return hashlib.sha256(_canonical_json(payload).encode("utf-8")).hexdigest()
+
+
+def _append_evidence(ledger_path: Path, evidence: Dict, prev_hash: str) -> str:
+    evidence["prev_hash"] = prev_hash
+    evidence_id = _hash_evidence(evidence)
+    evidence["evidence_id"] = evidence_id
+    with ledger_path.open("a", encoding="utf-8") as handle:
+        handle.write(_canonical_json(evidence))
+        handle.write("\n")
+    return evidence_id
 
 
 def run_graph_pipeline(
@@ -32,8 +58,12 @@ def run_graph_pipeline(
     arv_phi_limit: int | None = None,
     arv_phi_limit_gate1: int | None = None,
     arv_phi_limit_gate23: int | None = None,
+    arv_phi_limit_gate3: int | None = None,
     arv_beta: float | None = None,
     arv_tau: float | None = None,
+    profile_id: str | None = None,
+    registry_commit: str | None = None,
+    lineage_id: str | None = None,
     triage_only: bool = False,
     skip_enrichment: bool = False,
     verbose: bool = False,
@@ -44,6 +74,8 @@ def run_graph_pipeline(
     """
     output_root = Path(output_dir)
     _ensure_dir(output_root)
+    arv_ledger_path = output_root / "arv_gate_ledger.jsonl"
+    arv_prev_hash = ""
 
     admitted_alerts = raw_alerts
     triage_counts = {
@@ -65,6 +97,11 @@ def run_graph_pipeline(
         "logoff",
         "account logon",
     }
+    # Profile settings (fallbacks for ARV + evidence metadata)
+    profile = profile_settings(profile_id)
+    profile_id = profile.get("profile_id") or profile_id
+    registry_commit = registry_commit or profile.get("registry_commit")
+
     # Stage 1 entropic triage (low/high/mimic)
     stage1_events = []
     for raw_alert in raw_alerts:
@@ -152,7 +189,7 @@ def run_graph_pipeline(
         deduped_alerts.append(raw_alert)
 
     if enable_kernel:
-        gate = KernelGate(ledger_path=kernel_ledger_path)
+        gate = KernelGate(profile_id=profile_id or "profile.cix", ledger_path=kernel_ledger_path)
         gated_results = []
         for raw_alert in deduped_alerts:
             result = gate.evaluate(raw_alert)
@@ -207,6 +244,43 @@ def run_graph_pipeline(
             "triage_summary": [str(triage_summary_path)],
         }
 
+    def emit_gate_evidence(
+        gate: str,
+        decision_obj,
+        metrics: Dict[str, Any],
+        root_id: str | None = None,
+    ) -> None:
+        nonlocal arv_prev_hash
+        evidence = {
+            "evidence_id": "",
+            "schema_version": profile.get("schema_version"),
+            "domain": "cix",
+            "kind": "decision",
+            "timestamp": _utc_now(),
+            "source": {
+                "system": "cix-alerts",
+                "sensor": "pipeline",
+                "feed_id": "batch",
+            },
+            "inputs": [],
+            "features_summary": {
+                "gate": gate,
+                "action": decision_obj.action,
+                "reason": decision_obj.reason,
+                **metrics,
+            },
+            "profile_id": profile_id,
+            "registry_commit": registry_commit,
+            "prev_hash": "",
+        }
+        if lineage_id:
+            evidence["lineage_id"] = lineage_id
+            evidence["inputs"].append({"ref_type": "lineage", "ref": lineage_id})
+        if root_id:
+            evidence["root_id"] = root_id
+            evidence["inputs"].append({"ref_type": "root", "ref": root_id})
+        arv_prev_hash = _append_evidence(arv_ledger_path, evidence, arv_prev_hash)
+
     # ARV gate 1 (post-triage admission)
     arv_state = {
         "phi_prev": 12,
@@ -216,14 +290,23 @@ def run_graph_pipeline(
     }
     # Use active triage candidates for admission gating (not graph complexity)
     phi_curr = triage_counts["active_candidates"]
-    phi_limit_gate1 = ARV_PHI_LIMIT if arv_phi_limit_gate1 is None else arv_phi_limit_gate1
+    phi_limit_gate1 = profile.get("phi_limit_admission", ARV_PHI_LIMIT)
+    phi_limit_gate2 = profile.get("phi_limit_enrichment", ARV_PHI_LIMIT)
+    phi_limit_gate3 = profile.get("phi_limit_reporting", ARV_PHI_LIMIT)
+    if arv_phi_limit_gate1 is not None:
+        phi_limit_gate1 = arv_phi_limit_gate1
+    if arv_phi_limit_gate23 is not None:
+        phi_limit_gate2 = arv_phi_limit_gate23
+    if arv_phi_limit_gate3 is not None:
+        phi_limit_gate3 = arv_phi_limit_gate3
     if arv_phi_limit is not None and arv_phi_limit_gate1 is None:
         phi_limit_gate1 = arv_phi_limit
-    phi_limit_gate23 = ARV_PHI_LIMIT if arv_phi_limit_gate23 is None else arv_phi_limit_gate23
     if arv_phi_limit is not None and arv_phi_limit_gate23 is None:
-        phi_limit_gate23 = arv_phi_limit
-    beta = ARV_BETA if arv_beta is None else arv_beta
-    tau = ARV_TAU if arv_tau is None else arv_tau
+        phi_limit_gate2 = arv_phi_limit
+    if arv_phi_limit is not None and arv_phi_limit_gate3 is None:
+        phi_limit_gate3 = arv_phi_limit
+    beta = profile.get("arv_beta", ARV_BETA) if arv_beta is None else arv_beta
+    tau = profile.get("arv_tau", ARV_TAU) if arv_tau is None else arv_tau
     decision = arv_evaluate(
         phi_curr,
         arv_state["phi_prev"],
@@ -233,6 +316,17 @@ def run_graph_pipeline(
         phi_limit=phi_limit_gate1,
         beta=beta,
         tau=tau,
+    )
+    emit_gate_evidence(
+        "ARV1",
+        decision,
+        {
+            "phi_curr": phi_curr,
+            "phi_limit": phi_limit_gate1,
+            "beta": beta,
+            "tau": tau,
+            **decision.metrics,
+        },
     )
     if verbose:
         print(f"[ARV1] action={decision.action} reason={decision.reason} metrics={decision.metrics}")
@@ -257,9 +351,20 @@ def run_graph_pipeline(
             arv_state["d_plus"],
             "agent_v1_out_A",
             "agent_v1_out_B",
-            phi_limit=phi_limit_gate23,
+            phi_limit=phi_limit_gate2,
             beta=beta,
             tau=tau,
+        )
+        emit_gate_evidence(
+            "ARV2",
+            decision,
+            {
+                "phi_curr": phi_curr,
+                "phi_limit": phi_limit_gate2,
+                "beta": beta,
+                "tau": tau,
+                **decision.metrics,
+            },
         )
         if verbose:
             print(f"[ARV2] action={decision.action} reason={decision.reason} metrics={decision.metrics}")
@@ -303,9 +408,22 @@ def run_graph_pipeline(
         arv_state["d_plus"],
         "chaser_out_A",
         "chaser_out_B",
-        phi_limit=phi_limit_gate23,
+        phi_limit=phi_limit_gate3,
         beta=beta,
         tau=tau,
+    )
+    root_id = hashlib.sha256("chaser_out_A|chaser_out_B".encode("utf-8")).hexdigest()
+    emit_gate_evidence(
+        "ARV3",
+        decision,
+        {
+            "phi_curr": phi_curr,
+            "phi_limit": phi_limit_gate3,
+            "beta": beta,
+            "tau": tau,
+            **decision.metrics,
+        },
+        root_id=root_id,
     )
     if verbose:
         print(f"[ARV3] action={decision.action} reason={decision.reason} metrics={decision.metrics}")
