@@ -22,6 +22,48 @@ class GraphConstructor:
             graph.add_node(hash_node, type="SHA256", value=alert.file_hash_sha256)
             graph.add_edge(alert_node, hash_node, relationship="HAS_FILE_HASH")
 
+        # File Name Node
+        if alert.file_name:
+            file_node = f"File:{alert.file_name}"
+            graph.add_node(file_node, type="FileName", value=alert.file_name)
+            graph.add_edge(alert_node, file_node, relationship="HAS_FILE_NAME")
+
+        # File Path Node
+        if alert.file_path:
+            path_node = f"Path:{alert.file_path}"
+            graph.add_node(path_node, type="FilePath", value=alert.file_path)
+            graph.add_edge(alert_node, path_node, relationship="HAS_FILE_PATH")
+
+        # Host Node
+        if alert.hostname:
+            host_node = f"Host:{alert.hostname}"
+            graph.add_node(host_node, type="Host", value=alert.hostname)
+            graph.add_edge(alert_node, host_node, relationship="ON_HOST")
+
+        # User Node
+        if alert.user:
+            user_node = f"User:{alert.user}"
+            graph.add_node(user_node, type="User", value=alert.user)
+            graph.add_edge(alert_node, user_node, relationship="OBSERVED_USER")
+
+        # Process Node
+        if alert.process_image:
+            proc_node = f"Process:{alert.process_image}"
+            graph.add_node(proc_node, type="Process", value=alert.process_image)
+            graph.add_edge(alert_node, proc_node, relationship="OBSERVED_PROCESS")
+
+        # Parent Process Node
+        if alert.parent_process:
+            parent_node = f"Process:{alert.parent_process}"
+            graph.add_node(parent_node, type="Process", value=alert.parent_process)
+            graph.add_edge(alert_node, parent_node, relationship="OBSERVED_PARENT")
+
+        # Command Line Node
+        if alert.command_line:
+            cmd_node = f"Command:{alert.command_line}"
+            graph.add_node(cmd_node, type="CommandLine", value=alert.command_line)
+            graph.add_edge(alert_node, cmd_node, relationship="OBSERVED_COMMAND")
+
         # Source IP Node
         if alert.source_ip:
             ip_node = f"IP:{alert.source_ip}"
@@ -44,6 +86,12 @@ class GraphConstructor:
             family_node = f"Malware:{alert.malware_family}"
             graph.add_node(family_node, type="MalwareFamily", value=alert.malware_family)
             graph.add_edge(alert_node, family_node, relationship="IDENTIFIED_AS_FAMILY")
+
+        # Rule Intent Node
+        if alert.rule_intent:
+            intent_node = f"Rule:{alert.rule_intent}"
+            graph.add_node(intent_node, type="RuleIntent", value=alert.rule_intent)
+            graph.add_edge(alert_node, intent_node, relationship="HAS_RULE_INTENT")
 
         # --- MITRE ATT&CK Mappings ---
         self._map_mitre_techniques(graph, alert_node, alert)
@@ -84,6 +132,42 @@ class GraphConstructor:
             graph.add_node(path_node, type="FileArtifact", value=alert.file_path)
             graph.add_edge(alert_node, path_node, relationship="HAS_FILE_PATH")
             graph.add_edge(path_node, tech_node, relationship="MAPPED_TO")
+
+        # Mapping 2b: VBScript execution via wscript/cscript or .vbs
+        cmd = (alert.command_line or "").lower()
+        file_name = (alert.file_name or "").lower()
+        process_image = (alert.process_image or "").lower()
+        if file_name.endswith(".vbs") or "wscript.exe" in cmd or "cscript.exe" in cmd or "wscript.exe" in process_image:
+            tech_node = "MITRE:T1059.005"
+            graph.add_node(
+                tech_node,
+                type="MITRE_Technique",
+                name="Command and Scripting Interpreter: Visual Basic",
+                tactic="Execution",
+            )
+            graph.add_edge(alert_node, tech_node, relationship="INDICATES_TECHNIQUE")
+
+        # Mapping 2c: PowerShell encoded/exec policy bypass
+        if "powershell.exe" in cmd and (" -enc" in cmd or " -encodedcommand" in cmd or " -nop" in cmd):
+            tech_node = "MITRE:T1059.001"
+            graph.add_node(
+                tech_node,
+                type="MITRE_Technique",
+                name="Command and Scripting Interpreter: PowerShell",
+                tactic="Execution",
+            )
+            graph.add_edge(alert_node, tech_node, relationship="INDICATES_TECHNIQUE")
+
+        # Mapping 2d: System information discovery (whoami)
+        if "whoami.exe" in cmd or file_name == "whoami.exe":
+            tech_node = "MITRE:T1082"
+            graph.add_node(
+                tech_node,
+                type="MITRE_Technique",
+                name="System Information Discovery",
+                tactic="Discovery",
+            )
+            graph.add_edge(alert_node, tech_node, relationship="INDICATES_TECHNIQUE")
 
         # Mapping 3: Rule Intent -> Tactic
         if alert.rule_intent == "System Compromise":

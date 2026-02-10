@@ -24,11 +24,33 @@ class GraphVisualizer:
             "VSR_CONFLICT": "#FF1493"     # Deep Pink (Alert)
         }
         self.default_color = "#D3D3D3"   # Light Grey
+        self.campaign_palette = [
+            "#1f77b4",
+            "#ff7f0e",
+            "#2ca02c",
+            "#d62728",
+            "#9467bd",
+            "#8c564b",
+            "#e377c2",
+            "#7f7f7f",
+            "#bcbd22",
+            "#17becf",
+        ]
+
+    def _component_map(self, graph: nx.DiGraph) -> tuple[dict, int]:
+        undirected = graph.to_undirected()
+        components = list(nx.connected_components(undirected))
+        node_to_component = {}
+        for idx, comp in enumerate(components, start=1):
+            for node in comp:
+                node_to_component[node] = idx
+        return node_to_component, len(components)
 
     def generate_interactive_html(self, graph: nx.DiGraph, output_path: str = "data/investigation_graph_interactive.html"):
         """
         Generates a zoomable, interactive HTML graph using PyVis with a clean light theme and a legend.
         """
+        component_map, component_count = self._component_map(graph)
         # Create PyVis Network with dynamic height
         net = Network(height="calc(100vh - 50px)", width="100%", bgcolor="#ffffff", font_color="#000000", cdn_resources='in_line')
         
@@ -41,9 +63,15 @@ class GraphVisualizer:
             node_type = data.get("type", "Unknown")
             present_types.add(node_type)
             color = self.color_map.get(node_type, self.default_color)
+            campaign_id = component_map.get(node)
+            campaign_color = None
+            if component_count > 1 and campaign_id:
+                campaign_color = self.campaign_palette[(campaign_id - 1) % len(self.campaign_palette)]
             
             title_html = f"<div style='font-family: Calibri, sans-serif; color: black;'>"
             title_html += f"<b>{node}</b><br>Type: {node_type}<hr style='margin: 4px 0;'>"
+            if campaign_id:
+                title_html += f"<b>Campaign:</b> {campaign_id}<br>"
             for k, v in data.items():
                 if k != "type":
                     title_html += f"<b>{k}:</b> {v}<br>"
@@ -55,13 +83,22 @@ class GraphVisualizer:
                 if len(parts) > 1:
                     label = f"{parts[0]}\n{parts[1][:12]}..." if len(parts[1]) > 12 else f"{parts[0]}\n{parts[1]}"
             
+            node_color = color
+            if campaign_color:
+                node_color = {
+                    "background": color,
+                    "border": campaign_color,
+                    "highlight": {"background": color, "border": campaign_color},
+                }
+
             net.add_node(
                 node, 
                 label=label, 
                 title=title_html, 
-                color=color, 
+                color=node_color,
                 shape="dot", 
                 size=25,
+                borderWidth=3 if campaign_color else 1,
                 font={'face': 'Calibri, sans-serif', 'color': '#000000', 'size': 14}
             )
 
@@ -107,6 +144,15 @@ class GraphVisualizer:
                     legend_content += "</div>"
             legend_content += "</div>"
 
+            if component_count > 1:
+                legend_content += "<h3 style='margin: 12px 0 10px 0; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 5px; color: #000;'>Campaigns</h3>"
+                for idx in range(1, component_count + 1):
+                    color = self.campaign_palette[(idx - 1) % len(self.campaign_palette)]
+                    legend_content += f"<div style='display: flex; align-items: center; margin-bottom: 8px;'>"
+                    legend_content += f"<div style='width: 16px; height: 16px; background: transparent; margin-right: 12px; border-radius: 4px; border: 3px solid {color};'></div>"
+                    legend_content += f"<span style='font-size: 14px; color: #333;'>Campaign {idx}</span>"
+                    legend_content += "</div>"
+
             # Inject into the HTML
             final_html = html_content.replace("<head>", f"<head>{custom_style}")
             final_html = final_html.replace("</body>", f"{legend_content}</body>")
@@ -122,6 +168,7 @@ class GraphVisualizer:
         """
         Draws the graph and saves it as a PNG.
         """
+        component_map, component_count = self._component_map(graph)
         # Increase figure size for better spacing
         plt.figure(figsize=(16, 12))
         
@@ -132,14 +179,28 @@ class GraphVisualizer:
 
         # Assign colors based on node type
         node_colors = []
+        node_edges = []
         present_types = set()
         for node, data in graph.nodes(data=True):
             node_type = data.get("type", "Unknown")
             present_types.add(node_type)
             node_colors.append(self.color_map.get(node_type, self.default_color))
+            if component_count > 1:
+                campaign_id = component_map.get(node, 1)
+                node_edges.append(self.campaign_palette[(campaign_id - 1) % len(self.campaign_palette)])
+            else:
+                node_edges.append("black")
 
         # Draw Nodes
-        nx.draw_networkx_nodes(graph, pos, node_color=node_colors, node_size=3000, alpha=0.9, edgecolors='black')
+        nx.draw_networkx_nodes(
+            graph,
+            pos,
+            node_color=node_colors,
+            node_size=3000,
+            alpha=0.9,
+            edgecolors=node_edges,
+            linewidths=2 if component_count > 1 else 1,
+        )
         
         # Draw Labels (Clean up long IDs)
         labels = {}
@@ -189,6 +250,13 @@ class GraphVisualizer:
             if node_type in present_types:
                 patch = mpatches.Patch(color=color, label=node_type)
                 legend_handles.append(patch)
+
+        if component_count > 1:
+            for idx in range(1, component_count + 1):
+                color = self.campaign_palette[(idx - 1) % len(self.campaign_palette)]
+                legend_handles.append(
+                    mpatches.Patch(facecolor="none", edgecolor=color, label=f"Campaign {idx}", linewidth=2)
+                )
         
         plt.legend(handles=legend_handles, loc="upper left", title="Node Types", frameon=True)
 

@@ -15,9 +15,26 @@ cp .env.example .env
 python3 -u main.py
 ```
 
+### Useful flags
+- `--triage-only` stop after triage counts (no enrichment or reports)
+- `--skip-enrichment` skip EFI enrichment (faster)
+- `--arv-beta N` set entropy expansion budget (ARV)
+- `--phi-limit-arv1 N` set Gate 1 phi limit (triage admission)
+- `--phi-limit-arv2 N` set Gate 2/3 phi limit (post-enrichment)
+- `--verbose` print ARV gate decisions
+
 ## Docker
 
 ```bash
 docker compose up --build
 docker exec -it cix-alerts-container python -u main.py
+```
+
+Example (full run with explicit ARV limits):
+```bash
+docker exec -it cix-alerts-container python -u main.py /app/soc_alert_batch.json \
+  --arv-beta 4 \
+  --phi-limit-arv1 200 \
+  --phi-limit-arv2 500 \
+  --verbose
 ```

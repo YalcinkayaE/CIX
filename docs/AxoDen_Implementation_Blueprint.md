@@ -27,54 +27,102 @@ Unlike traditional SIEMs that process alerts in isolation, CIX Alerts utilizes a
 The system follows a strict, gated pipeline. Data flows from ingestion to reporting, but **only** if it passes the mathematical safety checks at each stage.
 
 ```mermaid
-graph TD
-    %% Input & Safety Kernel
-    RAW["Batch Ingestion: JSON Array/Stream"] -->|"ARV Gate 1: Burden Baseline"| ARV1["ARV Resilience Validator"]
-    
-    %% The World Graph (Architectural Shift)
-    ARV1 -->|"Evidence Admissible"| WG["Unified World Graph Composition"]
-    WG -->|"Shared Hubs: IPs/Hashes/Domains"| COR["Automatic Cross-Correlation"]
-    
-    %% Deduplicated Intel Loop
-    COR -->|"EFI-Deduplicated Targets"| LC["Lead-Chasing Module"]
-    
-    %% External Discovery Gateway
-    LC -->|"Brave Search API Gateway"| EXT["External Intel Discovery"]
-    
-    subgraph "External Intelligence Sources"
-    EXT -->|"Query"| NVD["NVD / CVE Database"]
-    EXT -->|"Query"| OTX["AlienVault OTX"]
-    EXT -->|"Query"| MA_WEB["MITRE Knowledge Base"]
-    VT["VirusTotal: EFI Signature Check"]
+graph TB
+    %% === STYLING DEFINITIONS ===
+    classDef safety fill:#ffccbc,stroke:#d84315,stroke-width:2px;
+    classDef topology fill:#fff9c4,stroke:#fbc02d,stroke-width:2px;
+    classDef external fill:#b3e5fc,stroke:#0277bd,stroke-width:2px;
+    classDef audit fill:#e1bee7,stroke:#8e24aa,stroke-width:2px;
+
+    %% === 1. INGESTION ===
+    subgraph sg_ingest["1. Ingest"]
+        RAW["Batch Ingestion:<br/>JSON Array/Stream"]
     end
-    
-    %% Safety Kernel: Enrichment Check
-    NVD & OTX & MA_WEB & VT -->|"New Artifacts"| ARV2["ARV Gate 2: Entropy Drift D+"]
-    
-    %% Campaign Discovery (The Analysis Step)
-    ARV2 -->|"Verified Expansion"| CC["Campaign Clustering: Connected Components"]
-    
-    %% Cross-Root Validation
-    CC -->|"Cluster Isolation"| ARV3["ARV Gate 3: Correlation Risk dist_2"]
-    
-    %% Synthesis & Narrative
-    ARV3 -->|"CFS Certified"| SUM["Strategic Campaign Summaries"]
-    SUM -->|"Interactive Visualization"| DASH["PyVis Dashboard: Zoom/Pan/Click"]
-    
-    %% Audit Trail
-    SUM & DASH -->|"Immutable History"| FL["Forensic Ledger: Validation Audit Trail"]
 
-    %% Component Styling
-    classDef safety fill:#f96,stroke:#333,stroke-width:2px;
-    classDef graph fill:#fdfd96,stroke:#333,stroke-width:2px;
-    classDef external fill:#4db8ff,stroke:#333,stroke-width:2px;
-    classDef audit fill:#e1d5e7,stroke:#333,stroke-width:2px;
+    %% === 4. VALIDATION DOMAIN (The Safety Kernel) ===
+    subgraph sg_validate["4. VALIDATION KERNEL (TCB)"]
+        direction TB
+        ARV1["ARV Gate 1:<br/>Burden Baseline"]
+        ARV2["ARV Gate 2:<br/>Entropy Drift D+"]
+        ARV3["ARV Gate 3:<br/>Correlation Risk"]
+        FL["Forensic Ledger:<br/>Immutable Audit"]
+    end
 
+    %% === 2. CORRELATION DOMAIN ===
+    subgraph sg_correlate["2. Correlate (Graph Topology)"]
+        WG["Unified World Graph"]
+        COR["Auto Cross-Correlation"]
+        CC["Connected Components"]
+    end
+
+    %% === 3. ENRICHMENT DOMAIN ===
+    subgraph sg_enrich["3. Enrich (External Sources)"]
+        direction LR
+        LC["Lead Chaser"]
+        EXT["Brave Search API"]
+
+        subgraph sg_sources["Intel Feeds"]
+            direction TB
+            NVD["NVD/CVE"]
+            OTX["AlienVault"]
+            MA["MITRE"]
+            VT["VirusTotal"]
+        end
+    end
+
+    %% === 5. SYNTHESIS ===
+    subgraph sg_synthesize["5. Synthesize & Report"]
+        SYN["Synthesis:<br/>Campaign Story"]
+        SUM["Strategic Summary"]
+        DASH["PyVis Dashboard"]
+    end
+
+    %% === OPERATIONAL FLOW ===
+    RAW --> ARV1
+    ARV1 -->|"Admissible"| WG
+    WG --> COR
+    COR -->|"Targets"| LC
+    LC --> EXT
+
+    %% Fan-Out to Intel
+    EXT --> NVD & OTX & MA & VT
+
+    %% Fan-In to Validation
+    NVD & OTX & MA & VT -->|"Artifacts"| ARV2
+
+    %% Analysis Flow
+    ARV2 -->|"Verified"| CC
+    CC --> ARV3
+    ARV3 -->|"Certified"| SYN
+    SYN --> SUM --> DASH
+
+    %% === AUDIT LOGGING (The Invisible Overlay) ===
+    ARV1 -.->|"Log"| FL
+    ARV2 -.->|"Log"| FL
+    ARV3 -.->|"Log"| FL
+    SUM -.->|"History"| FL
+
+    %% === APPLY CLASSES ===
     class ARV1,ARV2,ARV3 safety;
-    class WG,COR,LC,CC graph;
-    class VT,NVD,OTX,MA_WEB external;
-    class FL,SUM,DASH audit;
+    class WG,COR,LC,CC topology;
+    class NVD,OTX,MA,VT,EXT external;
+    class FL,SUM,DASH,SYN audit;
+
+    %% === SUBGRAPH STYLING ===
+    style sg_validate fill:#fff5f5,stroke:#ff0000,stroke-width:4px,stroke-dasharray: 5 5
+    style sg_enrich fill:#f0f8ff,stroke:#0277bd,stroke-width:1px,stroke-dasharray: 3 3
+    style sg_sources fill:#e1f5fe,stroke:none
 ```
+
+**Note:** The current Python implementation is **Depth 1 (single-pass)**. Recursive graph updates are not implemented, so no ARV2 → WG loop is shown.
+**Audit note:** The diagram shows ARV gate decisions logging to the Forensic Ledger; in this prototype, gate outcomes are persisted to `data/kernel_ledger.jsonl`, while the campaign ledger includes only component-level validation history.
+
+### Diagram-to-Blueprint Mapping (Steps 1–5)
+1. **Ingest** batches of disconnected alerts. → `RAW` → `ARV1` → `WG`
+2. **Correlate** them instantly via shared entities. → `WG` → `COR`
+3. **Enrich** them using EFI. → `COR` → `LC` → `EXT` → `ARV2`
+4. **Validate** the findings using ARV. → `ARV1`, `ARV2`, `ARV3` (gates on each phase)
+5. **Synthesize** a unified "Campaign Story". → `ARV3` → `SYN` → `SUM` → `DASH`
 
 ---
 
@@ -100,6 +148,7 @@ The core innovation is the `src/canon_registry.py` module, which enforces mathem
 **Configuration (`src/canon_registry.py`):**
 *   `ARV_BETA = 2.0`: The "Entropy Budget" (recently increased to support multi-stage campaigns).
 *   `ARV_TAU = 0.1`: The independence threshold.
+*   **Note (Implementation):** Gate 1 now uses **active triage candidates** for $\phi$ (admission), while Gates 2/3 use **graph node count**. Separate $\phi$ limits are configurable for ARV1 vs ARV2/3 to avoid blocking hunting during enrichment while keeping admission strict.
 
 ---
 
@@ -115,7 +164,7 @@ The core innovation is the `src/canon_registry.py` module, which enforces mathem
 | **Campaign Clustering** | `main.py` (`nx.connected_components`) | Splits the World Graph into isolated "Campaigns" for reporting. |
 | **Safety Validator** | `src/canon_registry.py` | The mathematical authority. Called by `main.py` at every gate. |
 | **Forensic Ledger** | `src/audit.py` | Writes the JSON audit trail, including the `validation_audit`. |
-| **Interactive Dash** | `src/visualize.py` (`PyVis`) | Generates the zoomable, physics-enabled HTML map. |
+| **Interactive Dash** | `src/visualize.py` (`PyVis`) | Generates the zoomable, physics-enabled HTML map. When multiple campaigns exist, connected components are highlighted with colored borders. |
 
 ---
 
@@ -138,6 +187,7 @@ The core innovation is the `src/canon_registry.py` module, which enforces mathem
     *   `GraphNarrator` walks the graph and tells the story.
     *   `ForensicLedger` saves the proof.
     *   `GraphVisualizer` renders the HTML dashboard.
+    *   Reports include a triage summary section (run counts) for traceability.
 9.  **Gate 3**: Final safety check before release. *Decision: EXECUTE.*
 
 ---

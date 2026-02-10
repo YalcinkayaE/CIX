@@ -1,5 +1,6 @@
 import json
-from typing import Any, Dict
+import os
+from typing import Any, Dict, List, Optional
 from boto3.dynamodb.types import TypeDeserializer
 
 class RawParser:
@@ -21,6 +22,88 @@ class RawParser:
         # Otherwise, process the values
         return {k: self.deserializer.deserialize(v) for k, v in data.items()}
 
+    def _extract_sha256(self, hashes: Optional[str]) -> Optional[str]:
+        if not hashes or not isinstance(hashes, str):
+            return None
+        parts = hashes.split(",")
+        for part in parts:
+            chunk = part.strip()
+            if chunk.upper().startswith("SHA256="):
+                return chunk.split("=", 1)[1].strip()
+        return None
+
+    def _mordor_event_to_alert(self, event: Dict[str, Any], fallback_id: str) -> Dict[str, Any]:
+        event_id = (
+            event.get("eventId")
+            or event.get("RecordNumber")
+            or event.get("EventRecordID")
+            or event.get("EventID")
+            or fallback_id
+        )
+        file_path = event.get("TargetFilename") or event.get("Image") or event.get("Application")
+        file_name = os.path.basename(file_path) if file_path else None
+        command_line = event.get("CommandLine") or event.get("Process Command Line")
+        process_image = event.get("Image") or event.get("ProcessName") or event.get("New Process Name")
+        parent_process = event.get("ParentImage") or event.get("ParentProcessName") or event.get("Creator Process Name")
+        hostname = event.get("Hostname") or event.get("Computer")
+        user = event.get("User") or event.get("AccountName") or event.get("SubjectUserName")
+        sha256 = self._extract_sha256(event.get("Hashes"))
+
+        data: Dict[str, Any] = {
+            "alarm_source_ips": [event.get("SourceAddress")] if event.get("SourceAddress") else [],
+            "alarm_destination_ips": [event.get("DestAddress")] if event.get("DestAddress") else [],
+            "file_path": file_path,
+            "file_name": file_name,
+            "rule_intent": event.get("Category") or event.get("EventType") or event.get("Opcode") or event.get("Task"),
+            "command_line": command_line,
+            "process_image": process_image,
+            "parent_process": parent_process,
+            "hostname": hostname,
+            "user": user,
+        }
+        if sha256:
+            data["file_hash_sha256"] = sha256
+
+        if event.get("EventTime"):
+            data["event_time"] = event.get("EventTime")
+        if event.get("Message"):
+            data["message"] = event.get("Message")
+        if event.get("SourcePort"):
+            data["source_port"] = event.get("SourcePort")
+        if event.get("DestPort"):
+            data["destination_port"] = event.get("DestPort")
+
+        timestamp = (
+            event.get("@timestamp")
+            or event.get("EventTime")
+            or event.get("EventReceivedTime")
+            or event.get("UtcTime")
+            or event.get("TimeCreated")
+            or event.get("TimeGenerated")
+            or event.get("Timestamp")
+        )
+
+        return {
+            "eventId": str(event_id),
+            "data": data,
+            "raw_payload": event,
+            "raw_event": event,
+            "timestamp": timestamp,
+        }
+
+    def _normalize_mordor_batch(self, raw_content: Any) -> Optional[List[Dict[str, Any]]]:
+        if isinstance(raw_content, dict) and isinstance(raw_content.get("events"), list):
+            events = raw_content["events"]
+            return [self._mordor_event_to_alert(e, f"event_{idx}") for idx, e in enumerate(events)]
+
+        if isinstance(raw_content, list) and raw_content:
+            if any(isinstance(e, dict) and ("eventId" in e or "data" in e) for e in raw_content):
+                return None
+            if any(isinstance(e, dict) and ("EventID" in e or "RecordNumber" in e) for e in raw_content):
+                return [self._mordor_event_to_alert(e, f"event_{idx}") for idx, e in enumerate(raw_content)]
+
+        return None
+
     def parse_file(self, file_path: str) -> list:
         """
         Load a JSON file and return a list of processed alerts.
@@ -28,12 +111,16 @@ class RawParser:
         """
         with open(file_path, 'r') as f:
             raw_content = json.load(f)
-        
-        # Normalize to list
-        if isinstance(raw_content, list):
-            alerts = raw_content
+
+        mordor_alerts = self._normalize_mordor_batch(raw_content)
+        if mordor_alerts is not None:
+            alerts = mordor_alerts
         else:
-            alerts = [raw_content]
+            # Normalize to list
+            if isinstance(raw_content, list):
+                alerts = raw_content
+            else:
+                alerts = [raw_content]
             
         processed_alerts = []
         for alert in alerts:
