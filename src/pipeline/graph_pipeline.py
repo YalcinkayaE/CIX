@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import ipaddress
 import json
 import os
 import platform
@@ -27,6 +28,8 @@ from src.ingest.dedup import compute_event_hash
 from src.kernel.kernel_gate import KernelGate
 from src.kernel.ledger import Ledger
 from src.kernel.stage1 import BAND_LOW, BAND_MIMIC, BAND_VACUUM, classify_batch
+
+_PLATFORM_SERVICE_IPS = {"168.63.129.16"}
 
 
 def _ensure_dir(path: Path) -> None:
@@ -113,21 +116,170 @@ def _parse_ground_truth_event_ids() -> List[str]:
     return sorted(set(event_ids))
 
 
-def _candidate_core_event_ids(traversal_analysis: Dict[str, Any]) -> List[str]:
-    event_ids = set()
-    for row in traversal_analysis.get("seed_alerts", []):
-        value = str(row.get("event_id") or "").strip()
-        if value:
-            event_ids.add(value)
-    for row in traversal_analysis.get("rca_top", [])[:3]:
-        value = str(row.get("event_id") or "").strip()
-        if value:
-            event_ids.add(value)
-    for key in ("rca_patient_zero", "rca_connectivity_top"):
-        value = str(traversal_analysis.get(key, {}).get("event_id") or "").strip()
-        if value:
-            event_ids.add(value)
-    return sorted(event_ids)
+def _is_external_ip(value: str) -> bool:
+    try:
+        ip = ipaddress.ip_address(value)
+    except ValueError:
+        return False
+    return bool(ip.is_global)
+
+
+def _alert_sort_timestamp(meta: Dict[str, Any]) -> datetime:
+    ts = meta.get("timestamp_dt")
+    if isinstance(ts, datetime):
+        return ts
+    return datetime.max.replace(tzinfo=timezone.utc)
+
+
+def _extract_alert_features(
+    subgraph: nx.DiGraph,
+    alert_node: str,
+    alert_meta: Dict[str, Dict[str, Any]],
+) -> Dict[str, Any]:
+    meta = alert_meta.get(alert_node, {})
+    techniques = set()
+    commands: List[str] = []
+    processes: List[str] = []
+    paths: List[str] = []
+    filenames: List[str] = []
+    ips: List[str] = []
+
+    for _, dst, edge_data in subgraph.out_edges(alert_node, data=True):
+        rel = str(edge_data.get("relationship") or "")
+        dst_attrs = subgraph.nodes.get(dst, {})
+        dst_value = str(dst_attrs.get("value") or dst)
+
+        if rel == "INDICATES_TECHNIQUE":
+            techniques.add(str(dst))
+        elif rel in {"OBSERVED_COMMAND"}:
+            commands.append(dst_value)
+        elif rel in {"OBSERVED_PROCESS", "OBSERVED_PARENT"}:
+            processes.append(dst_value)
+        elif rel == "HAS_FILE_PATH":
+            paths.append(dst_value)
+        elif rel == "HAS_FILE_NAME":
+            filenames.append(dst_value)
+        elif rel in {"HAS_SOURCE_IP", "HAS_DEST_IP"}:
+            ips.append(dst_value)
+
+    if meta.get("command"):
+        commands.append(str(meta["command"]))
+    if meta.get("process"):
+        processes.append(str(meta["process"]))
+
+    text_blob = " ".join(commands + processes + paths + filenames).lower()
+    external_ips = [ip for ip in ips if _is_external_ip(ip)]
+    has_non_platform_external_ip = any(ip not in _PLATFORM_SERVICE_IPS for ip in external_ips)
+
+    has_script_execution = (
+        "MITRE:T1059.005" in techniques
+        or "wscript.exe" in text_blob
+        or "cscript.exe" in text_blob
+        or ".vbs" in text_blob
+    )
+    has_powershell_encoded = (
+        "MITRE:T1059.001" in techniques
+        or (
+            "powershell" in text_blob
+            and any(token in text_blob for token in (" -enc", " -encodedcommand", " encodedcommand", " -nop"))
+        )
+    )
+    has_discovery = (
+        bool({"MITRE:T1033", "MITRE:T1082"} & techniques)
+        or any(token in text_blob for token in ("whoami", "hostname", "wmic", "systeminfo"))
+    )
+    has_staging = (
+        "MITRE:T1074.001" in techniques
+        or any(token in text_blob for token in ("\\temp\\", "/temp/", "\\tmp\\", "/tmp/"))
+        or (".ps1" in text_blob and "temp" in text_blob)
+    )
+    has_network_pivot = bool(external_ips)
+
+    feature_score = sum(
+        int(flag)
+        for flag in (
+            has_script_execution,
+            has_powershell_encoded,
+            has_discovery,
+            has_staging,
+            has_network_pivot,
+        )
+    ) + len(techniques)
+
+    return {
+        "alert": alert_node,
+        "event_id": str(meta.get("event_id") or "").strip(),
+        "timestamp_dt": _alert_sort_timestamp(meta),
+        "feature_score": feature_score,
+        "has_script_execution": has_script_execution,
+        "has_powershell_encoded": has_powershell_encoded,
+        "has_discovery": has_discovery,
+        "has_staging": has_staging,
+        "has_network_pivot": has_network_pivot,
+        "has_non_platform_external_ip": has_non_platform_external_ip,
+    }
+
+
+def _pick_stage_event(
+    rows: List[Dict[str, Any]],
+    predicate,
+) -> Dict[str, Any]:
+    candidates = [row for row in rows if predicate(row)]
+    if not candidates:
+        return {}
+    candidates.sort(
+        key=lambda row: (
+            row["timestamp_dt"],
+            -int(row.get("feature_score", 0)),
+            str(row.get("alert", "")),
+        )
+    )
+    return candidates[0]
+
+
+def _append_event_id_once(target: List[str], value: str) -> None:
+    normalized = str(value or "").strip()
+    if normalized and normalized not in target:
+        target.append(normalized)
+
+
+def _candidate_core_event_ids(
+    traversal_analysis: Dict[str, Any],
+    subgraph: nx.DiGraph,
+    alert_meta: Dict[str, Dict[str, Any]],
+) -> List[str]:
+    # Select campaign core events from generic behavioral stages, not from dataset IDs.
+    alert_rows = []
+    for node, data in subgraph.nodes(data=True):
+        if data.get("type") != "Alert":
+            continue
+        alert_rows.append(_extract_alert_features(subgraph, str(node), alert_meta))
+
+    selected_event_ids: List[str] = []
+    if alert_rows:
+        stage_picks = [
+            _pick_stage_event(alert_rows, lambda row: row["has_script_execution"]),
+            _pick_stage_event(alert_rows, lambda row: row["has_powershell_encoded"]),
+            _pick_stage_event(alert_rows, lambda row: row["has_discovery"]),
+            _pick_stage_event(alert_rows, lambda row: row["has_staging"]),
+            _pick_stage_event(alert_rows, lambda row: row["has_network_pivot"] and row["has_non_platform_external_ip"]),
+            _pick_stage_event(alert_rows, lambda row: row["has_network_pivot"]),
+        ]
+        for row in stage_picks:
+            _append_event_id_once(selected_event_ids, row.get("event_id"))
+
+    # Seed anchor remains useful for reproducibility even if no stage-specific signal was mapped.
+    for row in traversal_analysis.get("seed_alerts", [])[:1]:
+        _append_event_id_once(selected_event_ids, row.get("event_id"))
+
+    # Safety fallback for sparse graphs.
+    if not selected_event_ids:
+        for key in ("rca_patient_zero", "rca_connectivity_top"):
+            _append_event_id_once(selected_event_ids, traversal_analysis.get(key, {}).get("event_id"))
+        for row in traversal_analysis.get("rca_top", [])[:2]:
+            _append_event_id_once(selected_event_ids, row.get("event_id"))
+
+    return selected_event_ids
 
 
 def _compute_detection_metrics(
@@ -939,7 +1091,11 @@ def run_graph_pipeline(
             alert_meta=alert_meta,
             campaign_index=idx + 1,
         )
-        predicted_core_event_ids = _candidate_core_event_ids(traversal_analysis)
+        predicted_core_event_ids = _candidate_core_event_ids(
+            traversal_analysis=traversal_analysis,
+            subgraph=subgraph,
+            alert_meta=alert_meta,
+        )
         detection_metrics = _compute_detection_metrics(
             predicted_event_ids=predicted_core_event_ids,
             ground_truth_event_ids=ground_truth_event_ids,

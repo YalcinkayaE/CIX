@@ -145,16 +145,19 @@ class EnrichmentAgent:
                     corroborated = self._ip_has_attack_corroboration(graph, node_id)
                     if platform_service_ip:
                         verdict = "LIKELY_PLATFORM_SERVICE"
-                        relationship = "ENRICHED_BY_VT_IP"
+                        relationship = "PLATFORM_SERVICE_CONTEXT"
                         confidence = "LOW"
+                        primary_c2_candidate = False
                     elif corroborated:
                         verdict = "CORROBORATED_MALICIOUS_IP"
                         relationship = "MALICIOUS_IP_CONFIRMED"
                         confidence = "MEDIUM"
+                        primary_c2_candidate = True
                     else:
                         verdict = "UNCONFIRMED_MALICIOUS_IP"
                         relationship = "ENRICHED_BY_VT_IP"
                         confidence = "LOW"
+                        primary_c2_candidate = False
 
                     efi_node = f"EFI:VT:{ip_addr}"
                     graph.add_node(efi_node, 
@@ -164,7 +167,8 @@ class EnrichmentAgent:
                                    country=data.get("country", "Unknown"),
                                    verdict=verdict,
                                    confidence=confidence,
-                                   requires_corroboration=True)
+                                   requires_corroboration=True,
+                                   primary_c2_candidate=primary_c2_candidate)
                     graph.add_edge(node_id, efi_node, relationship=relationship)
                     print(f"  [+] VT IP Hit: {ip_addr} (Score: {malicious}, Verdict: {verdict})")
             elif response.status_code == 404:
