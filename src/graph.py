@@ -158,8 +158,24 @@ class GraphConstructor:
             )
             graph.add_edge(alert_node, tech_node, relationship="INDICATES_TECHNIQUE")
 
-        # Mapping 2d: System information discovery (whoami)
-        if "whoami.exe" in cmd or file_name == "whoami.exe":
+        # Mapping 2d: Account discovery via whoami (prefer T1033)
+        if "whoami.exe" in cmd or file_name == "whoami.exe" or process_image.endswith("whoami.exe"):
+            tech_node = "MITRE:T1033"
+            graph.add_node(
+                tech_node,
+                type="MITRE_Technique",
+                name="System Owner/User Discovery",
+                tactic="Discovery",
+            )
+            graph.add_edge(alert_node, tech_node, relationship="INDICATES_TECHNIQUE")
+
+        # Mapping 2e: System information discovery (hostname/systeminfo/wmic)
+        system_discovery_tokens = ("systeminfo", "hostname", "wmic", "wmic.exe")
+        if any(token in cmd for token in system_discovery_tokens) or file_name in {
+            "systeminfo.exe",
+            "hostname.exe",
+            "wmic.exe",
+        }:
             tech_node = "MITRE:T1082"
             graph.add_node(
                 tech_node,

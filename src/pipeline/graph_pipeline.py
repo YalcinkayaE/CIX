@@ -95,23 +95,112 @@ def _sha256_file(path: Path) -> str:
     return hasher.hexdigest()
 
 
+def _parse_ground_truth_event_ids() -> List[str]:
+    raw = (os.getenv("CIX_GROUND_TRUTH_EVENT_IDS") or "").strip()
+    if not raw:
+        return []
+    try:
+        parsed = json.loads(raw)
+    except json.JSONDecodeError:
+        parsed = [token.strip() for token in raw.split(",")]
+    if not isinstance(parsed, list):
+        return []
+    event_ids = []
+    for item in parsed:
+        value = str(item).strip()
+        if value:
+            event_ids.append(value)
+    return sorted(set(event_ids))
+
+
+def _candidate_core_event_ids(traversal_analysis: Dict[str, Any]) -> List[str]:
+    event_ids = set()
+    for row in traversal_analysis.get("seed_alerts", []):
+        value = str(row.get("event_id") or "").strip()
+        if value:
+            event_ids.add(value)
+    for row in traversal_analysis.get("rca_top", [])[:3]:
+        value = str(row.get("event_id") or "").strip()
+        if value:
+            event_ids.add(value)
+    for key in ("rca_patient_zero", "rca_connectivity_top"):
+        value = str(traversal_analysis.get(key, {}).get("event_id") or "").strip()
+        if value:
+            event_ids.add(value)
+    return sorted(event_ids)
+
+
+def _compute_detection_metrics(
+    predicted_event_ids: List[str],
+    ground_truth_event_ids: List[str],
+) -> Dict[str, Any]:
+    predicted = {str(item).strip() for item in predicted_event_ids if str(item).strip()}
+    ground_truth = {str(item).strip() for item in ground_truth_event_ids if str(item).strip()}
+    tp = len(predicted & ground_truth)
+    fp = len(predicted - ground_truth)
+    fn = len(ground_truth - predicted)
+    precision = (tp / len(predicted)) if predicted else None
+    recall = (tp / len(ground_truth)) if ground_truth else None
+    return {
+        "predicted_count": len(predicted),
+        "ground_truth_count": len(ground_truth),
+        "true_positive": tp,
+        "false_positive": fp,
+        "false_negative": fn,
+        "precision": round(precision, 4) if precision is not None else None,
+        "recall": round(recall, 4) if recall is not None else None,
+    }
+
+
 def _render_claim_and_verification_appendix(
     traversal_analysis: Dict[str, Any],
     verification_analysis: Dict[str, Any],
     manifest_name: str,
+    temporal_artifact_name: str,
+    verification_artifact_name: str,
+    predicted_core_event_ids: List[str],
+    detection_metrics: Dict[str, Any],
+    ground_truth_event_ids: List[str],
 ) -> str:
     seed_alerts = traversal_analysis.get("seed_alerts", [])
     top_seed = seed_alerts[0] if seed_alerts else {}
-    rca_top = traversal_analysis.get("rca_top", [])
-    top_rca = rca_top[0] if rca_top else {}
+    patient_zero = traversal_analysis.get("rca_patient_zero", {}) or {}
+    connectivity_top = traversal_analysis.get("rca_connectivity_top", {}) or {}
+    if not patient_zero:
+        rca_top = traversal_analysis.get("rca_top", [])
+        patient_zero = rca_top[0] if rca_top else {}
+    if not connectivity_top:
+        rca_top = traversal_analysis.get("rca_top", [])
+        connectivity_top = rca_top[0] if rca_top else {}
     decision = verification_analysis.get("decision", {})
     stats = verification_analysis.get("statistics", {})
     claim_label = str(decision.get("claim_label") or "INFERRED")
 
+    def _compact_cmd(value: Any, limit: int = 96) -> str:
+        text = str(value or "").strip()
+        if not text:
+            return "n/a"
+        return text if len(text) <= limit else text[: limit - 3] + "..."
+
+    def _pointer(label: str, row: Dict[str, Any], artifact_name: str) -> str:
+        event_id = str(row.get("event_id") or "n/a")
+        host = str(row.get("host") or "n/a")
+        process = str(row.get("process") or "n/a")
+        command = _compact_cmd(row.get("command"))
+        return (
+            f"- `{label}` -> `event_id={event_id}` | `host={host}` | `process={process}` | "
+            f"`command={command}` | source: `{artifact_name}`"
+        )
+
+    precision = detection_metrics.get("precision")
+    recall = detection_metrics.get("recall")
+    precision_text = "n/a" if precision is None else str(precision)
+    recall_text = "n/a" if recall is None else str(recall)
+
     observed_claim = "Graph contains temporal and topological evidence edges across campaign entities."
     inferred_claim = (
-        f"Top RCA candidate is {top_rca.get('alert', 'n/a')} on host {top_rca.get('host', 'n/a')} "
-        f"with score {top_rca.get('score', 'n/a')}."
+        f"Connectivity-led RCA candidate is {connectivity_top.get('alert', 'n/a')} on host "
+        f"{connectivity_top.get('host', 'n/a')} with score {connectivity_top.get('score', 'n/a')}."
     )
     verification_claim = (
         "Distinct DC channel evidence statistically validated."
@@ -127,14 +216,32 @@ def _render_claim_and_verification_appendix(
             f"- [INFERRED] {inferred_claim}",
             f"- [{claim_label}] {verification_claim}",
             "",
-            "## 7. Verification Summary (CMI)",
+            "## 7. RCA Ranking Policy",
+            "- Temporal patient-zero and graph-connectivity RCA are reported separately.",
+            f"- Temporal patient-zero candidate: `{patient_zero.get('alert', 'n/a')}` (event_id `{patient_zero.get('event_id', 'n/a')}`).",
+            f"- Connectivity RCA candidate: `{connectivity_top.get('alert', 'n/a')}` (event_id `{connectivity_top.get('event_id', 'n/a')}`).",
+            "",
+            "## 8. Claim Evidence Pointers",
+            _pointer("Observed temporal seed", top_seed, temporal_artifact_name),
+            _pointer("Inferred patient zero", patient_zero, temporal_artifact_name),
+            _pointer("Inferred connectivity pivot", connectivity_top, temporal_artifact_name),
+            f"- `Verification evidence` -> `claim_label={claim_label}` | `p_value={stats.get('p_value', 1.0)}` | source: `{verification_artifact_name}`",
+            "",
+            "## 9. Verification Summary (CMI)",
             f"- `CMI_obs`: {stats.get('cmi_observed', 0.0)}",
             f"- `p_value`: {stats.get('p_value', 1.0)}",
             f"- `CI95`: [{stats.get('ci95_low', 0.0)}, {stats.get('ci95_high', 0.0)}]",
             f"- `Decision`: {decision.get('reason', 'n/a')}",
             f"- `Primary Seed`: {top_seed.get('alert', 'n/a')}",
             "",
-            "## 8. Reproducibility Envelope",
+            "## 10. Quantitative Detection Scoring",
+            f"- `Predicted core event IDs`: {predicted_core_event_ids or ['n/a']}",
+            f"- `Ground truth event IDs`: {ground_truth_event_ids or ['n/a (set CIX_GROUND_TRUTH_EVENT_IDS)']}",
+            f"- `TP/FP/FN`: {detection_metrics.get('true_positive', 0)}/{detection_metrics.get('false_positive', 0)}/{detection_metrics.get('false_negative', 0)}",
+            f"- `Precision`: {precision_text}",
+            f"- `Recall`: {recall_text}",
+            "",
+            "## 11. Reproducibility Envelope",
             f"- Manifest: `{manifest_name}`",
             "- Claim labels are bounded by available evidence and verification outputs in this run.",
         ]
@@ -794,6 +901,7 @@ def run_graph_pipeline(
     temporal_analyses_json: List[str] = []
     verification_json: List[str] = []
     manifests_json: List[str] = []
+    ground_truth_event_ids = _parse_ground_truth_event_ids()
 
     for idx, comp_nodes in enumerate(components):
         subgraph = world_graph.subgraph(comp_nodes).copy()
@@ -831,6 +939,11 @@ def run_graph_pipeline(
             alert_meta=alert_meta,
             campaign_index=idx + 1,
         )
+        predicted_core_event_ids = _candidate_core_event_ids(traversal_analysis)
+        detection_metrics = _compute_detection_metrics(
+            predicted_event_ids=predicted_core_event_ids,
+            ground_truth_event_ids=ground_truth_event_ids,
+        )
         temporal_analysis_name = output_root / f"temporal_analysis_campaign_{idx+1}.json"
         temporal_analysis_name.write_text(
             json.dumps(traversal_analysis, indent=2),
@@ -850,6 +963,11 @@ def run_graph_pipeline(
             traversal_analysis=traversal_analysis,
             verification_analysis=verification_analysis,
             manifest_name="reproducibility_manifest.json",
+            temporal_artifact_name=temporal_analysis_name.name,
+            verification_artifact_name=verification_name.name,
+            predicted_core_event_ids=predicted_core_event_ids,
+            detection_metrics=detection_metrics,
+            ground_truth_event_ids=ground_truth_event_ids,
         )
         report_path.write_text(report_with_claims, encoding="utf-8")
         reports.append(str(report_path))

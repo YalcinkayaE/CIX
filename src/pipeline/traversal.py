@@ -138,6 +138,8 @@ def _select_seed_alerts(subgraph: nx.DiGraph, alert_meta: Dict[str, Dict[str, An
                 "event_id": meta.get("event_id"),
                 "timestamp": meta.get("timestamp"),
                 "host": meta.get("host"),
+                "process": meta.get("process"),
+                "command": meta.get("command"),
                 "score": score,
                 "reasons": reasons,
             }
@@ -340,6 +342,8 @@ def analyze_campaign_traversal(
                 "event_id": meta.get("event_id"),
                 "timestamp": meta.get("timestamp"),
                 "host": meta.get("host"),
+                "process": meta.get("process"),
+                "command": meta.get("command"),
                 "betweenness": round(cent, 6),
                 "support": int(sup),
                 "precedence": round(pre, 6),
@@ -347,6 +351,17 @@ def analyze_campaign_traversal(
             }
         )
     rca_rows.sort(key=lambda item: (-float(item["score"]), str(item["alert"])))
+    rca_connectivity_top = dict(rca_rows[0]) if rca_rows else {}
+    if rca_connectivity_top:
+        rca_connectivity_top["ranking_method"] = "graph_connectivity"
+
+    temporal_sorted = sorted(
+        rca_rows,
+        key=lambda row: _alert_sort_key(str(row.get("alert")), alert_meta),
+    )
+    rca_patient_zero = dict(temporal_sorted[0]) if temporal_sorted else {}
+    if rca_patient_zero:
+        rca_patient_zero["ranking_method"] = "temporal_precedence"
 
     counterfactuals: List[Dict[str, Any]] = []
     for node, kind in _counterfactual_candidates(subgraph)[:max_counterfactuals]:
@@ -382,6 +397,13 @@ def analyze_campaign_traversal(
             "reachable_alerts": len(baseline_reachable),
             "counterfactual_candidates": len(counterfactuals),
         },
+        "observed_event_ids": sorted(
+            {
+                str(alert_meta.get(node, {}).get("event_id"))
+                for node in projection.nodes
+                if alert_meta.get(node, {}).get("event_id")
+            }
+        ),
         "seed_alerts": seeds,
         "temporal_paths": temporal_paths[:50],
         "blast_radius": {
@@ -390,6 +412,7 @@ def analyze_campaign_traversal(
             "recommendation": "ESCALATE" if any(row["within_threshold"] > 0 for row in blast_rows) else "MONITOR",
         },
         "counterfactuals": counterfactuals[:max_counterfactuals],
+        "rca_patient_zero": rca_patient_zero,
+        "rca_connectivity_top": rca_connectivity_top,
         "rca_top": rca_rows[:10],
     }
-

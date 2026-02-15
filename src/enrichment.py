@@ -28,6 +28,36 @@ class EnrichmentAgent:
         else:
             self.client = None
 
+    def _is_platform_service_ip(self, ip_addr: str) -> bool:
+        # Known cloud platform service IPs should never be auto-promoted as primary C2.
+        return ip_addr in {"168.63.129.16"}
+
+    def _ip_has_attack_corroboration(self, graph: nx.DiGraph, ip_node_id: str) -> bool:
+        suspicious_tokens = ("powershell", "wscript", "cscript", "encodedcommand", " -enc")
+        corroborating_techniques = ("MITRE:T1059", "MITRE:T1071", "MITRE:T1105", "MITRE:T1021")
+
+        for upstream in graph.predecessors(ip_node_id):
+            upstream_attrs = graph.nodes[upstream] if upstream in graph else {}
+            if upstream_attrs.get("type") != "Alert":
+                continue
+            for _, dst, edge_data in graph.out_edges(upstream, data=True):
+                rel = edge_data.get("relationship")
+                if rel == "INDICATES_TECHNIQUE" and str(dst).startswith(corroborating_techniques):
+                    return True
+                if rel in {"OBSERVED_COMMAND", "OBSERVED_PROCESS"}:
+                    dst_attrs = graph.nodes[dst] if dst in graph else {}
+                    text = str(dst_attrs.get("value") or dst).lower()
+                    if any(token in text for token in suspicious_tokens):
+                        return True
+                if rel == "HAS_FILE_HASH":
+                    for _, efi_dst, efi_edge in graph.out_edges(dst, data=True):
+                        if efi_edge.get("relationship") in {"ENRICHED_BY_VT", "ENRICHED_BY_OTX"}:
+                            return True
+                        efi_attrs = graph.nodes[efi_dst] if efi_dst in graph else {}
+                        if efi_attrs.get("type") == "EFI":
+                            return True
+        return False
+
     def _calculate_monitoring_vector(self, graph: nx.DiGraph) -> list:
         """
         Computes the Monitoring Quad (M1-M4) proxy vector for the graph.
@@ -111,14 +141,32 @@ class EnrichmentAgent:
                 malicious = stats.get("malicious", 0)
                 
                 if malicious > 0:
+                    platform_service_ip = self._is_platform_service_ip(ip_addr)
+                    corroborated = self._ip_has_attack_corroboration(graph, node_id)
+                    if platform_service_ip:
+                        verdict = "LIKELY_PLATFORM_SERVICE"
+                        relationship = "ENRICHED_BY_VT_IP"
+                        confidence = "LOW"
+                    elif corroborated:
+                        verdict = "CORROBORATED_MALICIOUS_IP"
+                        relationship = "MALICIOUS_IP_CONFIRMED"
+                        confidence = "MEDIUM"
+                    else:
+                        verdict = "UNCONFIRMED_MALICIOUS_IP"
+                        relationship = "ENRICHED_BY_VT_IP"
+                        confidence = "LOW"
+
                     efi_node = f"EFI:VT:{ip_addr}"
                     graph.add_node(efi_node, 
                                    type="EFI", 
                                    source="VirusTotal_IP",
                                    score=malicious,
-                                   country=data.get("country", "Unknown"))
-                    graph.add_edge(node_id, efi_node, relationship="MALICIOUS_IP")
-                    print(f"  [+] VT IP Hit: {ip_addr} (Score: {malicious})")
+                                   country=data.get("country", "Unknown"),
+                                   verdict=verdict,
+                                   confidence=confidence,
+                                   requires_corroboration=True)
+                    graph.add_edge(node_id, efi_node, relationship=relationship)
+                    print(f"  [+] VT IP Hit: {ip_addr} (Score: {malicious}, Verdict: {verdict})")
             elif response.status_code == 404:
                 print(f"  [-] VT: IP not found.")
         except Exception as e:
