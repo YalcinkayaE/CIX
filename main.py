@@ -1,10 +1,18 @@
 import argparse
 import hashlib
+from datetime import datetime, timezone
 from pathlib import Path
 
 from src.ingestion import RawParser
 from src.canon_registry import profile_settings
 from src.pipeline.graph_pipeline import run_graph_pipeline
+
+
+def _default_output_dir() -> str:
+    # Use UTC timestamp with microseconds so each run has a unique artifact folder.
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S_%f")
+    return str(Path("reports") / f"report_{timestamp}")
+
 
 def main():
     parser = argparse.ArgumentParser(description="CIX Alerts Graph-Lead Prototype")
@@ -14,7 +22,11 @@ def main():
         default="samples/cix_kernel_demo_alerts.json",
         help="Path to the input JSON file (default: samples/cix_kernel_demo_alerts.json)",
     )
-    parser.add_argument("--output-dir", default="data", help="Directory to write run artifacts (default: data)")
+    parser.add_argument(
+        "--output-dir",
+        default=None,
+        help="Directory to write run artifacts (default: reports/report_<UTC timestamp>)",
+    )
     parser.add_argument("--skip-kernel", action="store_true", help="Skip kernel gating (legacy flow)")
     parser.add_argument("--kernel-ledger", default=None, help="Kernel ledger output path (default: <output-dir>/kernel_ledger.jsonl)")
     parser.add_argument("--phi-limit", type=int, default=None, help="Override ARV phi limit for all gates (legacy)")
@@ -34,8 +46,10 @@ def main():
         help="Maximum number of campaign components to emit as artifacts (default: 0 = all).",
     )
     args = parser.parse_args()
+    output_dir = args.output_dir or _default_output_dir()
 
     print("--- CIX Alerts Graph-Lead Prototype (Phase 3: World Graph) Starting ---")
+    print(f"[0] Artifact Output Dir: {output_dir}")
 
     
     # 1. Ingestion (Batch)
@@ -55,10 +69,10 @@ def main():
     else:
         lineage_id = hashlib.sha256(str(lineage_source).encode("utf-8")).hexdigest()
     profile = profile_settings(args.profile_id)
-    kernel_ledger_path = args.kernel_ledger or str(Path(args.output_dir) / "kernel_ledger.jsonl")
+    kernel_ledger_path = args.kernel_ledger or str(Path(output_dir) / "kernel_ledger.jsonl")
     artifacts = run_graph_pipeline(
         raw_alerts,
-        output_dir=args.output_dir,
+        output_dir=output_dir,
         enable_kernel=not args.skip_kernel,
         kernel_ledger_path=kernel_ledger_path,
         arv_phi_limit=args.phi_limit,
