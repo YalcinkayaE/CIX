@@ -17,6 +17,7 @@ See:
 - `docs/AxoDen_Canonical_Blueprint.md`
 - `docs/api/README.md`
 - `docs/api/openapi.yaml`
+- `CONTEXT_RECOVERY.md`
 
 ## Local run
 
