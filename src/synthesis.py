@@ -205,7 +205,8 @@ class GraphNarrator:
                 "",
                 "**Forensic Artifacts Attached:**",
                 "*   **Immutable Ledger:** `data/forensic_ledger.json`",
-                "*   **Relational Flow Graph:** `data/investigation_graph.png`",
+                "*   **Relational Flow Graph:** `data/investigation_graph_campaign_1.html`",
+                "*   **Campaign Snapshot:** `data/campaign_snapshot_1.html`",
             ]
         )
 
@@ -325,7 +326,8 @@ class GraphNarrator:
 
         **Forensic Artifacts Attached:**
         *   **Immutable Ledger:** `data/forensic_ledger.json`
-        *   **Relational Flow Graph:** `data/investigation_graph.png`
+        *   **Relational Flow Graph:** `data/investigation_graph_campaign_1.html`
+        *   **Campaign Snapshot:** `data/campaign_snapshot_1.html`
         """
 
         if not self.client:

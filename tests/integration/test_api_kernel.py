@@ -54,10 +54,11 @@ def test_kernel_graph_run(tmp_path, monkeypatch):
         graph_pipeline,
         "run_graph_pipeline",
         lambda raw_events, output_dir, enable_kernel=False: {
-            "reports": [],
-            "ledgers": [],
-            "graphs_html": [],
+            "reports": [f"{output_dir}/Forensic_Assessment_Campaign_1.md"],
+            "ledgers": [f"{output_dir}/forensic_ledger_campaign_1.json"],
+            "graphs_html": [f"{output_dir}/investigation_graph_campaign_1.html"],
             "graphs_png": [],
+            "snapshots_html": [f"{output_dir}/campaign_snapshot_1.html"],
         },
     )
 

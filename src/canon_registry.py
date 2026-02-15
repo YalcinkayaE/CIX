@@ -131,6 +131,7 @@ def profile_settings(profile_id: Optional[str] = None) -> Dict[str, Any]:
     profile = _find_profile(profile_id)
     arv = profile.get("arv", {}) if profile else {}
     phi_limits = arv.get("phi_limit_stages", {}) if arv else {}
+    topo = profile.get("topological", {}) if profile else {}
     return {
         "profile_id": profile.get("profile_id") if profile else profile_id,
         "schema_version": profile.get("schema_version") if profile else DEFAULT_SCHEMA_VERSION,
@@ -140,6 +141,10 @@ def profile_settings(profile_id: Optional[str] = None) -> Dict[str, Any]:
         "phi_limit_admission": int(phi_limits.get("admission", ARV_PHI_LIMIT)),
         "phi_limit_enrichment": int(phi_limits.get("enrichment", ARV_PHI_LIMIT)),
         "phi_limit_reporting": int(phi_limits.get("reporting", ARV_PHI_LIMIT)),
+        "rho_warn": float(topo.get("rho_warn", 0.90)),
+        "rho_crit": float(topo.get("rho_crit", 1.00)),
+        "drift_warn": float(topo.get("drift_warn", 0.30)),
+        "max_genus": int(topo.get("max_genus", 0)),
     }
 
 # MQ Defaults (ER-mq)
@@ -519,28 +524,28 @@ def arv_evaluate(
     
     # 1. Domain Violation
     if phi_curr <= 0 or phi_prev <= 0:
-        return ARVDecision("HALT", "DOMAIN_VIOLATION", {})
-        
+        return ARVDecision("ARV.HALT", "ARV.DOMAIN_VIOLATION", {})
+
     # 2. Verifiability Limit
     if phi_curr > phi_limit:
-        return ARVDecision("ROLLBACK", "VERIFIABILITY_LIMIT_EXCEEDED", {"phi_curr": phi_curr, "limit": phi_limit})
-        
+        return ARVDecision("ARV.ROLLBACK", "ARV.VERIFIABILITY_LIMIT_EXCEEDED", {"phi_curr": phi_curr, "limit": phi_limit})
+
     # Calculate D+ next
     d_plus_next = arv_d_plus(d_plus_prev, phi_curr, phi_prev)
-    
+
     # 3. Entropy Budget
     if d_plus_next > beta:
-        return ARVDecision("ROLLBACK", "VERIFICATION_EXPANSION_BUDGET_EXCEEDED", {"d_plus": d_plus_next, "beta": beta})
-        
+        return ARVDecision("ARV.ROLLBACK", "ARV.VERIFICATION_EXPANSION_BUDGET_EXCEEDED", {"d_plus": d_plus_next, "beta": beta})
+
     # Calculate dist_2
     dist_val = arv_dist2(root_a_output, root_b_output)
-    
+
     # 4. Correlation Risk
     if dist_val < tau:
-        return ARVDecision("THROTTLE", "ROOT_CORRELATION_RISK", {"dist_2": dist_val, "tau": tau})
-        
+        return ARVDecision("ARV.THROTTLE", "ARV.ROOT_CORRELATION_RISK", {"dist_2": dist_val, "tau": tau})
+
     # 5. Execute
-    return ARVDecision("EXECUTE", "INVARIANTS_PASSED", {
+    return ARVDecision("ARV.EXECUTE", "ARV.INVARIANTS_PASSED", {
         "d_plus": d_plus_next,
         "dist_2": dist_val,
         "phi_star": phi_curr

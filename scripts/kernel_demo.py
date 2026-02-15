@@ -138,12 +138,12 @@ def main() -> int:
         help="Ledger JSONL output path",
     )
     parser.add_argument("--reset", action="store_true", help="Reset ledger before run")
-    parser.add_argument("--profile", default="profile.cix", help="Registry profile id")
+    parser.add_argument("--profile", default="axoden-cix-1-v0.2.0", help="Registry profile id")
     args = parser.parse_args()
 
     kernel_root = _ensure_kernel_on_path()
 
-    from sdk import EvidenceLedger, Registry, decide  # type: ignore
+    from sdk import ARVInput, EvidenceLedger, Registry, decide  # type: ignore
 
     registry = Registry.load(kernel_root / "registry")
     registry_commit = registry.registry_commit()
@@ -158,25 +158,28 @@ def main() -> int:
     alerts: List[Dict] = json.loads(input_path.read_text(encoding="utf-8"))
 
     current_state = "VSR.NOMINAL"
-    repeated_abstain_count = 0
 
     for alert in alerts:
         ingest = _build_ingest_evidence(alert, registry_commit, args.profile)
         ingest_id = ledger.append(ingest)
 
+        arv_input = ARVInput(
+            phi_curr=1,
+            phi_prev=1,
+            D_plus=0.0,
+            dist_2=1.0,
+        )
         decision = decide(
-            ingest,
+            arv_input,
             current_state,
             registry,
             args.profile,
-            repeated_abstain_count=repeated_abstain_count,
             strict=True,
-            expected_registry_commit=registry_commit,
         )
 
         decision_payload = {
             "action_id": decision.action_id,
-            "reason_codes": decision.reason_codes,
+            "reason_code": decision.reason_code,
         }
         decision_evidence = _build_decision_evidence(
             alert, registry_commit, args.profile, decision_payload
@@ -187,15 +190,11 @@ def main() -> int:
             alert,
             registry_commit,
             args.profile,
-            "MQ.M1_EVIDENCE_BUDGET_RATIO",
+            "MQ.M1",
             float(alert.get("budget_ratio", 0.0)),
         )
         ledger.append(metric_evidence)
 
-        if decision.action_id == "ARV.ABSTAIN":
-            repeated_abstain_count += 1
-        else:
-            repeated_abstain_count = 0
         current_state = decision.next_state
 
         print(

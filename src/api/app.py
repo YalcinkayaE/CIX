@@ -49,13 +49,13 @@ class IngestBatch(BaseModel):
 
 class KernelIngestBatch(BaseModel):
     events: List[IngestEvent] = Field(..., description="Batch of ingest events")
-    profile_id: Optional[str] = Field("profile.cix", description="Kernel profile id")
+    profile_id: Optional[str] = Field("axoden-cix-1-v0.2.0", description="Kernel profile id")
     run_graph: Optional[bool] = Field(False, description="Trigger graph run asynchronously")
 
 
 class KernelDecision(BaseModel):
     action_id: str
-    reason_codes: List[str]
+    reason_code: str
 
 
 class IngestEventResult(BaseModel):
@@ -77,7 +77,7 @@ class IngestBatchResponse(BaseModel):
 
 class GraphRunRequest(BaseModel):
     evidence_ids: List[str] = Field(..., description="Evidence IDs to graph")
-    profile_id: Optional[str] = Field("profile.cix", description="Kernel profile id")
+    profile_id: Optional[str] = Field("axoden-cix-1-v0.2.0", description="Kernel profile id")
 
 
 class GraphRunResponse(BaseModel):
@@ -177,7 +177,7 @@ def create_app() -> FastAPI:
                 _error("IDEMPOTENCY_CONFLICT", "Idempotency key reuse with different payload", 409)
             return cached["response"]
 
-        gate = KernelGate(profile_id=batch.profile_id or "profile.cix", ledger_path=kernel_ledger_path)
+        gate = KernelGate(profile_id=batch.profile_id or "axoden-cix-1-v0.2.0", ledger_path=kernel_ledger_path)
         from sdk import hash_evidence  # type: ignore
 
         admitted_results: List[IngestEventResult] = []
@@ -189,7 +189,7 @@ def create_app() -> FastAPI:
             result = gate.evaluate(raw_alert.model_dump(exclude_none=True))
             decision = KernelDecision(
                 action_id=result.action_id,
-                reason_codes=result.reason_codes,
+                reason_code=result.reason_code,
             )
             evidence_id = hash_evidence(result.ingest_evidence)
 
@@ -206,7 +206,7 @@ def create_app() -> FastAPI:
                 halt_triggered = True
                 break
 
-            if result.action_id in {"ARV.ADMIT", "ARV.COMPRESS"}:
+            if result.action_id in {"ARV.EXECUTE", "ARV.THROTTLE"}:
                 gated_results.append((result, evidence_id, decision))
             else:
                 gate.append_ledger(result)
@@ -296,8 +296,8 @@ def create_app() -> FastAPI:
                     artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "ledger_json", "path": path})
                 for path in artifacts["graphs_html"]:
                     artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "graph_html", "path": path})
-                for path in artifacts["graphs_png"]:
-                    artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "graph_png", "path": path})
+                for path in artifacts.get("snapshots_html", []):
+                    artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "snapshot_html", "path": path})
                 artifact_store[run_id] = artifact_list
                 run_store[run_id]["status"] = "SUCCEEDED"
                 run_store[run_id]["finished_at"] = datetime.now(timezone.utc).isoformat()
@@ -351,8 +351,8 @@ def create_app() -> FastAPI:
                 artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "ledger_json", "path": path})
             for path in artifacts["graphs_html"]:
                 artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "graph_html", "path": path})
-            for path in artifacts["graphs_png"]:
-                artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "graph_png", "path": path})
+            for path in artifacts.get("snapshots_html", []):
+                artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "snapshot_html", "path": path})
             artifact_store[run_id] = artifact_list
             run_store[run_id]["status"] = "SUCCEEDED"
             run_store[run_id]["finished_at"] = datetime.now(timezone.utc).isoformat()

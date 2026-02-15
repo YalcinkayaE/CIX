@@ -92,7 +92,7 @@ class GateResult:
     raw_alert: Dict[str, Any]
     graph_raw: Dict[str, Any]
     action_id: str
-    reason_codes: List[str]
+    reason_code: str
     ingest_evidence: Dict[str, Any]
     decision_evidence: Dict[str, Any]
 
@@ -100,15 +100,16 @@ class GateResult:
 class KernelGate:
     def __init__(
         self,
-        profile_id: str = "profile.cix",
+        profile_id: str = "axoden-cix-1-v0.2.0",
         ledger_path: str = "data/kernel_ledger.jsonl",
         enable_ledger: bool = True,
     ) -> None:
         kernel_root = _ensure_kernel_on_path()
-        from sdk import EvidenceLedger, Registry, decide  # type: ignore
+        from sdk import ARVInput, EvidenceLedger, Registry, decide  # type: ignore
 
         self._Registry = Registry
         self._EvidenceLedger = EvidenceLedger
+        self._ARVInput = ARVInput
         self._decide = decide
         self._kernel_root = kernel_root
         self.profile_id = profile_id
@@ -159,19 +160,23 @@ class KernelGate:
             "prev_hash": "",
         }
 
+        arv_input = self._ARVInput(
+            phi_curr=1,
+            phi_prev=1,
+            D_plus=0.0,
+            dist_2=1.0,
+        )
         decision = self._decide(
-            ingest_evidence,
+            arv_input,
             "VSR.NOMINAL",
             self.registry,
             self.profile_id,
-            repeated_abstain_count=0,
             strict=True,
-            expected_registry_commit=self.registry_commit,
         )
 
         decision_payload = {
             "action_id": decision.action_id,
-            "reason_codes": decision.reason_codes,
+            "reason_code": decision.reason_code,
         }
         decision_evidence = {
             "evidence_id": "",
@@ -196,7 +201,7 @@ class KernelGate:
             raw_alert=event,
             graph_raw=graph_raw,
             action_id=decision.action_id,
-            reason_codes=decision.reason_codes,
+            reason_code=decision.reason_code,
             ingest_evidence=ingest_evidence,
             decision_evidence=decision_evidence,
         )

@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import hashlib
 import json
+from collections import Counter
 from datetime import datetime, timezone
+from html import escape
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -50,6 +52,225 @@ def _append_evidence(ledger_path: Path, evidence: Dict, prev_hash: str) -> str:
     return evidence_id
 
 
+def _severity_label(subgraph: nx.DiGraph) -> str:
+    finding_count = sum(1 for _, data in subgraph.nodes(data=True) if data.get("type") == "MITRE_Technique")
+    efi_count = sum(1 for _, data in subgraph.nodes(data=True) if data.get("type") == "EFI")
+    if finding_count >= 5 or efi_count >= 5:
+        return "HIGH"
+    if finding_count >= 2 or efi_count >= 2:
+        return "MEDIUM"
+    return "LOW"
+
+
+def _render_campaign_snapshot(
+    subgraph: nx.DiGraph,
+    campaign_index: int,
+    triage_counts: Dict[str, int],
+    report_path: Path,
+    ledger_path: Path,
+    graph_html_path: Path,
+) -> str:
+    node_count = subgraph.number_of_nodes()
+    edge_count = subgraph.number_of_edges()
+    finding_nodes = sorted(
+        [
+            (node, data)
+            for node, data in subgraph.nodes(data=True)
+            if data.get("type") == "MITRE_Technique"
+        ],
+        key=lambda item: item[0],
+    )
+    efi_rows = []
+    for src, dst, edge_data in subgraph.edges(data=True):
+        dst_data = subgraph.nodes.get(dst, {})
+        if dst_data.get("type") != "EFI":
+            continue
+        score = dst_data.get("score")
+        if score is None:
+            score = dst_data.get("pulses", "-")
+        efi_rows.append(
+            {
+                "source": src,
+                "relationship": edge_data.get("relationship", "RELATED"),
+                "target": dst,
+                "provider": dst_data.get("source", "Unknown"),
+                "score": score,
+            }
+        )
+    efi_rows = sorted(efi_rows, key=lambda row: (str(row["provider"]), str(row["target"])))
+
+    asset_types = {"Host", "User", "IP", "Process", "FileName", "SHA256", "MalwareFamily"}
+    asset_values = []
+    for _, data in subgraph.nodes(data=True):
+        ntype = data.get("type")
+        if ntype not in asset_types:
+            continue
+        value = data.get("value")
+        if value:
+            asset_values.append(str(value))
+    asset_values = sorted(set(asset_values))[:16]
+
+    relation_counter = Counter()
+    for _, _, edge_data in subgraph.edges(data=True):
+        relation_counter[str(edge_data.get("relationship", "RELATED"))] += 1
+    relation_rows = sorted(relation_counter.items(), key=lambda item: (-item[1], item[0]))[:12]
+
+    severity = _severity_label(subgraph)
+    total_ingested = triage_counts.get("total_ingested", 0)
+    findings = triage_counts.get("findings", 0)
+    signal_ratio = "n/a" if findings == 0 else f"1:{max(1, int(total_ingested / max(1, findings)))}"
+
+    findings_table = "".join(
+        (
+            f"<tr><td class='mono'>{escape(node)}</td>"
+            f"<td>{escape(str(data.get('name', 'Unknown technique')))}</td>"
+            f"<td>{escape(str(data.get('tactic', 'n/a')))}</td></tr>"
+        )
+        for node, data in finding_nodes
+    ) or "<tr><td colspan='3' class='muted'>No MITRE findings in this campaign.</td></tr>"
+
+    efi_table = "".join(
+        (
+            f"<tr><td class='mono'>{escape(str(row['source']))}</td>"
+            f"<td>{escape(str(row['relationship']))}</td>"
+            f"<td class='mono'>{escape(str(row['target']))}</td>"
+            f"<td>{escape(str(row['provider']))}</td>"
+            f"<td>{escape(str(row['score']))}</td></tr>"
+        )
+        for row in efi_rows
+    ) or "<tr><td colspan='5' class='muted'>No EFI nodes generated.</td></tr>"
+
+    relation_table = "".join(
+        f"<tr><td class='mono'>{escape(name)}</td><td>{count}</td></tr>"
+        for name, count in relation_rows
+    ) or "<tr><td colspan='2' class='muted'>No graph relationships.</td></tr>"
+
+    assets_html = "".join(f"<span class='asset-tag'>{escape(value)}</span>" for value in asset_values)
+    if not assets_html:
+        assets_html = "<span class='muted'>No impacted assets extracted.</span>"
+
+    generated_at = _utc_now()
+    return f"""<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CIX Campaign Snapshot</title>
+  <style>
+    :root {{
+      --bg: #f7f3eb; --card: #ffffff; --ink: #0f172a; --muted: #5b6472;
+      --border: #e2e8f0; --accent: #1f7a6e; --accent-soft: #d9f1eb;
+      --danger: #c84638; --warn: #d07a2b; --shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }}
+    body {{ margin: 0; background: var(--bg); color: var(--ink); font-family: system-ui, sans-serif; padding: 1.5rem; }}
+    .container {{ max-width: 1200px; margin: 0 auto; background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }}
+    header {{ background: linear-gradient(135deg, #1f7a6e 0%, #155e54 100%); color: white; padding: 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }}
+    h1 {{ margin: 0; font-size: 1.5rem; }}
+    .mono {{ font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }}
+    .hud {{ display: grid; grid-template-columns: repeat(6, minmax(120px, 1fr)); border-bottom: 1px solid var(--border); background: #faf8f4; }}
+    .hud-card {{ padding: 1rem; text-align: center; border-right: 1px solid var(--border); }}
+    .hud-card:last-child {{ border-right: none; }}
+    .label {{ display: block; font-size: 0.68rem; text-transform: uppercase; color: var(--muted); font-weight: 700; letter-spacing: .03em; margin-bottom: .4rem; }}
+    .value {{ font-weight: 800; font-size: 1rem; }}
+    .value.sev-high {{ color: var(--danger); }} .value.sev-medium {{ color: var(--warn); }} .value.sev-low {{ color: var(--accent); }}
+    section {{ padding: 1.5rem 2rem; border-bottom: 1px solid var(--border); }}
+    section:last-child {{ border-bottom: none; }}
+    h2 {{ margin-top: 0; color: #155e54; font-size: 1.1rem; }}
+    .pipeline {{ display: grid; grid-template-columns: repeat(7, 1fr); gap: .75rem; }}
+    .step {{ background: #faf8f4; border: 1px solid var(--border); border-radius: 10px; padding: .8rem; text-align: center; }}
+    .count {{ display: block; font-size: 1.25rem; font-weight: 800; }}
+    table {{ width: 100%; border-collapse: collapse; border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }}
+    th, td {{ text-align: left; padding: .75rem; border-bottom: 1px solid var(--border); vertical-align: top; }}
+    th {{ background: #f8fafc; font-size: .72rem; text-transform: uppercase; color: var(--muted); }}
+    .grid {{ display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }}
+    .asset-list {{ display: flex; gap: .4rem; flex-wrap: wrap; }}
+    .asset-tag {{ background: #f1f5f9; border: 1px solid var(--border); border-radius: 8px; padding: .2rem .55rem; font-size: .8rem; }}
+    .links a {{ color: #155e54; text-decoration: none; font-weight: 700; }}
+    .links a:hover {{ text-decoration: underline; }}
+    .muted {{ color: var(--muted); }}
+    @media (max-width: 900px) {{
+      .hud {{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }}
+      .pipeline {{ grid-template-columns: repeat(2, minmax(120px, 1fr)); }}
+      .grid {{ grid-template-columns: 1fr; }}
+    }}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Campaign {campaign_index} Snapshot</h1>
+        <div class="mono" style="opacity:.9; font-size:.82rem;">Generated {escape(generated_at)}</div>
+      </div>
+      <div class="mono" style="text-align:right;">AxoDen CIX Snapshot</div>
+    </header>
+
+    <div class="hud">
+      <div class="hud-card"><span class="label">Severity</span><span class="value sev-{severity.lower()}">{severity}</span></div>
+      <div class="hud-card"><span class="label">S/N Ratio</span><span class="value">{signal_ratio}</span></div>
+      <div class="hud-card"><span class="label">Findings</span><span class="value">{findings}</span></div>
+      <div class="hud-card"><span class="label">EFI Nodes</span><span class="value">{len(efi_rows)}</span></div>
+      <div class="hud-card"><span class="label">Graph Nodes</span><span class="value">{node_count}</span></div>
+      <div class="hud-card"><span class="label">Graph Edges</span><span class="value">{edge_count}</span></div>
+    </div>
+
+    <section>
+      <h2>Efficiency Pipeline</h2>
+      <div class="pipeline">
+        <div class="step"><span class="label">Ingested</span><span class="count">{triage_counts.get("total_ingested", 0)}</span></div>
+        <div class="step"><span class="label">Low Entropy</span><span class="count">-{triage_counts.get("background_low_entropy", 0)}</span></div>
+        <div class="step"><span class="label">Semantic</span><span class="count">-{triage_counts.get("background_semantic", 0)}</span></div>
+        <div class="step"><span class="label">Red Zone</span><span class="count">-{triage_counts.get("red_zone_high_entropy", 0)}</span></div>
+        <div class="step"><span class="label">Deduped</span><span class="count">-{triage_counts.get("dedup_removed", 0)}</span></div>
+        <div class="step"><span class="label">Active</span><span class="count">{triage_counts.get("active_candidates", 0)}</span></div>
+        <div class="step"><span class="label">Findings</span><span class="count">{triage_counts.get("findings", 0)}</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Key MITRE Findings</h2>
+      <table>
+        <thead><tr><th>Technique ID</th><th>Name</th><th>Tactic</th></tr></thead>
+        <tbody>{findings_table}</tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>EFI Evidence</h2>
+      <table>
+        <thead><tr><th>Source Node</th><th>Relation</th><th>EFI Node</th><th>Provider</th><th>Score/Pulses</th></tr></thead>
+        <tbody>{efi_table}</tbody>
+      </table>
+    </section>
+
+    <section>
+      <h2>Assets & Relationships</h2>
+      <div class="grid">
+        <div>
+          <div class="label">Impacted Assets</div>
+          <div class="asset-list">{assets_html}</div>
+        </div>
+        <div>
+          <table>
+            <thead><tr><th>Relationship</th><th>Count</th></tr></thead>
+            <tbody>{relation_table}</tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="links">
+      <h2>Generated Artifacts</h2>
+      <p><a href="{escape(report_path.name)}">Forensic Assessment (Markdown)</a></p>
+      <p><a href="{escape(ledger_path.name)}">Forensic Ledger (JSON)</a></p>
+      <p><a href="{escape(graph_html_path.name)}">Interactive Graph (HTML)</a></p>
+    </section>
+  </div>
+</body>
+</html>
+"""
+
+
 def run_graph_pipeline(
     raw_alerts: List[Dict],
     output_dir: str = "data",
@@ -83,6 +304,7 @@ def run_graph_pipeline(
         "background_low_entropy": 0,
         "background_semantic": 0,
         "red_zone_high_entropy": 0,
+        "stage1_failed": 0,
         "dedup_removed": 0,
         "active_candidates": 0,
         "findings": 0,
@@ -136,6 +358,8 @@ def run_graph_pipeline(
         )
     stage1_result = classify_batch(stage1_events)
     per_event = stage1_result.get("per_event", [])
+    batch_counts = stage1_result.get("batch", {}) if isinstance(stage1_result, dict) else {}
+    triage_counts["stage1_failed"] = int(batch_counts.get("failed_count", 0) or 0)
     mimic_indices = []
     for idx, entry in enumerate(per_event):
         band = entry.get("band")
@@ -189,12 +413,12 @@ def run_graph_pipeline(
         deduped_alerts.append(raw_alert)
 
     if enable_kernel:
-        gate = KernelGate(profile_id=profile_id or "profile.cix", ledger_path=kernel_ledger_path)
+        gate = KernelGate(profile_id=profile_id or "axoden-cix-1-v0.2.0", ledger_path=kernel_ledger_path)
         gated_results = []
         for raw_alert in deduped_alerts:
             result = gate.evaluate(raw_alert)
             gate.append_ledger(result)
-            if result.action_id in {"ARV.ADMIT", "ARV.COMPRESS"}:
+            if result.action_id in {"ARV.EXECUTE", "ARV.THROTTLE"}:
                 gated_results.append(result)
         admitted_alerts = [r.graph_raw for r in gated_results]
     else:
@@ -207,14 +431,7 @@ def run_graph_pipeline(
         alert_model = GraphReadyAlert.from_raw_data(raw_alert)
         constructor.add_to_graph(world_graph, alert_model)
 
-    triage_counts["active_candidates"] = max(
-        0,
-        triage_counts["total_ingested"]
-        - triage_counts["background_low_entropy"]
-        - triage_counts["background_semantic"]
-        - triage_counts["red_zone_high_entropy"]
-        - triage_counts["dedup_removed"],
-    )
+    triage_counts["active_candidates"] = len(deduped_alerts)
 
     # Findings (unique MITRE techniques)
     mitre_nodes = {
@@ -228,6 +445,7 @@ def run_graph_pipeline(
     print(f"BACKGROUND -{triage_counts['background_low_entropy']} (Low entropy)")
     print(f"BACKGROUND -{triage_counts['background_semantic']} (Semantic)")
     print(f"RED ZONE -{triage_counts['red_zone_high_entropy']} (High entropy)")
+    print(f"FAILED -{triage_counts['stage1_failed']} (Invalid schema)")
     print(f"DEDUPED -{triage_counts['dedup_removed']}")
     print(f"ACTIVE TRIAGE CANDIDATES {triage_counts['active_candidates']}")
     print(f"FINDINGS {triage_counts['findings']}")
@@ -241,6 +459,7 @@ def run_graph_pipeline(
             "ledgers": [],
             "graphs_html": [],
             "graphs_png": [],
+            "snapshots_html": [],
             "triage_summary": [str(triage_summary_path)],
         }
 
@@ -330,12 +549,13 @@ def run_graph_pipeline(
     )
     if verbose:
         print(f"[ARV1] action={decision.action} reason={decision.reason} metrics={decision.metrics}")
-    if decision.action != "EXECUTE":
+    if decision.action != "ARV.EXECUTE":
         return {
             "reports": [],
             "ledgers": [],
             "graphs_html": [],
             "graphs_png": [],
+            "snapshots_html": [],
         }
     arv_state["phi_prev"] = phi_curr
     arv_state["d_plus"] = decision.metrics["d_plus"]
@@ -363,17 +583,19 @@ def run_graph_pipeline(
                 "phi_limit": phi_limit_gate2,
                 "beta": beta,
                 "tau": tau,
+                "E_evidence": world_graph.number_of_edges(),
                 **decision.metrics,
             },
         )
         if verbose:
             print(f"[ARV2] action={decision.action} reason={decision.reason} metrics={decision.metrics}")
-        if decision.action != "EXECUTE":
+        if decision.action != "ARV.EXECUTE":
             return {
                 "reports": [],
                 "ledgers": [],
                 "graphs_html": [],
                 "graphs_png": [],
+                "snapshots_html": [],
             }
         arv_state["phi_prev"] = phi_curr
         arv_state["d_plus"] = decision.metrics["d_plus"]
@@ -421,18 +643,20 @@ def run_graph_pipeline(
             "phi_limit": phi_limit_gate3,
             "beta": beta,
             "tau": tau,
+            "E_evidence": world_graph.number_of_edges(),
             **decision.metrics,
         },
         root_id=root_id,
     )
     if verbose:
         print(f"[ARV3] action={decision.action} reason={decision.reason} metrics={decision.metrics}")
-    if decision.action not in {"EXECUTE", "THROTTLE"}:
+    if decision.action not in {"ARV.EXECUTE", "ARV.THROTTLE"}:
         return {
             "reports": [],
             "ledgers": [],
             "graphs_html": [],
             "graphs_png": [],
+            "snapshots_html": [],
         }
 
     # Campaign split + reports
@@ -447,6 +671,7 @@ def run_graph_pipeline(
     ledgers: List[str] = []
     graphs_html: List[str] = []
     graphs_png: List[str] = []
+    snapshots_html: List[str] = []
 
     for idx, comp_nodes in enumerate(components):
         subgraph = world_graph.subgraph(comp_nodes).copy()
@@ -467,18 +692,27 @@ def run_graph_pipeline(
         ledger.export(triples, summary, comp_arv)
         ledgers.append(str(ledger_name))
 
-        viz_name = output_root / f"investigation_graph_campaign_{idx+1}.png"
         interactive_name = output_root / f"investigation_graph_campaign_{idx+1}.html"
+        snapshot_name = output_root / f"campaign_snapshot_{idx+1}.html"
 
-        visualizer.generate_image(subgraph, output_path=str(viz_name))
         visualizer.generate_interactive_html(subgraph, output_path=str(interactive_name))
+        snapshot_html = _render_campaign_snapshot(
+            subgraph=subgraph,
+            campaign_index=idx + 1,
+            triage_counts=triage_counts,
+            report_path=report_path,
+            ledger_path=ledger_name,
+            graph_html_path=interactive_name,
+        )
+        snapshot_name.write_text(snapshot_html, encoding="utf-8")
 
-        graphs_png.append(str(viz_name))
         graphs_html.append(str(interactive_name))
+        snapshots_html.append(str(snapshot_name))
 
     return {
         "reports": reports,
         "ledgers": ledgers,
         "graphs_html": graphs_html,
         "graphs_png": graphs_png,
+        "snapshots_html": snapshots_html,
     }

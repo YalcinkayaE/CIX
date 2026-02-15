@@ -59,7 +59,8 @@ All runtime behavior must follow this flow. Any legacy documents are advisory on
 - Outputs:
   - Forensic Assessment report
   - Forensic ledger
-  - Interactive HTML + PNG graph
+  - Interactive HTML graph
+  - Campaign snapshot HTML
 
 ## 4. Wiring Diagram
 ```mermaid
@@ -99,7 +100,7 @@ curl -X POST http://localhost:8009/api/v1/ingest/classify \
 - `data/Forensic_Assessment_Campaign_*.md`
 - `data/forensic_ledger_campaign_*.json`
 - `data/investigation_graph_campaign_*.html`
-- `data/investigation_graph_campaign_*.png`
+- `data/campaign_snapshot_*.html`
 
 ## 7. Non-Negotiable Invariants
 - Evidence objects are hashed before graph build and never mutated after hashing

@@ -1,5 +1,6 @@
 import json
 import os
+from json import JSONDecodeError
 from typing import Any, Dict, List, Optional
 from boto3.dynamodb.types import TypeDeserializer
 
@@ -91,26 +92,65 @@ class RawParser:
             "timestamp": timestamp,
         }
 
+    def _looks_normalized_event(self, event: Dict[str, Any]) -> bool:
+        if not isinstance(event, dict):
+            return False
+        # Stage-1 ingest envelope
+        if "event_id" in event and (
+            "raw_payload" in event or "raw_payload_ref" in event
+        ):
+            return True
+        # Graph-ready envelope
+        if "eventId" in event and "data" in event:
+            return True
+        return False
+
     def _normalize_mordor_batch(self, raw_content: Any) -> Optional[List[Dict[str, Any]]]:
         if isinstance(raw_content, dict) and isinstance(raw_content.get("events"), list):
             events = raw_content["events"]
+            if events and all(
+                isinstance(e, dict) and self._looks_normalized_event(e) for e in events
+            ):
+                return events
             return [self._mordor_event_to_alert(e, f"event_{idx}") for idx, e in enumerate(events)]
 
         if isinstance(raw_content, list) and raw_content:
-            if any(isinstance(e, dict) and ("eventId" in e or "data" in e) for e in raw_content):
+            if any(isinstance(e, dict) and self._looks_normalized_event(e) for e in raw_content):
                 return None
             if any(isinstance(e, dict) and ("EventID" in e or "RecordNumber" in e) for e in raw_content):
                 return [self._mordor_event_to_alert(e, f"event_{idx}") for idx, e in enumerate(raw_content)]
 
         return None
 
+    def _load_json_or_jsonl(self, file_path: str) -> Any:
+        with open(file_path, "r", encoding="utf-8") as f:
+            raw_text = f.read()
+
+        try:
+            return json.loads(raw_text)
+        except JSONDecodeError:
+            events: List[Dict[str, Any]] = []
+            for line_no, line in enumerate(raw_text.splitlines(), 1):
+                stripped = line.strip()
+                if not stripped:
+                    continue
+                try:
+                    parsed = json.loads(stripped)
+                except JSONDecodeError as exc:
+                    raise ValueError(f"Invalid JSONL at line {line_no}: {exc}") from exc
+                if isinstance(parsed, dict):
+                    events.append(parsed)
+
+            if events:
+                return events
+            raise
+
     def parse_file(self, file_path: str) -> list:
         """
         Load a JSON file and return a list of processed alerts.
         Supports both single object and list (batch) input.
         """
-        with open(file_path, 'r') as f:
-            raw_content = json.load(f)
+        raw_content = self._load_json_or_jsonl(file_path)
 
         mordor_alerts = self._normalize_mordor_batch(raw_content)
         if mordor_alerts is not None:

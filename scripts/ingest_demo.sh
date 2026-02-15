@@ -46,9 +46,59 @@ wrap_jsonl() {
   python3 - "$input" "$output" <<'PY'
 import json
 import sys
+import hashlib
 from pathlib import Path
+from typing import Any, Dict, Iterable
 inp = Path(sys.argv[1])
 out = Path(sys.argv[2])
+
+def canonical_json(obj: Any) -> str:
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
+def sha256_hex(s: str) -> str:
+    return hashlib.sha256(s.encode("utf-8")).hexdigest()
+
+def pick_first(obj: Dict[str, Any], keys: Iterable[str]) -> Any:
+    for k in keys:
+        if k in obj and obj[k] not in (None, ""):
+            return obj[k]
+    return None
+
+def normalize_event(event: Dict[str, Any]) -> Dict[str, Any]:
+    source_id = pick_first(
+        event,
+        [
+            "source_id",
+            "stream",
+            "SourceName",
+            "SourceModuleName",
+            "ProviderName",
+            "Provider",
+            "Channel",
+            "host",
+            "Hostname",
+        ],
+    )
+    if not source_id:
+        source_id = "unknown-source"
+
+    event_id = pick_first(event, ["event_id", "eventId", "RecordNumber", "EventRecordID", "EventID", "id"])
+    if event_id is None:
+        event_id = sha256_hex(canonical_json(event))[:16]
+
+    source_timestamp = pick_first(event, ["source_timestamp", "ts", "EventTime", "@timestamp", "EventReceivedTime", "timestamp", "TimeCreated"])
+    if source_timestamp is None:
+        source_timestamp = "1970-01-01T00:00:00Z"
+
+    raw_payload_hash = f"sha256:{sha256_hex(canonical_json(event))}"
+
+    return {
+        "source_id": str(source_id),
+        "event_id": str(event_id),
+        "source_timestamp": str(source_timestamp),
+        "raw_payload": event,
+        "raw_payload_hash": raw_payload_hash,
+    }
 
 items = []
 with inp.open("r", encoding="utf-8", errors="ignore") as f:
@@ -57,9 +107,11 @@ with inp.open("r", encoding="utf-8", errors="ignore") as f:
         if not line:
             continue
         try:
-            items.append(json.loads(line))
+            obj = json.loads(line)
         except json.JSONDecodeError as exc:
             raise SystemExit(f"Invalid JSON on line {line_no}: {exc}")
+        if isinstance(obj, dict):
+            items.append(normalize_event(obj))
 
 out.write_text(json.dumps({"events": items}, indent=2))
 print(f"Wrote {len(items)} events to {out}")
@@ -176,12 +228,27 @@ RESP=$(curl -s "$URL" -H "Content-Type: application/json" -d "@${FINAL_FILE}")
 
 case "$MODE" in
   summary)
+    if ! echo "$RESP" | jq -e '.batch | type == "object"' >/dev/null; then
+      echo "$RESP" | jq '.'
+      echo "ERROR: response missing .batch counters (likely schema/API error)." >&2
+      exit 1
+    fi
     echo "$RESP" | jq '.batch | {vacuum_count, low_entropy_count, mimic_scoped_count, drop_count, suppress_count, pass_count, processed_count, replayed_count, conflict_count, failed_count, stage1_ms}'
     ;;
   bands)
+    if ! echo "$RESP" | jq -e '.per_event | type == "array"' >/dev/null; then
+      echo "$RESP" | jq '.'
+      echo "ERROR: response missing .per_event list (likely schema/API error)." >&2
+      exit 1
+    fi
     echo "$RESP" | jq '.per_event | sort_by(.band) | group_by(.band) | map({band: .[0].band, count: length})'
     ;;
   vacuum)
+    if ! echo "$RESP" | jq -e '.per_event | type == "array"' >/dev/null; then
+      echo "$RESP" | jq '.'
+      echo "ERROR: response missing .per_event list (likely schema/API error)." >&2
+      exit 1
+    fi
     echo "$RESP" | jq '.per_event[] | select(.band=="VACUUM") | {event_id, entropy_raw, reason}'
     ;;
   full)
