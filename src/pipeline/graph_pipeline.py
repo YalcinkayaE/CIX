@@ -358,6 +358,7 @@ def _render_claim_and_verification_appendix(
     predicted_core_event_ids: List[str],
     detection_metrics: Dict[str, Any],
     ground_truth_event_ids: List[str],
+    ground_truth_draft: Dict[str, Any] | None = None,
 ) -> str:
     seed_alerts = traversal_analysis.get("seed_alerts", [])
     top_seed = seed_alerts[0] if seed_alerts else {}
@@ -393,6 +394,18 @@ def _render_claim_and_verification_appendix(
     recall = detection_metrics.get("recall")
     precision_text = "n/a" if precision is None else str(precision)
     recall_text = "n/a" if recall is None else str(recall)
+    draft = ground_truth_draft or {}
+    draft_ids = [str(value) for value in draft.get("recommended_event_ids", []) if str(value).strip()]
+    draft_stage_candidates = draft.get("stage_candidates", {}) if isinstance(draft.get("stage_candidates"), dict) else {}
+    draft_env_export = json.dumps(draft_ids)
+    stage_lines = []
+    for stage_key in sorted(draft_stage_candidates):
+        row = draft_stage_candidates.get(stage_key) or {}
+        stage_lines.append(
+            f"- `Draft {stage_key}` -> `event_id={row.get('event_id', 'n/a')}` | `alert={row.get('alert', 'n/a')}` | `feature_score={row.get('feature_score', 'n/a')}`"
+        )
+    if not stage_lines:
+        stage_lines.append("- `Draft stage candidates`: n/a")
 
     observed_claim = "Graph contains temporal and topological evidence edges across campaign entities."
     inferred_claim = (
@@ -441,6 +454,12 @@ def _render_claim_and_verification_appendix(
             "## 11. Reproducibility Envelope",
             f"- Manifest: `{manifest_name}`",
             "- Claim labels are bounded by available evidence and verification outputs in this run.",
+            "",
+            "## 12. Ground Truth Draft (Analyst Review)",
+            f"- `Draft event IDs`: {draft_ids or ['n/a']}",
+            f"- `Draft env export`: {draft_env_export}",
+            "- `Analyst action`: review and edit draft IDs before using CIX_GROUND_TRUTH_EVENT_IDS for scoring.",
+            *stage_lines,
         ]
     )
 
@@ -1146,6 +1165,15 @@ def run_graph_pipeline(
         stage_selected_ids, stage_candidates = _select_stage_candidates(
             _feature_rows_for_subgraph(subgraph, alert_meta)
         )
+        ground_truth_campaign_entry = {
+            "campaign_index": idx + 1,
+            "recommended_event_ids": predicted_core_event_ids,
+            "stage_candidate_event_ids": stage_selected_ids,
+            "stage_candidates": stage_candidates,
+            "seed_anchor_event_id": str((traversal_analysis.get("seed_alerts") or [{}])[0].get("event_id") or ""),
+            "rca_patient_zero_event_id": str((traversal_analysis.get("rca_patient_zero") or {}).get("event_id") or ""),
+            "rca_connectivity_event_id": str((traversal_analysis.get("rca_connectivity_top") or {}).get("event_id") or ""),
+        }
         detection_metrics = _compute_detection_metrics(
             predicted_event_ids=predicted_core_event_ids,
             ground_truth_event_ids=ground_truth_event_ids,
@@ -1174,6 +1202,7 @@ def run_graph_pipeline(
             predicted_core_event_ids=predicted_core_event_ids,
             detection_metrics=detection_metrics,
             ground_truth_event_ids=ground_truth_event_ids,
+            ground_truth_draft=ground_truth_campaign_entry,
         )
         report_path.write_text(report_with_claims, encoding="utf-8")
         reports.append(str(report_path))
@@ -1182,17 +1211,7 @@ def run_graph_pipeline(
         snapshots_html.append(str(snapshot_name))
         temporal_analyses_json.append(str(temporal_analysis_name))
         verification_json.append(str(verification_name))
-        ground_truth_campaign_rows.append(
-            {
-                "campaign_index": idx + 1,
-                "recommended_event_ids": predicted_core_event_ids,
-                "stage_candidate_event_ids": stage_selected_ids,
-                "stage_candidates": stage_candidates,
-                "seed_anchor_event_id": str((traversal_analysis.get("seed_alerts") or [{}])[0].get("event_id") or ""),
-                "rca_patient_zero_event_id": str((traversal_analysis.get("rca_patient_zero") or {}).get("event_id") or ""),
-                "rca_connectivity_event_id": str((traversal_analysis.get("rca_connectivity_top") or {}).get("event_id") or ""),
-            }
-        )
+        ground_truth_campaign_rows.append(ground_truth_campaign_entry)
 
     ground_truth_draft_path = output_root / "ground_truth_draft.json"
     ground_truth_draft = _build_ground_truth_draft_payload(ground_truth_campaign_rows)

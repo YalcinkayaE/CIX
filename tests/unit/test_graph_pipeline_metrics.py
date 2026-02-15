@@ -46,10 +46,21 @@ def test_claim_appendix_includes_evidence_pointers_and_scoring():
         predicted_core_event_ids=["E1", "E2"],
         detection_metrics=metrics,
         ground_truth_event_ids=["E1", "E3"],
+        ground_truth_draft={
+            "recommended_event_ids": ["E1", "E2"],
+            "stage_candidates": {
+                "initial_access_script_execution": {
+                    "event_id": "E1",
+                    "alert": "Alert:E1",
+                    "feature_score": 3,
+                }
+            },
+        },
     )
 
     assert "## 8. Claim Evidence Pointers" in appendix
     assert "## 10. Quantitative Detection Scoring" in appendix
+    assert "## 12. Ground Truth Draft (Analyst Review)" in appendix
     assert "event_id=E1" in appendix
     assert "TP/FP/FN" in appendix
 
