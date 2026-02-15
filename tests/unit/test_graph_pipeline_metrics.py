@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 import networkx as nx
 
 from src.pipeline.graph_pipeline import (
+    _build_ground_truth_draft_payload,
     _candidate_core_event_ids,
     _compute_detection_metrics,
     _render_claim_and_verification_appendix,
@@ -96,3 +97,16 @@ def test_candidate_core_event_ids_prefers_generic_stage_evidence():
     assert predicted[:5] == ["E1", "E2", "E3", "E4", "E5"]
     assert "RCA1" not in predicted
     assert "RCA2" not in predicted
+
+
+def test_ground_truth_draft_payload_consolidates_ids_and_env_export():
+    payload = _build_ground_truth_draft_payload(
+        [
+            {"campaign_index": 1, "recommended_event_ids": ["E1", "E2"]},
+            {"campaign_index": 2, "recommended_event_ids": ["E2", "E3"]},
+        ]
+    )
+
+    assert payload["kind"] == "ground_truth_draft"
+    assert payload["recommended_event_ids"] == ["E1", "E2", "E3"]
+    assert payload["env_export"] == '["E1", "E2", "E3"]'

@@ -57,6 +57,7 @@ def _cleanup_previous_pipeline_artifacts(output_root: Path) -> None:
         "arv_gate_ledger.jsonl",
         "triage_summary.json",
         "reproducibility_manifest.json",
+        "ground_truth_draft.json",
     ):
         target = output_root / name
         if target.exists() and target.is_file():
@@ -243,30 +244,56 @@ def _append_event_id_once(target: List[str], value: str) -> None:
         target.append(normalized)
 
 
+def _feature_rows_for_subgraph(
+    subgraph: nx.DiGraph,
+    alert_meta: Dict[str, Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    rows: List[Dict[str, Any]] = []
+    for node, data in subgraph.nodes(data=True):
+        if data.get("type") != "Alert":
+            continue
+        rows.append(_extract_alert_features(subgraph, str(node), alert_meta))
+    return rows
+
+
+def _select_stage_candidates(
+    alert_rows: List[Dict[str, Any]],
+) -> tuple[List[str], Dict[str, Dict[str, Any]]]:
+    stage_rules = [
+        ("initial_access_script_execution", lambda row: row["has_script_execution"]),
+        ("execution_powershell_encoded", lambda row: row["has_powershell_encoded"]),
+        ("discovery_activity", lambda row: row["has_discovery"]),
+        ("data_staging_temp_artifact", lambda row: row["has_staging"]),
+        ("network_pivot_non_platform", lambda row: row["has_network_pivot"] and row["has_non_platform_external_ip"]),
+        ("network_pivot_any_external", lambda row: row["has_network_pivot"]),
+    ]
+
+    selected_event_ids: List[str] = []
+    stage_candidates: Dict[str, Dict[str, Any]] = {}
+
+    for stage_key, predicate in stage_rules:
+        row = _pick_stage_event(alert_rows, predicate)
+        if not row:
+            continue
+        _append_event_id_once(selected_event_ids, row.get("event_id"))
+        stage_candidates[stage_key] = {
+            "event_id": row.get("event_id"),
+            "alert": row.get("alert"),
+            "feature_score": row.get("feature_score", 0),
+        }
+
+    return selected_event_ids, stage_candidates
+
+
 def _candidate_core_event_ids(
     traversal_analysis: Dict[str, Any],
     subgraph: nx.DiGraph,
     alert_meta: Dict[str, Dict[str, Any]],
 ) -> List[str]:
     # Select campaign core events from generic behavioral stages, not from dataset IDs.
-    alert_rows = []
-    for node, data in subgraph.nodes(data=True):
-        if data.get("type") != "Alert":
-            continue
-        alert_rows.append(_extract_alert_features(subgraph, str(node), alert_meta))
+    alert_rows = _feature_rows_for_subgraph(subgraph, alert_meta)
 
-    selected_event_ids: List[str] = []
-    if alert_rows:
-        stage_picks = [
-            _pick_stage_event(alert_rows, lambda row: row["has_script_execution"]),
-            _pick_stage_event(alert_rows, lambda row: row["has_powershell_encoded"]),
-            _pick_stage_event(alert_rows, lambda row: row["has_discovery"]),
-            _pick_stage_event(alert_rows, lambda row: row["has_staging"]),
-            _pick_stage_event(alert_rows, lambda row: row["has_network_pivot"] and row["has_non_platform_external_ip"]),
-            _pick_stage_event(alert_rows, lambda row: row["has_network_pivot"]),
-        ]
-        for row in stage_picks:
-            _append_event_id_once(selected_event_ids, row.get("event_id"))
+    selected_event_ids, _ = _select_stage_candidates(alert_rows)
 
     # Seed anchor remains useful for reproducibility even if no stage-specific signal was mapped.
     for row in traversal_analysis.get("seed_alerts", [])[:1]:
@@ -280,6 +307,24 @@ def _candidate_core_event_ids(
             _append_event_id_once(selected_event_ids, row.get("event_id"))
 
     return selected_event_ids
+
+
+def _build_ground_truth_draft_payload(
+    campaign_rows: List[Dict[str, Any]],
+) -> Dict[str, Any]:
+    consolidated_ids: List[str] = []
+    for row in campaign_rows:
+        for event_id in row.get("recommended_event_ids", []):
+            _append_event_id_once(consolidated_ids, event_id)
+    return {
+        "generated_at": _utc_now(),
+        "kind": "ground_truth_draft",
+        "note": "Draft only. Analyst review required before using as evaluation ground truth.",
+        "campaigns": campaign_rows,
+        "recommended_event_ids": consolidated_ids,
+        "env_export": json.dumps(consolidated_ids),
+        "usage": "Set CIX_GROUND_TRUTH_EVENT_IDS to env_export for scoring-only reruns.",
+    }
 
 
 def _compute_detection_metrics(
@@ -1053,7 +1098,9 @@ def run_graph_pipeline(
     temporal_analyses_json: List[str] = []
     verification_json: List[str] = []
     manifests_json: List[str] = []
+    ground_truth_draft_json: List[str] = []
     ground_truth_event_ids = _parse_ground_truth_event_ids()
+    ground_truth_campaign_rows: List[Dict[str, Any]] = []
 
     for idx, comp_nodes in enumerate(components):
         subgraph = world_graph.subgraph(comp_nodes).copy()
@@ -1096,6 +1143,9 @@ def run_graph_pipeline(
             subgraph=subgraph,
             alert_meta=alert_meta,
         )
+        stage_selected_ids, stage_candidates = _select_stage_candidates(
+            _feature_rows_for_subgraph(subgraph, alert_meta)
+        )
         detection_metrics = _compute_detection_metrics(
             predicted_event_ids=predicted_core_event_ids,
             ground_truth_event_ids=ground_truth_event_ids,
@@ -1132,6 +1182,22 @@ def run_graph_pipeline(
         snapshots_html.append(str(snapshot_name))
         temporal_analyses_json.append(str(temporal_analysis_name))
         verification_json.append(str(verification_name))
+        ground_truth_campaign_rows.append(
+            {
+                "campaign_index": idx + 1,
+                "recommended_event_ids": predicted_core_event_ids,
+                "stage_candidate_event_ids": stage_selected_ids,
+                "stage_candidates": stage_candidates,
+                "seed_anchor_event_id": str((traversal_analysis.get("seed_alerts") or [{}])[0].get("event_id") or ""),
+                "rca_patient_zero_event_id": str((traversal_analysis.get("rca_patient_zero") or {}).get("event_id") or ""),
+                "rca_connectivity_event_id": str((traversal_analysis.get("rca_connectivity_top") or {}).get("event_id") or ""),
+            }
+        )
+
+    ground_truth_draft_path = output_root / "ground_truth_draft.json"
+    ground_truth_draft = _build_ground_truth_draft_payload(ground_truth_campaign_rows)
+    ground_truth_draft_path.write_text(json.dumps(ground_truth_draft, indent=2), encoding="utf-8")
+    ground_truth_draft_json.append(str(ground_truth_draft_path))
 
     artifact_records: List[Dict[str, Any]] = []
     artifact_collections = {
@@ -1141,6 +1207,7 @@ def run_graph_pipeline(
         "snapshot_html": snapshots_html,
         "temporal_analysis_json": temporal_analyses_json,
         "verification_json": verification_json,
+        "ground_truth_draft_json": ground_truth_draft_json,
         "stage1_ledger_jsonl": [str(stage1_ledger_path)],
         "triage_summary_json": [str(triage_summary_path)],
         "arv_gate_ledger_jsonl": [str(arv_ledger_path)],
@@ -1205,5 +1272,6 @@ def run_graph_pipeline(
         "snapshots_html": snapshots_html,
         "temporal_analyses_json": temporal_analyses_json,
         "verification_json": verification_json,
+        "ground_truth_draft_json": ground_truth_draft_json,
         "manifests_json": manifests_json,
     }
