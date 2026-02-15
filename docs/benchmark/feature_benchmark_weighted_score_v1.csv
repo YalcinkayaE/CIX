@@ -1,0 +1,9 @@
+rank,system,score_raw,score_100,confidence,siem_soar_integration_score,autonomous_triage_investigation_score,evidence_explainability_score,human_approval_control_score,no_training_on_customer_data_score,hallucination_grounding_control_score,reproducibility_artifacts_score,tamper_evident_ledger_score,statistical_verification_gate_score,temporal_counterfactual_graph_analytics_score,notes
+1,AxoDen CIX,93.50,93.50,High,8.00,10.00,12.00,3.50,0.00,14.00,14.00,12.00,12.00,8.00,Source: local implementation and GraphRAG docs
+2,Qevlar AI,50.50,50.50,Medium,8.00,10.00,12.00,3.50,3.00,14.00,0.00,0.00,0.00,0.00,Deterministic graph and no-hallucination claims public; no public manifest/ledger spec found
+2,Prophet Security,50.50,50.50,Medium,8.00,10.00,12.00,3.50,3.00,7.00,7.00,0.00,0.00,0.00,Reproducible investigation and explainability claims public; no explicit ledger/stat verification docs found
+4,Radiant Security,44.00,44.00,Medium,8.00,10.00,12.00,7.00,0.00,7.00,0.00,0.00,0.00,0.00,Strong workflow and integration claims; no explicit reproducibility/ledger/stat verification docs found
+4,D3 Morpheus,44.00,44.00,Medium,8.00,10.00,12.00,7.00,0.00,7.00,0.00,0.00,0.00,0.00,Autonomous + auditable + approval workflow claims public; no explicit reproducibility/ledger/stat verification docs found
+6,Dropzone AI,43.50,43.50,Medium,8.00,10.00,12.00,3.50,3.00,7.00,0.00,0.00,0.00,0.00,Integration + AI analyst + evidence claims public; no public reproducibility/ledger spec found
+7,Torq HyperSOC,37.00,37.00,Medium-Low,8.00,10.00,6.00,7.00,0.00,0.00,0.00,6.00,0.00,0.00,Automation and audit-ready logging claims public; no explicit forensic verification stack found
+8,ReliaQuest GreyMatter,22.50,22.50,Low-Medium,8.00,5.00,6.00,3.50,0.00,0.00,0.00,0.00,0.00,0.00,Integration-heavy positioning public; limited explicit details for listed advanced controls

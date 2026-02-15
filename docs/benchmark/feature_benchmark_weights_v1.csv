@@ -1,0 +1,11 @@
+feature,weight,rationale
+siem_soar_integration,8,Must connect to existing SOC stack
+autonomous_triage_investigation,10,Core middleware automation value
+evidence_explainability,12,Analyst trust and actionability
+human_approval_control,7,Operational governance and safety
+no_training_on_customer_data,3,Important procurement/privacy concern
+hallucination_grounding_control,14,High-impact risk control requirement
+reproducibility_artifacts,14,Audit and replay requirement
+tamper_evident_ledger,12,Chain-of-custody assurance
+statistical_verification_gate,12,Verification strength beyond narrative confidence
+temporal_counterfactual_graph_analytics,8,Forensic depth and response utility

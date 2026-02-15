@@ -1,0 +1,4 @@
+run_id,date_utc,system_name,system_version,dataset_id,events_count,run_index,total_runtime_sec,time_to_first_artifact_sec,input_size_mb,output_size_mb,critical_recall,causal_chain_score,false_positive_burden_score,unsupported_claim_rate,claim_label_correctness_score,evidence_citation_completeness_score,manifest_completeness_score,ledger_integrity_score,replay_stability_score,temporal_consistency_score,blast_radius_utility_score,counterfactual_utility_score,siem_soar_compatibility_score,analyst_usability_score,export_api_interop_score,hard_fail,hard_fail_reasons,total_score,notes
+R001,2026-02-15T00:00:00Z,AxoDen,CIX-0.4.0,MORDOR_C1_2067,2067,1,,,,,,,,,,,,,,,,,,,,,,,
+R002,2026-02-15T00:00:00Z,AxoDen,CIX-0.4.0,MORDOR_C1_2067,2067,2,,,,,,,,,,,,,,,,,,,,,,,
+R003,2026-02-15T00:00:00Z,AxoDen,CIX-0.4.0,MORDOR_C1_2067,2067,3,,,,,,,,,,,,,,,,,,,,,,,

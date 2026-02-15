@@ -1,0 +1,9 @@
+system,siem_soar_integration,autonomous_triage_investigation,evidence_explainability,human_approval_control,no_training_on_customer_data,hallucination_grounding_control,reproducibility_artifacts,tamper_evident_ledger,statistical_verification_gate,temporal_counterfactual_graph_analytics,confidence,notes
+AxoDen CIX,Y,Y,Y,P,U,Y,Y,Y,Y,Y,High,"Source: local implementation and GraphRAG docs"
+Dropzone AI,Y,Y,Y,P,Y,P,U,U,U,U,Medium,"Integration + AI analyst + evidence claims public; no public reproducibility/ledger spec found"
+Qevlar AI,Y,Y,Y,P,Y,Y,U,U,U,U,Medium,"Deterministic graph and no-hallucination claims public; no public manifest/ledger spec found"
+Prophet Security,Y,Y,Y,P,Y,P,P,U,U,U,Medium,"Reproducible investigation and explainability claims public; no explicit ledger/stat verification docs found"
+Radiant Security,Y,Y,Y,Y,U,P,U,U,U,U,Medium,"Strong workflow and integration claims; no explicit reproducibility/ledger/stat verification docs found"
+D3 Morpheus,Y,Y,Y,Y,U,P,U,U,U,U,Medium,"Autonomous + auditable + approval workflow claims public; no explicit reproducibility/ledger/stat verification docs found"
+Torq HyperSOC,Y,Y,P,Y,U,U,U,P,U,U,Medium-Low,"Automation and audit-ready logging claims public; no explicit forensic verification stack found"
+ReliaQuest GreyMatter,Y,P,P,P,U,U,U,U,U,U,Low-Medium,"Integration-heavy positioning public; limited explicit details for listed advanced controls"

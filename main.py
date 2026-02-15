@@ -9,8 +9,9 @@ from src.pipeline.graph_pipeline import run_graph_pipeline
 def main():
     parser = argparse.ArgumentParser(description="CIX Alerts Graph-Lead Prototype")
     parser.add_argument("input_file", nargs="?", default="soc_alert_batch.json", help="Path to the input JSON file (default: soc_alert_batch.json)")
+    parser.add_argument("--output-dir", default="data", help="Directory to write run artifacts (default: data)")
     parser.add_argument("--skip-kernel", action="store_true", help="Skip kernel gating (legacy flow)")
-    parser.add_argument("--kernel-ledger", default="data/kernel_ledger.jsonl", help="Kernel ledger output path")
+    parser.add_argument("--kernel-ledger", default=None, help="Kernel ledger output path (default: <output-dir>/kernel_ledger.jsonl)")
     parser.add_argument("--phi-limit", type=int, default=None, help="Override ARV phi limit for all gates (legacy)")
     parser.add_argument("--phi-limit-arv1", type=int, default=None, help="Override ARV Gate 1 phi limit (triage admission)")
     parser.add_argument("--phi-limit-arv2", type=int, default=None, help="Override ARV Gate 2 phi limit (post-enrichment)")
@@ -21,6 +22,12 @@ def main():
     parser.add_argument("--triage-only", action="store_true", help="Stop after triage counts (no enrichment or reports)")
     parser.add_argument("--skip-enrichment", action="store_true", help="Skip enrichment/ARV2 (faster runs)")
     parser.add_argument("--verbose", action="store_true", help="Print ARV gate decisions")
+    parser.add_argument(
+        "--max-campaigns",
+        type=int,
+        default=0,
+        help="Maximum number of campaign components to emit as artifacts (default: 0 = all).",
+    )
     args = parser.parse_args()
 
     print("--- CIX Alerts Graph-Lead Prototype (Phase 3: World Graph) Starting ---")
@@ -43,11 +50,12 @@ def main():
     else:
         lineage_id = hashlib.sha256(str(lineage_source).encode("utf-8")).hexdigest()
     profile = profile_settings(args.profile_id)
+    kernel_ledger_path = args.kernel_ledger or str(Path(args.output_dir) / "kernel_ledger.jsonl")
     artifacts = run_graph_pipeline(
         raw_alerts,
-        output_dir="data",
+        output_dir=args.output_dir,
         enable_kernel=not args.skip_kernel,
-        kernel_ledger_path=args.kernel_ledger,
+        kernel_ledger_path=kernel_ledger_path,
         arv_phi_limit=args.phi_limit,
         arv_phi_limit_gate1=args.phi_limit_arv1,
         arv_phi_limit_gate23=args.phi_limit_arv2,
@@ -60,6 +68,7 @@ def main():
         triage_only=args.triage_only,
         skip_enrichment=args.skip_enrichment,
         verbose=args.verbose,
+        max_campaigns=None if args.max_campaigns == 0 else args.max_campaigns,
     )
 
     if not artifacts["reports"]:

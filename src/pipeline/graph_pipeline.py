@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import platform
 from collections import Counter
 from datetime import datetime, timezone
 from html import escape
@@ -18,14 +20,44 @@ from src.models import GraphReadyAlert
 from src.refiner import IntelligenceRefiner
 from src.synthesis import GraphNarrator
 from src.visualize import GraphVisualizer
+from src.pipeline.traversal import analyze_campaign_traversal, build_alert_meta
+from src.pipeline.verification import verify_channel_independence
 from src.canon_registry import ARV_BETA, ARV_PHI_LIMIT, ARV_TAU, arv_evaluate, arv_phi, profile_settings
 from src.ingest.dedup import compute_event_hash
 from src.kernel.kernel_gate import KernelGate
+from src.kernel.ledger import Ledger
 from src.kernel.stage1 import BAND_LOW, BAND_MIMIC, BAND_VACUUM, classify_batch
 
 
 def _ensure_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
+
+
+def _cleanup_previous_pipeline_artifacts(output_root: Path) -> None:
+    # Remove previous run artifacts owned by this pipeline so output counts are deterministic.
+    patterns = [
+        "Forensic_Assessment_Campaign_*.md",
+        "forensic_ledger_campaign_*.json",
+        "investigation_graph_campaign_*.html",
+        "investigation_graph_campaign_*.png",
+        "campaign_snapshot_*.html",
+        "temporal_analysis_campaign_*.json",
+        "cmi_verification_campaign_*.json",
+    ]
+    for pattern in patterns:
+        for artifact in output_root.glob(pattern):
+            if artifact.is_file():
+                artifact.unlink()
+    for name in (
+        "ledger.jsonl",
+        "kernel_ledger.jsonl",
+        "arv_gate_ledger.jsonl",
+        "triage_summary.json",
+        "reproducibility_manifest.json",
+    ):
+        target = output_root / name
+        if target.exists() and target.is_file():
+            target.unlink()
 
 
 def _utc_now() -> str:
@@ -50,6 +82,63 @@ def _append_evidence(ledger_path: Path, evidence: Dict, prev_hash: str) -> str:
         handle.write(_canonical_json(evidence))
         handle.write("\n")
     return evidence_id
+
+
+def _sha256_file(path: Path) -> str:
+    hasher = hashlib.sha256()
+    with path.open("rb") as handle:
+        while True:
+            chunk = handle.read(65536)
+            if not chunk:
+                break
+            hasher.update(chunk)
+    return hasher.hexdigest()
+
+
+def _render_claim_and_verification_appendix(
+    traversal_analysis: Dict[str, Any],
+    verification_analysis: Dict[str, Any],
+    manifest_name: str,
+) -> str:
+    seed_alerts = traversal_analysis.get("seed_alerts", [])
+    top_seed = seed_alerts[0] if seed_alerts else {}
+    rca_top = traversal_analysis.get("rca_top", [])
+    top_rca = rca_top[0] if rca_top else {}
+    decision = verification_analysis.get("decision", {})
+    stats = verification_analysis.get("statistics", {})
+    claim_label = str(decision.get("claim_label") or "INFERRED")
+
+    observed_claim = "Graph contains temporal and topological evidence edges across campaign entities."
+    inferred_claim = (
+        f"Top RCA candidate is {top_rca.get('alert', 'n/a')} on host {top_rca.get('host', 'n/a')} "
+        f"with score {top_rca.get('score', 'n/a')}."
+    )
+    verification_claim = (
+        "Distinct DC channel evidence statistically validated."
+        if claim_label == "VERIFIED"
+        else "Distinct DC channel evidence not yet statistically sufficient; retain INFERRED status."
+    )
+
+    return "\n".join(
+        [
+            "",
+            "## 6. Claim Labels (Observed/Inferred/Verified)",
+            f"- [OBSERVED] {observed_claim}",
+            f"- [INFERRED] {inferred_claim}",
+            f"- [{claim_label}] {verification_claim}",
+            "",
+            "## 7. Verification Summary (CMI)",
+            f"- `CMI_obs`: {stats.get('cmi_observed', 0.0)}",
+            f"- `p_value`: {stats.get('p_value', 1.0)}",
+            f"- `CI95`: [{stats.get('ci95_low', 0.0)}, {stats.get('ci95_high', 0.0)}]",
+            f"- `Decision`: {decision.get('reason', 'n/a')}",
+            f"- `Primary Seed`: {top_seed.get('alert', 'n/a')}",
+            "",
+            "## 8. Reproducibility Envelope",
+            f"- Manifest: `{manifest_name}`",
+            "- Claim labels are bounded by available evidence and verification outputs in this run.",
+        ]
+    )
 
 
 def _severity_label(subgraph: nx.DiGraph) -> str:
@@ -288,6 +377,7 @@ def run_graph_pipeline(
     triage_only: bool = False,
     skip_enrichment: bool = False,
     verbose: bool = False,
+    max_campaigns: int | None = None,
 ) -> Dict[str, List[str]]:
     """
     Execute the CIX graph pipeline and return artifact paths.
@@ -295,6 +385,8 @@ def run_graph_pipeline(
     """
     output_root = Path(output_dir)
     _ensure_dir(output_root)
+    _cleanup_previous_pipeline_artifacts(output_root)
+    stage1_ledger_path = output_root / "ledger.jsonl"
     arv_ledger_path = output_root / "arv_gate_ledger.jsonl"
     arv_prev_hash = ""
 
@@ -356,7 +448,7 @@ def run_graph_pipeline(
                 or payload_timestamp,
             }
         )
-    stage1_result = classify_batch(stage1_events)
+    stage1_result = classify_batch(stage1_events, ledger=Ledger(str(stage1_ledger_path)))
     per_event = stage1_result.get("per_event", [])
     batch_counts = stage1_result.get("batch", {}) if isinstance(stage1_result, dict) else {}
     triage_counts["stage1_failed"] = int(batch_counts.get("failed_count", 0) or 0)
@@ -425,6 +517,7 @@ def run_graph_pipeline(
         admitted_alerts = deduped_alerts
 
     # Build world graph
+    alert_meta = build_alert_meta(admitted_alerts)
     world_graph = nx.DiGraph()
     constructor = GraphConstructor()
     for raw_alert in admitted_alerts:
@@ -460,6 +553,9 @@ def run_graph_pipeline(
             "graphs_html": [],
             "graphs_png": [],
             "snapshots_html": [],
+            "temporal_analyses_json": [],
+            "verification_json": [],
+            "manifests_json": [],
             "triage_summary": [str(triage_summary_path)],
         }
 
@@ -556,6 +652,9 @@ def run_graph_pipeline(
             "graphs_html": [],
             "graphs_png": [],
             "snapshots_html": [],
+            "temporal_analyses_json": [],
+            "verification_json": [],
+            "manifests_json": [],
         }
     arv_state["phi_prev"] = phi_curr
     arv_state["d_plus"] = decision.metrics["d_plus"]
@@ -596,6 +695,9 @@ def run_graph_pipeline(
                 "graphs_html": [],
                 "graphs_png": [],
                 "snapshots_html": [],
+                "temporal_analyses_json": [],
+                "verification_json": [],
+                "manifests_json": [],
             }
         arv_state["phi_prev"] = phi_curr
         arv_state["d_plus"] = decision.metrics["d_plus"]
@@ -657,11 +759,28 @@ def run_graph_pipeline(
             "graphs_html": [],
             "graphs_png": [],
             "snapshots_html": [],
+            "temporal_analyses_json": [],
+            "verification_json": [],
+            "manifests_json": [],
         }
 
     # Campaign split + reports
     undirected = world_graph.to_undirected()
     components = list(nx.connected_components(undirected))
+
+    def _component_rank(comp_nodes: set[str]) -> tuple[int, int, int, int]:
+        sub = world_graph.subgraph(comp_nodes)
+        mitre_count = sum(1 for _, data in sub.nodes(data=True) if data.get("type") == "MITRE_Technique")
+        alert_count = sum(1 for _, data in sub.nodes(data=True) if data.get("type") == "Alert")
+        edge_count = sub.number_of_edges()
+        node_count = sub.number_of_nodes()
+        return (mitre_count, alert_count, edge_count, node_count)
+
+    # Deterministic ordering: highest-signal campaigns first.
+    components.sort(key=_component_rank, reverse=True)
+    total_components = len(components)
+    if max_campaigns is not None and max_campaigns > 0:
+        components = components[:max_campaigns]
 
     narrator = GraphNarrator()
     ledger = ForensicLedger()
@@ -672,6 +791,9 @@ def run_graph_pipeline(
     graphs_html: List[str] = []
     graphs_png: List[str] = []
     snapshots_html: List[str] = []
+    temporal_analyses_json: List[str] = []
+    verification_json: List[str] = []
+    manifests_json: List[str] = []
 
     for idx, comp_nodes in enumerate(components):
         subgraph = world_graph.subgraph(comp_nodes).copy()
@@ -679,8 +801,6 @@ def run_graph_pipeline(
         assessment_report = narrator.generate_assessment_report(subgraph, triage_summary=triage_counts)
 
         report_path = output_root / f"Forensic_Assessment_Campaign_{idx+1}.md"
-        report_path.write_text(assessment_report, encoding="utf-8")
-        reports.append(str(report_path))
 
         triples = []
         for u, v, data in subgraph.edges(data=True):
@@ -706,8 +826,102 @@ def run_graph_pipeline(
         )
         snapshot_name.write_text(snapshot_html, encoding="utf-8")
 
+        traversal_analysis = analyze_campaign_traversal(
+            subgraph=subgraph,
+            alert_meta=alert_meta,
+            campaign_index=idx + 1,
+        )
+        temporal_analysis_name = output_root / f"temporal_analysis_campaign_{idx+1}.json"
+        temporal_analysis_name.write_text(
+            json.dumps(traversal_analysis, indent=2),
+            encoding="utf-8",
+        )
+        verification_analysis = verify_channel_independence(
+            subgraph=subgraph,
+            alert_meta=alert_meta,
+            campaign_index=idx + 1,
+        )
+        verification_name = output_root / f"cmi_verification_campaign_{idx+1}.json"
+        verification_name.write_text(
+            json.dumps(verification_analysis, indent=2),
+            encoding="utf-8",
+        )
+        report_with_claims = assessment_report + _render_claim_and_verification_appendix(
+            traversal_analysis=traversal_analysis,
+            verification_analysis=verification_analysis,
+            manifest_name="reproducibility_manifest.json",
+        )
+        report_path.write_text(report_with_claims, encoding="utf-8")
+        reports.append(str(report_path))
+
         graphs_html.append(str(interactive_name))
         snapshots_html.append(str(snapshot_name))
+        temporal_analyses_json.append(str(temporal_analysis_name))
+        verification_json.append(str(verification_name))
+
+    artifact_records: List[Dict[str, Any]] = []
+    artifact_collections = {
+        "report_md": reports,
+        "ledger_json": ledgers,
+        "graph_html": graphs_html,
+        "snapshot_html": snapshots_html,
+        "temporal_analysis_json": temporal_analyses_json,
+        "verification_json": verification_json,
+        "stage1_ledger_jsonl": [str(stage1_ledger_path)],
+        "triage_summary_json": [str(triage_summary_path)],
+        "arv_gate_ledger_jsonl": [str(arv_ledger_path)],
+    }
+    for artifact_type, paths in artifact_collections.items():
+        for artifact_path in paths:
+            p = Path(artifact_path)
+            if not p.exists():
+                continue
+            artifact_records.append(
+                {
+                    "type": artifact_type,
+                    "path": p.name if p.parent == output_root else str(p),
+                    "sha256": _sha256_file(p),
+                    "size_bytes": p.stat().st_size,
+                }
+            )
+
+    dataset_hash = hashlib.sha256(
+        json.dumps(raw_alerts, sort_keys=True, separators=(",", ":"), default=str).encode("utf-8")
+    ).hexdigest()
+    manifest = {
+        "generated_at": _utc_now(),
+        "dataset": {
+            "event_count": len(raw_alerts),
+            "sha256": dataset_hash,
+        },
+        "profile": {
+            "profile_id": profile_id,
+            "registry_commit": registry_commit,
+        },
+        "arv_parameters": {
+            "phi_limit_gate1": phi_limit_gate1,
+            "phi_limit_gate2": phi_limit_gate2,
+            "phi_limit_gate3": phi_limit_gate3,
+            "beta": beta,
+            "tau": tau,
+        },
+        "lineage_id": lineage_id,
+        "run_context": {
+            "invocation_command": os.getenv("CIX_RUN_COMMAND"),
+            "cwd": str(Path.cwd()),
+            "python_version": platform.python_version(),
+            "platform": platform.platform(),
+        },
+        "artifacts": artifact_records,
+        "campaigns": {
+            "total_components": total_components,
+            "emitted_components": len(components),
+            "max_campaigns": max_campaigns,
+        },
+    }
+    manifest_path = output_root / "reproducibility_manifest.json"
+    manifest_path.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    manifests_json.append(str(manifest_path))
 
     return {
         "reports": reports,
@@ -715,4 +929,7 @@ def run_graph_pipeline(
         "graphs_html": graphs_html,
         "graphs_png": graphs_png,
         "snapshots_html": snapshots_html,
+        "temporal_analyses_json": temporal_analyses_json,
+        "verification_json": verification_json,
+        "manifests_json": manifests_json,
     }
