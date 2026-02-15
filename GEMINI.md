@@ -1,30 +1,40 @@
 # CIX Alerts
 
 ## Project Overview
-CIX Alerts is a prototype pipeline designed to ingest SOC (Security Operations Center) alerts, construct a forensic knowledge graph, enrich it with internal and external intelligence, and synthesize a narrative report. It leverages Graph Theory (NetworkX) for relationship modeling and Generative AI (Google Gemini) for reasoning and report generation.
+CIX Alerts is a forensic pipeline designed to ingest SOC (Security Operations Center) alerts, strictly validate them via the **AxoDen Kernel**, construct a forensic knowledge graph, and synthesize narrative reports. It integrates Graph Theory (NetworkX) for relationship modeling and Generative AI (Google Gemini) for reasoning, all governed by entropy-based admissibility gates.
 
 ### Key Technologies
 *   **Language:** Python 3.12
 *   **Graph Database (In-Memory):** NetworkX
 *   **AI/LLM:** Google Generative AI (`gemini-2.0-flash`)
 *   **External APIs:** VirusTotal, AlienVault OTX, NVD (National Vulnerability Database), Brave Search
-*   **Infrastructure:** Docker, Docker Compose
+*   **Infrastructure:** Docker, Docker Compose, FastAPI
 
-### Architecture
-The pipeline follows a linear execution flow:
-1.  **Ingestion:** Parses raw JSON alerts (e.g., `samples/cix_kernel_demo_alerts.json`) into a standardized model.
-2.  **Modeling:** Converts raw data into a `GraphReadyAlert` object.
-3.  **Graph Construction:** Builds an initial graph connecting the Alert to entities like IPs, File Hashes, and mapped MITRE ATT&CK techniques.
-4.  **Enrichment (Internal):** Queries VirusTotal, OTX, and NVD based on graph nodes (SHA256, MalwareFamily). Generates "Search Leads" using Gemini.
-5.  **Lead Chasing (External):** Executes web searches (Brave) for generated leads and refines results into new graph artifacts (C2 Domains, Registry Keys) using Gemini.
-6.  **Synthesis:** Walks the final graph and uses Gemini to generate a structured forensic report.
-7.  **Audit & Visualization:** Exports a forensic ledger JSON and generates a PNG visualization of the graph.
+### Architecture: The AxoDen Canonical Flow
+The pipeline follows a rigorous 5-stage execution flow (detailed in `docs/AxoDen_Canonical_Blueprint.md`):
+
+1.  **Stage 0/1 (Ingestion & Triage):** 
+    *   Parses raw alerts (SIEM formats like CEF, LEEF, JSON).
+    *   Performs initial entropy-based classification and deduplication to filter noise.
+2.  **Stage 2 (Kernel Admission Gate):** 
+    *   Invokes the **AxoDen Kernel** to decide: `EXECUTE` (high value), `THROTTLE` (marginal), or `HALT` (noise).
+    *   Enforces entropy limits (e.g., max 5.28 bits) to prevent hallucination.
+3.  **Stage 3 (World Graph Build):** 
+    *   Constructs the initial forensic knowledge graph.
+    *   Maps alerts to entities (IPs, Hashes) and MITRE ATT&CK techniques.
+4.  **Stage 4 (ARV Gates):** 
+    *   **Admission/Relevance/Verification (ARV)** gates manage enrichment.
+    *   Queries external intelligence (VirusTotal, OTX) and performs "Lead Chasing" (web search) only for admitted artifacts.
+5.  **Stage 5 (Synthesis & Reporting):** 
+    *   Splits the graph into distinct campaigns.
+    *   Synthesizes structured forensic reports for each campaign using Gemini.
+    *   Audits decisions to a forensic ledger.
 
 ## Building and Running
 
 ### Prerequisites
 *   Python 3.12+ or Docker Desktop
-*   API Keys for: Google Gemini, VirusTotal, AlienVault OTX, NVD, Brave Search (optional but recommended for full functionality)
+*   API Keys: Google Gemini, VirusTotal, AlienVault OTX, NVD, Brave Search
 
 ### Local Development
 1.  **Setup Environment:**
@@ -35,39 +45,42 @@ The pipeline follows a linear execution flow:
     ```
 
 2.  **Configuration:**
-    Copy `.env.example` to `.env` and populate your API keys.
+    Copy `.env.example` to `.env` and populate keys.
     ```bash
     cp .env.example .env
     ```
 
-3.  **Run Pipeline:**
+3.  **Run Pipeline (CLI):**
     ```bash
     python3 -u main.py
     ```
+    *   Use flags like `--skip-enrichment`, `--phi-limit`, or `--output-dir` to tune execution.
 
-### Docker
+### Docker & API
 1.  **Build and Run:**
     ```bash
     docker compose up --build
     ```
-    This will start the `cix-alerts-container`.
+2.  **API Access:**
+    *   The API listens on `http://localhost:8009`.
+    *   Endpoints: `POST /v1/ingest/events`, `POST /v1/runs/graph`.
 
-2.  **Execute Pipeline inside Container:**
-    ```bash
-    docker exec -it cix-alerts-container python -u main.py
-    ```
+## Benchmark & Verification
+CIX Alerts includes a full benchmark suite for AI SOC middleware comparison (located in `docs/benchmark/`):
+*   **Quantitative Rubric:** 100-point rubric for fairness and performance.
+*   **Feature Matrix:** Repeatable `Y/P/U` scoring for feature availability.
+*   **Automated Scoring:** `scripts/score_feature_benchmark.py` generates weighted scores.
 
 ## Development Conventions
 
+*   **Structure:**
+    *   `src/api/`: FastAPI endpoints.
+    *   `src/kernel/`: AxoDen Kernel integration (gating, hashing, ledger).
+    *   `src/pipeline/`: Pipeline orchestration, ARV logic, and verification.
+    *   `src/`: Core domain logic (graph models, enrichment agents, synthesis).
 *   **Code Style:** Standard Python PEP 8.
-*   **Typing:** Extensive use of `typing` hints and Pydantic models for data validation.
-*   **Graph Schema:**
-    *   **Nodes:** Typed (e.g., `Alert`, `IP`, `SHA256`, `MITRE_Technique`, `EFI` (External Fact/Intelligence)).
-    *   **Edges:** semantic relationships (e.g., `HAS_FILE_HASH`, `INDICATES_TECHNIQUE`, `ENRICHED_BY_VT`).
-*   **AI Integration:**
-    *   **Prompts:** Located within their respective classes (`EnrichmentAgent`, `IntelligenceRefiner`, `GraphNarrator`).
-    *   **Roles:** AI agents have specific personas (e.g., "CIX Alerts Intelligence Refiner").
-    *   **Output:** strictly structured JSON for intermediate steps or Markdown for final reports.
+*   **Typing:** Extensive use of `typing` hints and Pydantic models.
+*   **Graph Schema:** Typed Nodes (`Alert`, `IP`, `EFI`) and Semantic Edges (`HAS_FILE_HASH`, `INDICATES_TECHNIQUE`).
 *   **Data Persistence:**
-    *   Input: `samples/cix_kernel_demo_alerts.json`
-    *   Output: `data/forensic_ledger.json`, `data/investigation_graph.png`
+    *   Outputs campaign-specific reports and a unified `data/forensic_ledger.json`.
+    *   Maintains run-scoped artifacts in `data/runs/`.

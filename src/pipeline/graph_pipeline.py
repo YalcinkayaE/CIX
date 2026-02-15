@@ -5,6 +5,7 @@ import ipaddress
 import json
 import os
 import platform
+import re
 from collections import Counter
 from datetime import datetime, timezone
 from html import escape
@@ -260,7 +261,10 @@ def _select_stage_candidates(
     alert_rows: List[Dict[str, Any]],
 ) -> tuple[List[str], Dict[str, Dict[str, Any]]]:
     stage_rules = [
-        ("initial_access_script_execution", lambda row: row["has_script_execution"]),
+        (
+            "initial_access_script_execution",
+            lambda row: row["has_script_execution"] and not row["has_powershell_encoded"],
+        ),
         ("execution_powershell_encoded", lambda row: row["has_powershell_encoded"]),
         ("discovery_activity", lambda row: row["has_discovery"]),
         ("data_staging_temp_artifact", lambda row: row["has_staging"]),
@@ -325,6 +329,38 @@ def _build_ground_truth_draft_payload(
         "env_export": json.dumps(consolidated_ids),
         "usage": "Set CIX_GROUND_TRUTH_EVENT_IDS to env_export for scoring-only reruns.",
     }
+
+
+def _select_incident_anchor_event_id(campaign_entry: Dict[str, Any]) -> str:
+    stage_candidates = campaign_entry.get("stage_candidates", {})
+    if isinstance(stage_candidates, dict):
+        value = str((stage_candidates.get("initial_access_script_execution") or {}).get("event_id") or "").strip()
+        if value:
+            return value
+    for key in ("seed_anchor_event_id", "rca_patient_zero_event_id", "rca_connectivity_event_id"):
+        value = str(campaign_entry.get(key) or "").strip()
+        if value:
+            return value
+    for value in campaign_entry.get("recommended_event_ids", []):
+        event_id = str(value or "").strip()
+        if event_id:
+            return event_id
+    return ""
+
+
+def _normalize_report_incident_id(report: str, incident_event_id: str) -> str:
+    event_id = str(incident_event_id or "").strip()
+    if not event_id:
+        return report
+    pattern = re.compile(r"^\*\*Incident ID:\*\*.+$", re.MULTILINE)
+    replacement = f"**Incident ID:** {event_id}"
+    if pattern.search(report):
+        return pattern.sub(replacement, report, count=1)
+    lines = report.splitlines()
+    if lines and lines[0].startswith("#"):
+        lines.insert(1, replacement)
+        return "\n".join(lines)
+    return report
 
 
 def _compute_detection_metrics(
@@ -392,8 +428,14 @@ def _render_claim_and_verification_appendix(
 
     precision = detection_metrics.get("precision")
     recall = detection_metrics.get("recall")
-    precision_text = "n/a" if precision is None else str(precision)
-    recall_text = "n/a" if recall is None else str(recall)
+    has_ground_truth = bool(ground_truth_event_ids)
+    precision_text = "n/a" if (precision is None or not has_ground_truth) else str(precision)
+    recall_text = "n/a" if (recall is None or not has_ground_truth) else str(recall)
+    tp_fp_fn_text = (
+        f"{detection_metrics.get('true_positive', 0)}/{detection_metrics.get('false_positive', 0)}/{detection_metrics.get('false_negative', 0)}"
+        if has_ground_truth
+        else "n/a (set CIX_GROUND_TRUTH_EVENT_IDS)"
+    )
     draft = ground_truth_draft or {}
     draft_ids = [str(value) for value in draft.get("recommended_event_ids", []) if str(value).strip()]
     draft_stage_candidates = draft.get("stage_candidates", {}) if isinstance(draft.get("stage_candidates"), dict) else {}
@@ -447,7 +489,7 @@ def _render_claim_and_verification_appendix(
             "## 10. Quantitative Detection Scoring",
             f"- `Predicted core event IDs`: {predicted_core_event_ids or ['n/a']}",
             f"- `Ground truth event IDs`: {ground_truth_event_ids or ['n/a (set CIX_GROUND_TRUTH_EVENT_IDS)']}",
-            f"- `TP/FP/FN`: {detection_metrics.get('true_positive', 0)}/{detection_metrics.get('false_positive', 0)}/{detection_metrics.get('false_negative', 0)}",
+            f"- `TP/FP/FN`: {tp_fp_fn_text}",
             f"- `Precision`: {precision_text}",
             f"- `Recall`: {recall_text}",
             "",
@@ -1204,6 +1246,8 @@ def run_graph_pipeline(
             ground_truth_event_ids=ground_truth_event_ids,
             ground_truth_draft=ground_truth_campaign_entry,
         )
+        canonical_incident_id = _select_incident_anchor_event_id(ground_truth_campaign_entry)
+        report_with_claims = _normalize_report_incident_id(report_with_claims, canonical_incident_id)
         report_path.write_text(report_with_claims, encoding="utf-8")
         reports.append(str(report_path))
 

@@ -86,6 +86,7 @@ def test_analyze_campaign_traversal_produces_temporal_and_rca_sections():
     assert analysis["rca_patient_zero"]
     assert analysis["rca_connectivity_top"]
     assert analysis["rca_patient_zero"]["ranking_method"] == "temporal_precedence"
+    assert analysis["rca_patient_zero"]["event_id"] == "E1"
     assert analysis["rca_connectivity_top"]["ranking_method"] == "graph_connectivity"
     assert analysis["rca_top"]
     assert "counterfactuals" in analysis

@@ -8,7 +8,9 @@ from src.pipeline.graph_pipeline import (
     _build_ground_truth_draft_payload,
     _candidate_core_event_ids,
     _compute_detection_metrics,
+    _normalize_report_incident_id,
     _render_claim_and_verification_appendix,
+    _select_incident_anchor_event_id,
 )
 
 
@@ -121,3 +123,37 @@ def test_ground_truth_draft_payload_consolidates_ids_and_env_export():
     assert payload["kind"] == "ground_truth_draft"
     assert payload["recommended_event_ids"] == ["E1", "E2", "E3"]
     assert payload["env_export"] == '["E1", "E2", "E3"]'
+
+
+def test_claim_appendix_marks_metrics_not_evaluable_without_ground_truth():
+    traversal = {"seed_alerts": [], "rca_patient_zero": {}, "rca_connectivity_top": {}, "rca_top": []}
+    verification = {"decision": {"claim_label": "INFERRED", "reason": "n/a"}, "statistics": {}}
+    metrics = _compute_detection_metrics(["E1"], [])
+    appendix = _render_claim_and_verification_appendix(
+        traversal_analysis=traversal,
+        verification_analysis=verification,
+        manifest_name="manifest.json",
+        temporal_artifact_name="temporal.json",
+        verification_artifact_name="verify.json",
+        predicted_core_event_ids=["E1"],
+        detection_metrics=metrics,
+        ground_truth_event_ids=[],
+        ground_truth_draft={},
+    )
+    assert "TP/FP/FN`: n/a (set CIX_GROUND_TRUTH_EVENT_IDS)" in appendix
+    assert "- `Precision`: n/a" in appendix
+    assert "- `Recall`: n/a" in appendix
+
+
+def test_incident_anchor_prefers_initial_access_and_normalizes_report_header():
+    entry = {
+        "stage_candidates": {"initial_access_script_execution": {"event_id": "E10"}},
+        "seed_anchor_event_id": "E11",
+        "recommended_event_ids": ["E12"],
+    }
+    anchor = _select_incident_anchor_event_id(entry)
+    assert anchor == "E10"
+
+    report = "# CyberIntelX.io FORENSIC ASSESSMENT REPORT\n**Incident ID:** OLD\nBody"
+    normalized = _normalize_report_incident_id(report, anchor)
+    assert "**Incident ID:** E10" in normalized

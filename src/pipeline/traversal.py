@@ -359,7 +359,14 @@ def analyze_campaign_traversal(
         rca_rows,
         key=lambda row: _alert_sort_key(str(row.get("alert")), alert_meta),
     )
-    rca_patient_zero = dict(temporal_sorted[0]) if temporal_sorted else {}
+    rca_patient_zero = {}
+    if seeds:
+        preferred_alert = str(seeds[0].get("alert") or "")
+        preferred_row = next((row for row in rca_rows if str(row.get("alert")) == preferred_alert), None)
+        if preferred_row:
+            rca_patient_zero = dict(preferred_row)
+    if not rca_patient_zero:
+        rca_patient_zero = dict(temporal_sorted[0]) if temporal_sorted else {}
     if rca_patient_zero:
         rca_patient_zero["ranking_method"] = "temporal_precedence"
 

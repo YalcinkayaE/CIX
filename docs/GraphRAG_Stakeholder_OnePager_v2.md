@@ -1,6 +1,6 @@
 # CyberIntelX.io One-Pager
 
-## Certifiable Forensic AI with Entropy-Bounded GraphRAG
+## Certifiable Forensic Middleware with Entropy-Bounded GraphRAG
 
 **Version:** v2  \
 **Date:** February 13, 2026  \
@@ -25,6 +25,10 @@ CyberIntelX.io applies an entropy-bounded GraphRAG workflow:
 
 Result: investigation moves from alert-by-alert review to structured, auditable forensic reasoning.
 
+## Positioning One-Liner
+
+`CIX-Alerts turns noisy alerts into time-ordered causal evidence, with statistical proof of root cause and remediation impact.`
+
 ---
 
 ## What We Observed (Mordor Sample Baseline)
@@ -39,12 +43,18 @@ Dataset: `empire_launcher_vbs_2020-09-04160940.batch.json`
 
 This represents a high compression of investigative surface area before graph reasoning.
 
+### The Signal-to-Noise Moat
+
+CIX-Alerts did not summarize all `2067` events. It invalidated `1969` events (`4` semantic background + `1` red-zone + `1964` deduplicated) before the AI-facing reasoning stage, leaving `98` active candidates.
+
 ---
 
 ## Business Value
 
 - **Faster triage:** fewer candidates reach analyst focus.
 - **Higher confidence decisions:** graph context reduces isolated-alert ambiguity.
+- **Causal evidence for action:** findings are evidence-linked and timeline-consistent, not just narrative summaries.
+- **Remediation impact clarity:** counterfactual traversal estimates what changes when specific pivots are removed or blocked.
 - **Auditability:** evidence, relations, and decisions are artifact-backed and reproducible.
 - **Operational readiness:** supports automated playbooks (isolation, containment, and RCA).
 
@@ -55,6 +65,7 @@ This represents a high compression of investigative surface area before graph re
 - **Temporal certitude:** event order is explicit in graph evidence.
 - **Topological risk scoring:** bridge nodes and pivots are measurable.
 - **Counterfactual analysis:** teams can test remediation impact before execution.
+- **Statistical proof gates (Mathematical Hallucination-Checking):** key claims are verified with CMI, permutation testing, and confidence intervals.
 
 ---
 
@@ -67,6 +78,12 @@ Every conclusion is labeled as one of:
 - **Verified** (statistically tested)
 
 This claim discipline is the foundation for ASIL-M style assurance and defensible external reporting.
+
+Technical layer:
+- Powered by AxoDen Kernel for entropy-bounded safety.
+- Temporal graph traversal for incident lineage.
+- Counterfactual reachability analysis for remediation impact.
+- Topological integrity and cryptographic evidence ledgers for replay-grade assurance.
 
 ---
 
@@ -81,4 +98,4 @@ This claim discipline is the foundation for ASIL-M style assurance and defensibl
 
 ## Outcome
 
-CyberIntelX.io positions SOC operations to shift from noisy alert handling to certifiable, evidence-grounded autonomous forensics.
+CyberIntelX.io positions SOC operations to shift from noisy alert handling to certifiable, evidence-grounded autonomous forensics and provable incident truth.
