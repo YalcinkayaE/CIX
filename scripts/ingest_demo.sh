@@ -218,7 +218,7 @@ if [[ -n "$LEDGER_PATH" ]]; then
 fi
 
 if [[ "$FRESH" == "true" ]]; then
-  LEDGER_FILE="${CIX_LEDGER_PATH:-/Users/erkanyalcinkaya/projects/cix-alerts/data/ledger.jsonl}"
+  LEDGER_FILE="${CIX_LEDGER_PATH:-data/ledger.jsonl}"
   if [[ -f "$LEDGER_FILE" ]]; then
     rm -f "$LEDGER_FILE"
   fi

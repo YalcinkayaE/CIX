@@ -32,6 +32,8 @@ cp .env.example .env
 python3 -u main.py
 ```
 
+By default, `main.py` uses `samples/cix_kernel_demo_alerts.json` when no input file is provided.
+
 ### Useful flags
 - `--triage-only` stop after triage counts (no enrichment or reports)
 - `--skip-enrichment` skip EFI enrichment (faster)
@@ -51,7 +53,7 @@ docker exec -it cix-alerts-container python -u main.py
 
 Example (full run with explicit ARV limits):
 ```bash
-docker exec -it cix-alerts-container python -u main.py /app/soc_alert_batch.json \
+docker exec -it cix-alerts-container python -u main.py /app/samples/cix_kernel_demo_alerts.json \
   --arv-beta 4 \
   --phi-limit-arv1 200 \
   --phi-limit-arv2 500 \

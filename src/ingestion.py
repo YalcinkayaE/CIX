@@ -178,7 +178,7 @@ if __name__ == "__main__":
     # Quick test
     parser = RawParser()
     try:
-        cleaned = parser.parse_file('soc_alert_raw.json')
+        cleaned = parser.parse_file("samples/cix_kernel_demo_alerts.json")
         print(json.dumps(cleaned, indent=2)[:500])
     except Exception as e:
         print(f"Error: {e}")

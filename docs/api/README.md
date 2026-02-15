@@ -4,7 +4,7 @@
 
 ```bash
 # From repo root
-export AXODEN_KERNEL_PATH=/Users/erkanyalcinkaya/projects/axoden-kernel
+export AXODEN_KERNEL_PATH="${AXODEN_KERNEL_PATH:-/Users/erkanyalcinkaya/projects/axoden-kernel}"
 
 docker compose up --build -d
 ```

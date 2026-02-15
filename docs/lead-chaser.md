@@ -39,7 +39,7 @@ JSON
 
 ### **1. Core Objectives**
 
-- **Manual Payload Ingestion:** Process `soc_alert_raw.json` without a live SIEM connection.
+- **Manual Payload Ingestion:** Process `samples/cix_kernel_demo_alerts.json` without a live SIEM connection.
     
 - **Relational Mapping:** Convert the "M" and "L" types into a directed graph.
     
@@ -98,7 +98,7 @@ JSON
     "action": "INGEST_RAW_PAYLOAD",
     "entity_id": "alarm-central_f4eb57fc-ae42-4da3-af22-6442d5c539e6",
     "metadata": { "client": "ClientA", "source_type": "alarm" },
-    "provenance": "soc_alert_raw.json",
+    "provenance": "samples/cix_kernel_demo_alerts.json",
     "safety_status": "EBDP_PASS"
   },
   {

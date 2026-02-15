@@ -24,6 +24,7 @@ soc_alert_flat.json
 *.jsonl
 *.html
 *.pdf
+# Local fixture files (kept for local runs, not tracked)
 soc_alert_raw.json
 soc_alert_batch.json
 soc_alert_batch.json.bak

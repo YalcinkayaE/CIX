@@ -19,8 +19,8 @@ ENV PATH=/root/.local/bin:$PATH
 
 # Copy application code
 COPY src/ ./src/
+COPY samples/ ./samples/
 COPY main.py .
-COPY *.json .
 
 # Create data directory for volume mapping
 RUN mkdir data

@@ -6,10 +6,7 @@ services:
       - "8009:8009"
     volumes:
       - ./data:/app/data
-      # Map the input file so you can edit it locally and test immediately
-      - ./soc_alert_raw.json:/app/soc_alert_raw.json
-      - ./soc_alert_batch.json:/app/soc_alert_batch.json
-      - /Users/erkanyalcinkaya/projects/axoden-kernel:/app/axoden-kernel
+      - ${AXODEN_KERNEL_PATH:-/Users/erkanyalcinkaya/projects/axoden-kernel}:/app/axoden-kernel
     env_file:
       - .env
     environment:

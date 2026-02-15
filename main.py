@@ -8,7 +8,12 @@ from src.pipeline.graph_pipeline import run_graph_pipeline
 
 def main():
     parser = argparse.ArgumentParser(description="CIX Alerts Graph-Lead Prototype")
-    parser.add_argument("input_file", nargs="?", default="soc_alert_batch.json", help="Path to the input JSON file (default: soc_alert_batch.json)")
+    parser.add_argument(
+        "input_file",
+        nargs="?",
+        default="samples/cix_kernel_demo_alerts.json",
+        help="Path to the input JSON file (default: samples/cix_kernel_demo_alerts.json)",
+    )
     parser.add_argument("--output-dir", default="data", help="Directory to write run artifacts (default: data)")
     parser.add_argument("--skip-kernel", action="store_true", help="Skip kernel gating (legacy flow)")
     parser.add_argument("--kernel-ledger", default=None, help="Kernel ledger output path (default: <output-dir>/kernel_ledger.jsonl)")
@@ -35,7 +40,7 @@ def main():
     
     # 1. Ingestion (Batch)
     parser = RawParser()
-    # Using 'soc_alert_batch.json' to test the new batch capability
+    # Default input is a tracked sample batch for reproducible local runs.
     raw_alerts = parser.parse_file(args.input_file)
     print(f"[1] Batch Ingestion: Loaded {len(raw_alerts)} alerts from {args.input_file}.")
     lineage_source = args.input_file

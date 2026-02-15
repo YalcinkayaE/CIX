@@ -17,7 +17,7 @@ Use this skill to produce deterministic, audit-ready API-only service designs fo
 
 ## Project References (Read When Relevant)
 - `/Users/erkanyalcinkaya/projects/cix-alerts/docs/stage1_admissibility_blueprint.md`
-- `/Users/erkanyalcinkaya/projects/cix-alerts/docs/AxoDen_Implementation_Blueprint.md`
+- `/Users/erkanyalcinkaya/projects/cix-alerts/docs/AxoDen_Canonical_Blueprint.md`
 - `/Users/erkanyalcinkaya/projects/cix-alerts/docs/axoden_soc_conformance_profile.yaml`
 - `/Users/erkanyalcinkaya/projects/cix-alerts/docs/axoden_soc_kernel_math_contract.md`
 

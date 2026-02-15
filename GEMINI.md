@@ -12,7 +12,7 @@ CIX Alerts is a prototype pipeline designed to ingest SOC (Security Operations C
 
 ### Architecture
 The pipeline follows a linear execution flow:
-1.  **Ingestion:** Parses raw JSON alerts (e.g., `soc_alert_raw.json`) into a standardized model.
+1.  **Ingestion:** Parses raw JSON alerts (e.g., `samples/cix_kernel_demo_alerts.json`) into a standardized model.
 2.  **Modeling:** Converts raw data into a `GraphReadyAlert` object.
 3.  **Graph Construction:** Builds an initial graph connecting the Alert to entities like IPs, File Hashes, and mapped MITRE ATT&CK techniques.
 4.  **Enrichment (Internal):** Queries VirusTotal, OTX, and NVD based on graph nodes (SHA256, MalwareFamily). Generates "Search Leads" using Gemini.
@@ -69,5 +69,5 @@ The pipeline follows a linear execution flow:
     *   **Roles:** AI agents have specific personas (e.g., "CIX Alerts Intelligence Refiner").
     *   **Output:** strictly structured JSON for intermediate steps or Markdown for final reports.
 *   **Data Persistence:**
-    *   Input: `soc_alert_raw.json`
+    *   Input: `samples/cix_kernel_demo_alerts.json`
     *   Output: `data/forensic_ledger.json`, `data/investigation_graph.png`
