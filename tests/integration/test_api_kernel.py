@@ -1,10 +1,24 @@
 from __future__ import annotations
 
+import os
+from pathlib import Path
+
+import pytest
 from fastapi.testclient import TestClient
 
 from src.api.app import create_app
 
-KERNEL_PATH = "/Users/erkanyalcinkaya/projects/axoden-kernel"
+
+def _kernel_path_or_skip() -> str:
+    env_path = os.getenv("AXODEN_KERNEL_PATH")
+    if env_path:
+        kernel_path = Path(env_path).expanduser().resolve()
+    else:
+        repo_root = Path(__file__).resolve().parents[2]
+        kernel_path = (repo_root.parent / "axoden-kernel").resolve()
+    if not kernel_path.exists():
+        pytest.skip("AxoDen kernel not found. Set AXODEN_KERNEL_PATH to run kernel integration tests.")
+    return str(kernel_path)
 
 
 def _payload() -> dict:
@@ -24,7 +38,7 @@ def _payload() -> dict:
 
 
 def test_kernel_ingest_events_basic(tmp_path, monkeypatch):
-    monkeypatch.setenv("AXODEN_KERNEL_PATH", KERNEL_PATH)
+    monkeypatch.setenv("AXODEN_KERNEL_PATH", _kernel_path_or_skip())
     monkeypatch.setenv("CIX_KERNEL_LEDGER_PATH", str(tmp_path / "kernel_ledger.jsonl"))
 
     client = TestClient(create_app())
@@ -45,7 +59,7 @@ def test_kernel_ingest_events_basic(tmp_path, monkeypatch):
 
 
 def test_kernel_graph_run(tmp_path, monkeypatch):
-    monkeypatch.setenv("AXODEN_KERNEL_PATH", KERNEL_PATH)
+    monkeypatch.setenv("AXODEN_KERNEL_PATH", _kernel_path_or_skip())
     monkeypatch.setenv("CIX_KERNEL_LEDGER_PATH", str(tmp_path / "kernel_ledger.jsonl"))
 
     import src.pipeline.graph_pipeline as graph_pipeline
@@ -59,6 +73,9 @@ def test_kernel_graph_run(tmp_path, monkeypatch):
             "graphs_html": [f"{output_dir}/investigation_graph_campaign_1.html"],
             "graphs_png": [],
             "snapshots_html": [f"{output_dir}/campaign_snapshot_1.html"],
+            "temporal_analyses_json": [f"{output_dir}/temporal_analysis_campaign_1.json"],
+            "verification_json": [f"{output_dir}/cmi_verification_campaign_1.json"],
+            "manifests_json": [f"{output_dir}/reproducibility_manifest.json"],
         },
     )
 
@@ -83,3 +100,7 @@ def test_kernel_graph_run(tmp_path, monkeypatch):
 
     artifacts_resp = client.get(f"/v1/runs/{run_body['run_id']}/artifacts")
     assert artifacts_resp.status_code == 200
+    artifact_types = {item["type"] for item in artifacts_resp.json().get("artifacts", [])}
+    assert "temporal_analysis_json" in artifact_types
+    assert "verification_json" in artifact_types
+    assert "reproducibility_manifest_json" in artifact_types

@@ -112,7 +112,7 @@ class ErrorResponse(BaseModel):
 
 
 def create_app() -> FastAPI:
-    app = FastAPI(title="CIX Alerts Ingestion API", version="0.1")
+    app = FastAPI(title="CIX Alerts Ingestion API", version="0.6.0")
 
     ledger_path = os.getenv("CIX_LEDGER_PATH", "data/ledger.jsonl")
     ledger_path_obj = Path(ledger_path)
@@ -298,6 +298,12 @@ def create_app() -> FastAPI:
                     artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "graph_html", "path": path})
                 for path in artifacts.get("snapshots_html", []):
                     artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "snapshot_html", "path": path})
+                for path in artifacts.get("temporal_analyses_json", []):
+                    artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "temporal_analysis_json", "path": path})
+                for path in artifacts.get("verification_json", []):
+                    artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "verification_json", "path": path})
+                for path in artifacts.get("manifests_json", []):
+                    artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "reproducibility_manifest_json", "path": path})
                 artifact_store[run_id] = artifact_list
                 run_store[run_id]["status"] = "SUCCEEDED"
                 run_store[run_id]["finished_at"] = datetime.now(timezone.utc).isoformat()
@@ -353,6 +359,12 @@ def create_app() -> FastAPI:
                 artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "graph_html", "path": path})
             for path in artifacts.get("snapshots_html", []):
                 artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "snapshot_html", "path": path})
+            for path in artifacts.get("temporal_analyses_json", []):
+                artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "temporal_analysis_json", "path": path})
+            for path in artifacts.get("verification_json", []):
+                artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "verification_json", "path": path})
+            for path in artifacts.get("manifests_json", []):
+                artifact_list.append({"artifact_id": str(uuid.uuid4()), "type": "reproducibility_manifest_json", "path": path})
             artifact_store[run_id] = artifact_list
             run_store[run_id]["status"] = "SUCCEEDED"
             run_store[run_id]["finished_at"] = datetime.now(timezone.utc).isoformat()
