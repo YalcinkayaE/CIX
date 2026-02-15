@@ -66,8 +66,8 @@ paths:
             schema:
               $ref: "#/components/schemas/GraphRunRequest"
       responses:
-        "202":
-          description: Accepted
+        "200":
+          description: Accepted (run created in PENDING state)
           content:
             application/json:
               schema:
@@ -165,19 +165,17 @@ components:
           items: { $ref: "#/components/schemas/IngestEvent" }
         profile_id:
           type: string
-          default: "profile.cix"
+          default: "axoden-cix-1-v0.2.0"
         run_graph:
           type: boolean
           default: false
 
     KernelDecision:
       type: object
-      required: [action_id, reason_codes]
+      required: [action_id, reason_code]
       properties:
         action_id: { type: string }
-        reason_codes:
-          type: array
-          items: { type: string }
+        reason_code: { type: string }
 
     IngestEventResult:
       type: object
@@ -214,7 +212,7 @@ components:
           items: { type: string }
         profile_id:
           type: string
-          default: "profile.cix"
+          default: "axoden-cix-1-v0.2.0"
 
     GraphRunResponse:
       type: object

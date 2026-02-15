@@ -2,6 +2,22 @@
 
 Prototype pipeline that ingests a SOC alert JSON, builds a graph, enriches it, and outputs a narrative + artifacts.
 
+## AxoDen Kernel compatibility
+
+This repo is wired to the AxoDen Kernel v0.6.0-style decision API.
+
+- Default kernel profile: `axoden-cix-1-v0.2.0`
+- Kernel decision output uses `reason_code` (single string), not `reason_codes`
+- Graph admission path accepts `ARV.EXECUTE` and `ARV.THROTTLE`; `ARV.HALT` hard-stops ingest
+- API endpoints are rooted at `/v1/*` for kernel ingest and graph runs
+- Graph artifacts include `snapshot_html` entries
+
+See:
+- `docs/kernel_demo.md`
+- `docs/AxoDen_Canonical_Blueprint.md`
+- `docs/api/README.md`
+- `docs/api/openapi.yaml`
+
 ## Local run
 
 ```bash

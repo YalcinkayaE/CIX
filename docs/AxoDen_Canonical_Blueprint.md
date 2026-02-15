@@ -27,14 +27,15 @@ All runtime behavior must follow this flow. Any legacy documents are advisory on
 - Source: SIEM/SOAR telemetry
 - Entry point:
   - CLI graph run: `main.py`
-  - API: `POST /api/v1/ingest/classify` (Stage 1 only, does not build graphs)
+  - API Stage 1 classify: `POST /api/v1/ingest/classify` (legacy classifier, no graph build)
+  - API kernel ingest: `POST /v1/ingest/events`
 
 ### 3.2 Stage 1: Kernel Gate (Entropy + Safety)
-- Uses AxoDen Kernel SDK `decide()` with `profile.cix`
+- Uses AxoDen Kernel SDK `decide()` with profile `axoden-cix-1-v0.2.0`
 - Evidence objects are built and hashed prior to any graph build
 - Decision outcomes:
-  - `ARV.ADMIT` or `ARV.COMPRESS` -> proceed
-  - `ARV.ABSTAIN` / `ARV.SUPPRESS` -> drop (ledger only)
+  - `ARV.EXECUTE` or `ARV.THROTTLE` -> proceed
+  - Any other non-halt action -> drop (ledger only)
   - `ARV.HALT` -> stop pipeline
 
 ### 3.3 Stage 2: Dedup (Exact Content Hash)
@@ -66,8 +67,8 @@ All runtime behavior must follow this flow. Any legacy documents are advisory on
 ```mermaid
 flowchart TB
   A["Ingest: SIEM/SOAR (JSON/CEF/LEEF/Syslog)"] --> B["Kernel Gate (decide())"]
-  B -->|"ADMIT/COMPRESS"| C["Dedup (exact content-hash)"]
-  B -->|"ABSTAIN/SUPPRESS"| Z["Ledger only, drop"]
+  B -->|"EXECUTE/THROTTLE"| C["Dedup (exact content-hash)"]
+  B -->|"Other non-halt actions"| Z["Ledger only, drop"]
   B -->|"HALT"| H["Stop pipeline"]
   C --> D["World Graph Build"]
   D --> E["ARV Gate 1"]
@@ -92,6 +93,19 @@ python3 main.py soc_alert_batch.json
 curl -X POST http://localhost:8009/api/v1/ingest/classify \
   -H "Content-Type: application/json" \
   -d '{"events":[{"source_id":"demo","event_id":"e1","source_timestamp":"2026-02-03T12:00:00Z","raw_payload":{"message":"test"}}]}'
+```
+
+### 5.3 API Kernel Ingest + Graph Run
+```bash
+curl -X POST http://localhost:8009/v1/ingest/events \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: demo-ingest-1" \
+  -d '{"events":[{"source_id":"demo","event_id":"e1","source_timestamp":"2026-02-03T12:00:00Z","raw_payload":{"message":"test"}}],"profile_id":"axoden-cix-1-v0.2.0","run_graph":false}'
+
+curl -X POST http://localhost:8009/v1/runs/graph \
+  -H "Content-Type: application/json" \
+  -H "Idempotency-Key: demo-run-1" \
+  -d '{"evidence_ids":["<evidence_id_from_ingest>"],"profile_id":"axoden-cix-1-v0.2.0"}'
 ```
 
 ## 6. Output Artifacts
